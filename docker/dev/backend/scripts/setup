@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -e
+
+export MAKE="make --jobs $(nproc)"
+
+bundle config mirror.https://rubygems.org https://mirrors.tuna.tsinghua.edu.cn/rubygems
+bundle install --jobs $(nproc)
+bundle exec rake db:create db:migrate
+bundle exec rake db:seed
+bundle exec rake openproject:plugins:register_frontend
+bundle exec rake assets:export_locales

@@ -199,7 +199,7 @@ RUN cp Gemfile.lock.bak Gemfile.lock && rm Gemfile.lock.bak
 RUN ./docker/prod/setup/postinstall.sh
 
 # this has to happen after postinstall.sh since it uses a different database.yml
-# COPY config/database.production.yml ./config/database.yml
+COPY config/database.production.yml ./config/database.yml
 
 # Expose ports for apache and postgres
 EXPOSE 80 5432

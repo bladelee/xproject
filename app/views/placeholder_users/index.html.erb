@@ -27,10 +27,7 @@ See COPYRIGHT and LICENSE files for more details.
 
 ++#%>
 <% html_title t(:label_administration), t(:label_placeholder_user_plural) -%>
-<% has_ee = EnterpriseToken.allows_to?(:placeholder_users) %>
 
-
-<% if has_ee %>
   <%= toolbar title: t(:label_placeholder_user_plural), title_class: 'no-padding-bottom' do %>
     <li class="toolbar-item">
       <%= link_to new_placeholder_user_path,
@@ -45,20 +42,7 @@ See COPYRIGHT and LICENSE files for more details.
     <%= call_hook(:placeholder_user_admin_action_menu) %>
   <% end %>
 
-<% end %>
 
+<%= render PlaceholderUsers::PlaceholderUserFilterComponent.new(params) %>
+<%= render PlaceholderUsers::TableComponent.new(rows: @placeholder_users) %>
 
-<% if has_ee %>
-  <%= render PlaceholderUsers::PlaceholderUserFilterComponent.new(params) %>
-  &nbsp;
-  <%= render PlaceholderUsers::TableComponent.new(rows: @placeholder_users) %>
-<% else %>
-  <%= render template: 'common/upsale',
-        locals: {
-          feature_title: I18n.t('placeholder_users.upsale.title'),
-          feature_description: I18n.t('placeholder_users.upsale.description'),
-          feature_reference: 'placeholder_users',
-          feature_video: 'enterprise/placeholder_users.mp4'
-        }
-  %>
-<% end %>

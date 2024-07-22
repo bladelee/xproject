@@ -40,6 +40,7 @@ module Users
     attribute :admin,
               writable: ->(*) { user.admin? && model.id != user.id }
     attribute :language
+    attribute :position
 
     attribute :ldap_auth_source_id,
               writable: ->(*) { can_create_or_manage_users? }

@@ -618,6 +618,7 @@ class PermittedParams
           mail_notification
           language
           custom_fields
+          position
         ),
         wiki_page: %i(
           title

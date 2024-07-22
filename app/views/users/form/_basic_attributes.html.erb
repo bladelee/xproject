@@ -31,3 +31,9 @@
                prompt: "--- #{t(:actionview_instancetag_blank_option)} ---",
                container_class: '-middle' %>
 </div>
+
+<div class="form--field">
+  <%= f.select :position,
+              options_from_collection_for_select(PlaceholderUser.all, :id, :name),
+               container_class: '-middle' %>
+</div>

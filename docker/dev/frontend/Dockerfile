@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y chromium
 
 ENV CHROME_BIN=/usr/bin/chromium
 
-RUN npm i -g npm
+RUN npm i -g npm --registry=https://registry.npmmirror.com
 
 RUN groupadd $USER || true
 RUN groupmod -g $DEV_GID $USER || true

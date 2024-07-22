@@ -90,6 +90,7 @@ export class AddExistingPaneComponent extends UntilDestroyedMixin implements OnI
     .pipe(
       map(([draggable, rendered]) => {
         const renderedIds = rendered.elements.map((el) => el.id as string);
+        console.log('currentWorkPackages changed');
         return draggable.filter((wp) => !renderedIds.includes(wp.id as string));
       }),
     );
@@ -128,12 +129,15 @@ export class AddExistingPaneComponent extends UntilDestroyedMixin implements OnI
   }
 
   ngOnInit():void {
+    
+
+
     combineLatest([
       this
         .searchString$
         .pipe(
           distinctUntilChanged(),
-          debounceTime(500),
+          // debounceTime(500),
         ),
       this
         .wpFilters
@@ -149,11 +153,22 @@ export class AddExistingPaneComponent extends UntilDestroyedMixin implements OnI
         switchMap((searchString:string) => this.searchWorkPackages(searchString)),
       )
       .subscribe((results) => {
+        console.log('results2', results, results.length)
         this.calendarDrag.draggableWorkPackages$.next(results);
 
         this.isEmpty$.next(results.length === 0);
         this.isLoading$.next(false);
+
       });
+
+
+      // Search for default work packages  尝试
+      this.searchDefaultWorkPackages().subscribe((results) => {
+        console.log('results1', results, results.length)
+        this.calendarDrag.draggableWorkPackages$.next(results);
+        this.isEmpty$.next(results.length === 0);
+        this.isLoading$.next(false);
+      });    
   }
 
   ngOnDestroy():void {
@@ -196,6 +211,35 @@ export class AddExistingPaneComponent extends UntilDestroyedMixin implements OnI
         this.untilDestroyed(),
       );
   }
+
+searchDefaultWorkPackages(): Observable<WorkPackageResource[]> {
+  this.isLoading$.next(true);
+
+  // Add any visible global filters
+  const activeFilters = this.wpFilters.currentlyVisibleFilters;
+  const filters: ApiV3FilterBuilder = this.urlParamsHelper.filterBuilderFrom(activeFilters);
+
+  // // Filter for unassigned work packages
+  // filters.add('assigned_to', '=', ['']);
+  
+  // // Add the existing filter, if any
+  // this.addExistingFilters(filters);
+
+  return this
+    .apiV3Service
+    .withOptionalProject(this.currentProject.id)
+    .work_packages
+    .filtered(filters, { pageSize: '-1' })
+    .get()
+    .pipe(
+      map((collection) => collection.elements),
+      catchError((error: unknown) => {
+        this.notificationService.handleRawError(error);
+        return of([]);
+      }),
+      this.untilDestroyed(),
+    );
+}
 
   clearInput():void {
     this.searchString$.next('');

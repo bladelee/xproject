@@ -491,6 +491,7 @@ export class TeamPlannerComponent extends UntilDestroyedMixin implements OnInit,
             plugins: [resourceTimelinePlugin, interactionPlugin],
             titleFormat: { year: 'numeric', month: 'long', day: 'numeric' },
             initialView: this.initialCalendarView,
+            resourceGroupField: 'position',            
             headerToolbar: {
               left: '',
               center: 'title',

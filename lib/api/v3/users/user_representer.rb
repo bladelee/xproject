@@ -131,6 +131,16 @@ module API
                  render_nil: false,
                  cache_if: -> { current_user_can_manage? }
 
+        property :position,
+                 as: :position,
+                 exec_context: :decorator,
+                 getter: ->(*) { represented.position },
+                 setter: ->(fragment:, represented:, **) do
+                   represented.position = fragment
+                 end,
+                 render_nil: false,
+                 cache_if: -> { current_user_can_manage? }                 
+
         property :lastname,
                  as: :lastName,
                  exec_context: :decorator,

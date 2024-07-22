@@ -90,11 +90,11 @@ module ::Gantt
           .parse(Gantt::DefaultQueryGeneratorService::DEFAULT_PARAMS)
 
         default_with_filter["c"] = if project.present?
-                                     Gantt::DefaultQueryGeneratorService::PROJECT_DEFAULT_COLUMNS
+#                                     Gantt::DefaultQueryGeneratorService::PROJECT_DEFAULT_COLUMNS
+                                      Gantt::DefaultQueryGeneratorService::GLOBAL_DEFAULT_COLUMNS
                                    else
                                      Gantt::DefaultQueryGeneratorService::GLOBAL_DEFAULT_COLUMNS
                                    end
-
         default_with_filter
       end
 

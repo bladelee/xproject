@@ -229,7 +229,8 @@ export class WorkPackagesListService {
   public loadCurrentQueryFromParams(projectIdentifier?:string):Promise<QueryResource> {
     var props = JSON.parse(this.$state.params['query_props']);
     props['g'] = 'project';
-    props['showHierarchies'] = false;
+    // props['showHierarchies'] = false;
+    props['hi'] = false;
     this.$state.params['query_props'] = JSON.stringify(props);
     console.log('this.$state.params', this.$state.params);
     return firstValueFrom(this.fromQueryParams(this.$state.params as { query_id?:string|null, query_props?:string }, projectIdentifier));

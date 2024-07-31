@@ -1,7 +1,7 @@
 module LdapGroups
   class SynchronizedGroupsController < ::ApplicationController
     before_action :require_admin
-    before_action :check_ee
+  #  before_action :check_ee
     before_action :find_group, only: %i(show destroy_info destroy)
 
     layout "admin"

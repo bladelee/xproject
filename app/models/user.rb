@@ -120,6 +120,11 @@ class User < Principal
 
   attr_accessor :password, :password_confirmation, :last_before_login_on
 
+  # Returns the name of the placeholder user with the given id
+  def position_name(id)
+    PlaceholderUser.find(id).name
+  end
+
   validates :login,
             :firstname,
             :lastname,

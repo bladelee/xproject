@@ -27,5 +27,7 @@ export interface IUser {
 
   status:string;
 
+  position:string;
+
   _links:IUserHalResourceLinks;
 }

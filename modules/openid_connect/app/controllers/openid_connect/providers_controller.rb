@@ -4,7 +4,7 @@ module OpenIDConnect
     menu_item :plugin_openid_connect
 
     before_action :require_admin
-    before_action :check_ee
+  #  before_action :check_ee
     before_action :find_provider, only: %i[edit update destroy]
 
     def index; end

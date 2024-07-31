@@ -36,13 +36,13 @@ See COPYRIGHT and LICENSE files for more details.
 
 <% if @homescreen[:blocks].any? %>
   <section class="widget-boxes -flex">
-  <%
+  <%# 
 =begin%>
- <%= debug "rails debug.................." %>
-  <%= debug @homescreen[:blocks] %> 
-<%
+ <%#= debug "rails debug.................." %>
+  <%#= debug @homescreen[:blocks] %> 
+<%#
 =end%>
-  <%= @homescreen[:blocks].inspect %>
+  <%#= @homescreen[:blocks].inspect %>
   <% @homescreen[:blocks].each do |block| %>
     <% if block[:if].nil? || instance_eval(&block[:if]) %>
       <div class="widget-box <%= block[:partial] %>">

@@ -134,7 +134,8 @@ module API
         property :position,
                  as: :position,
                  exec_context: :decorator,
-                 getter: ->(*) { represented.position },
+                # getter: ->(*) { represented.position },
+                 getter: ->(*) { represented.position_name(represented.position) },
                  setter: ->(fragment:, represented:, **) do
                    represented.position = fragment
                  end,

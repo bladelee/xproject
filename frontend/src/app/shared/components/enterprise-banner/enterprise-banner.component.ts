@@ -20,7 +20,8 @@ export const enterpriseBannerSelector = 'op-enterprise-banner';
   selector: enterpriseBannerSelector,
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./enterprise-banner.component.sass'],
-  templateUrl: './enterprise-banner.component.html',
+//  templateUrl: './enterprise-banner.component.html',
+  templateUrl: './empty.component.html',
 })
 export class EnterpriseBannerComponent implements OnInit {
   @Input() public leftMargin = false;

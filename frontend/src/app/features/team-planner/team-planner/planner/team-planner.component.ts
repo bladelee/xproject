@@ -116,6 +116,8 @@ import {
 import * as moment from 'moment-timezone';
 import allLocales from '@fullcalendar/core/locales-all';
 
+import { IUser } from 'core-app/core/state/principals/user.model';
+
 export type TeamPlannerViewOptionKey = 'resourceTimelineWorkWeek'|'resourceTimelineWeek'|'resourceTimelineTwoWeeks'|'resourceTimelineFourWeeks'|'resourceTimelineEightWeeks';
 export type TeamPlannerViewOptions = { [K in TeamPlannerViewOptionKey]:RawOptionsFromRefiners<Required<ViewOptionRefiners>> };
 
@@ -442,9 +444,12 @@ export class TeamPlannerComponent extends UntilDestroyedMixin implements OnInit,
 
         principals.forEach((principal) => {
           const id = principal._links.self.href;
+
+          const position = (principal as IUser).position; 
           api.addResource({
             principal,
             id,
+            position,
             title: principal.name,
           });
         });

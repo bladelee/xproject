@@ -107,7 +107,7 @@ zh-CN:
             item_2:
               name: 任务
             item_3:
-              name: 工作组规划器
+              name: 资源管理器
           boards:
             bcf:
               name: 简单拖放工作流
@@ -169,7 +169,7 @@ zh-CN:
             item_2:
               name: 任务
             item_3:
-              name: 工作组规划器
+              name: 资源管理器
           project-overview:
             widgets:
               item_0:
@@ -443,7 +443,7 @@ zh-CN:
             item_2:
               name: 任务
             item_3:
-              name: 工作组规划器
+              name: 资源管理器
           project-overview:
             widgets:
               item_0:
@@ -716,7 +716,7 @@ zh-CN:
             item_6:
               name: 任务
             item_7:
-              name: 工作组规划器
+              name: 资源管理器
           boards:
             bcf:
               name: BCF 问题

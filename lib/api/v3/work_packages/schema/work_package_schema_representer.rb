@@ -255,6 +255,17 @@ module API
                                          },
                                          has_default: false
 
+          schema_with_allowed_collection :placeholder_user,
+                                         value_representer: PlaceholderUsers::PlaceholderUserRepresenter,
+#                                       value_representer: PlaceholderUsers::PlaceholderUserSqlRepresenter,
+                                         link_factory: ->(placeholder_user) {
+                                           {
+                                             href: api_v3_paths.placeholder_user(placeholder_user.id),
+                                             title: placeholder_user.name
+                                           }
+                                         },
+                                         has_default: false
+
           schema_with_allowed_collection :status,
                                          value_representer: Statuses::StatusRepresenter,
                                          link_factory: ->(status) {

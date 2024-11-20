@@ -39,6 +39,8 @@ module BaseServices
       run_callbacks(:call) do
         perform(**self.params)
       end
+
+      # puts "---------------------xxxxxxxxxxxxxxxxxxxx    Called service #{self.class.name}"
     end
 
     protected

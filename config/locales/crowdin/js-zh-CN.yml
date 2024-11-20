@@ -979,6 +979,7 @@ zh-CN:
         category: "类别"
         percentageDone: "完成百分比"
         priority: "优先级"
+        placeholderUser: "岗位"
         projectName: "项目"
         remainingWork: "剩余工作"
         remainingWorkAlternative: "剩余小时数"
@@ -1209,7 +1210,7 @@ zh-CN:
         invite_to_project: "邀请%{type}加入 %{project}"
         User: "用户"
         Group: "组"
-        PlaceholderUser: "资源类别"
+        PlaceholderUser: "岗位"
         invite_principal_to_project: "邀请 %{principal} 加入 %{project}"
       project:
         label: "项目"
@@ -1228,8 +1229,8 @@ zh-CN:
           title: "组"
           description: "基于所选项目中所分配角色的权限"
         placeholder:
-          title: "资源类别"
-          title_no_ee: "资源类别（Enterprise edition 特定功能）"
+          title: "岗位"
+          title_no_ee: "岗位（Enterprise edition 特定功能）"
           description: "无法访问该项目并且未发送电子邮件。"
           description_no_ee: '无法访问该项目并且未发送电子邮件。<br>请参见 <a href="%{eeHref}" target="_blank">Enterprise edition</a>'
       principal:

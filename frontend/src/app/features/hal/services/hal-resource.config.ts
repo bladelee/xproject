@@ -48,6 +48,7 @@ import { ProjectResource } from 'core-app/features/hal/resources/project-resourc
 import { GroupResource } from 'core-app/features/hal/resources/group-resource';
 import { RootResource } from 'core-app/features/hal/resources/root-resource';
 import { TypeResource } from 'core-app/features/hal/resources/type-resource';
+import { PlaceholderUserResource } from 'core-app/features/hal/resources/placeholder-user-resource';
 import { QueryOperatorResource } from 'core-app/features/hal/resources/query-operator-resource';
 import { QueryFilterInstanceResource } from 'core-app/features/hal/resources/query-filter-instance-resource';
 import { FormResource } from 'core-app/features/hal/resources/form-resource';
@@ -110,6 +111,9 @@ const halResourceDefaultConfig:{ [typeName:string]:HalResourceFactoryConfigInter
   },
   Type: {
     cls: TypeResource,
+  },
+  PlaceholderUser: {
+    cls: PlaceholderUserResource,
   },
   Status: {
     cls: StatusResource,

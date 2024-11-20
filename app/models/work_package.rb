@@ -54,6 +54,7 @@ class WorkPackage < ApplicationRecord
   belongs_to :version, optional: true
   belongs_to :priority, class_name: "IssuePriority"
   belongs_to :category, class_name: "Category", optional: true
+  belongs_to :placeholder_user, class_name: "PlaceholderUser", optional: true
 
   has_many :time_entries, dependent: :delete_all
 
@@ -329,6 +330,12 @@ class WorkPackage < ApplicationRecord
   def priority_id=(pid)
     self.priority = nil
     write_attribute(:priority_id, pid)
+  end
+
+  def placeholder_user_id=(pid)
+    # self.priority = nil
+    self.placeholder_user = nil
+    write_attribute(:placeholder_user_id, pid)
   end
 
   def type_id=(tid)

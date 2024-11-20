@@ -482,17 +482,17 @@ Redmine::MenuManager.map :admin_menu do |menu|
             caption: :label_incoming_emails,
             parent: :mail_and_notifications
 
-  # menu.push :api_and_webhooks,
-  #           { controller: "/admin/settings/api_settings", action: :show },
-  #           if: Proc.new { User.current.admin? },
-  #           caption: :"menus.admin.api_and_webhooks",
-  #           icon: "relations"
+  menu.push :api_and_webhooks,
+            { controller: "/admin/settings/api_settings", action: :show },
+            if: Proc.new { User.current.admin? },
+            caption: :"menus.admin.api_and_webhooks",
+            icon: "relations"
 
-  # menu.push :api,
-  #           { controller: "/admin/settings/api_settings", action: :show },
-  #           if: Proc.new { User.current.admin? },
-  #           caption: :label_api_access_key_type,
-  #           parent: :api_and_webhooks
+  menu.push :api,
+            { controller: "/admin/settings/api_settings", action: :show },
+            if: Proc.new { User.current.admin? },
+            caption: :label_api_access_key_type,
+            parent: :api_and_webhooks
 
   menu.push :authentication,
             { controller: "/admin/settings/authentication_settings", action: :show },

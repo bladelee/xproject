@@ -63,8 +63,9 @@ module BaseServices
     end
 
     def validate_and_result
+      puts  "---------------------xxxxxxxxxxxxxxxxxxxx  begin  validate_and_result service #{self.class.name}"
       success, errors = validate(model, user, options: contract_options)
-
+      puts  "---------------------1xxxxxxxxxxxxxxxxxxxx  validated  service #{self.class.name}, erros: #{errors.inspect}"
       ServiceResult.new(success:,
                         errors:,
                         result: model)

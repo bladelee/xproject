@@ -35,6 +35,7 @@ class WorkPackages::UpdateService < BaseServices::Update
   def initialize(user:, model:, contract_class: nil, contract_options: {}, cause_of_rescheduling: nil)
     super(user:, model:, contract_class:, contract_options:)
     self.cause_of_rescheduling = cause_of_rescheduling || model
+    puts "---------------------xxxxxxxxxxxxxxxxxxxx    Updating work package #{model.id}"
   end
 
   private
@@ -42,7 +43,8 @@ class WorkPackages::UpdateService < BaseServices::Update
   def after_perform(service_call)
     update_related_work_packages(service_call)
     cleanup(service_call.result)
-
+    puts "---------------------xxxxxxxxxxxxxxxxxxxx    Updated work package #{service_call.result.id}" 
+     
     service_call
   end
 

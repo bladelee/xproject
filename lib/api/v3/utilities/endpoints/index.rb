@@ -46,7 +46,7 @@ module API
 
             -> do
               query = index.parse(self)
-
+          #    puts "v3::index", Thread.current.backtrace
               index.render(self, query)
             end
           end

@@ -37,6 +37,7 @@ module Queries::Principals
     filter Filters::AnyNameAttributeFilter
     filter Filters::TypeaheadFilter
     filter Filters::IdFilter
+    filter Filters::PositionFilter
 
     order Orders::NameOrder
   end

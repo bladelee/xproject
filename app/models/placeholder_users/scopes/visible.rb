@@ -38,6 +38,7 @@ module PlaceholderUsers::Scopes
 
     class_methods do
       def visible(user = User.current)
+        puts "visible called"
         if user.allowed_globally?(:manage_placeholder_user) ||
            user.allowed_in_any_project?(:manage_members)
           all

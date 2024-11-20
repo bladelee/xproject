@@ -43,6 +43,7 @@ module API
         end
 
         def present_error(call)
+        #  puts "Error: #{call.errors.full_messages}"
           api_errors = [::API::Errors::ErrorBase.create_and_merge_errors(postprocess_errors(call))]
 
           fail(::API::Errors::MultipleErrors

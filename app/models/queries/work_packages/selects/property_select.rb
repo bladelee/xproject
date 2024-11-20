@@ -62,6 +62,13 @@ class Queries::WorkPackages::Selects::PropertySelect < Queries::WorkPackages::Se
       highlightable: true,
       groupable: "#{WorkPackage.table_name}.status_id"
     },
+    placeholder_user:
+    {
+      association: "placeholder_user",
+      sortable: "position",
+      highlightable: true,
+      groupable: "#{WorkPackage.table_name}.placeholder_user_id"
+    },
     priority: {
       association: "priority",
       sortable: "position",

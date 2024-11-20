@@ -59,6 +59,8 @@ module Contracted
     def validate_and_yield(object, user, options: {})
       contract = instantiate_contract(object, user, options:)
 
+      puts "---------------------xxxxxxxxxxxxxxxxxxxx contracted    module , contract = #{contract.class.name}, contract = #{contract.inspect}"
+
       if contract.validate
         success = !!yield
         [success, object&.errors]

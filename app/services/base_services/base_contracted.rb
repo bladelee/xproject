@@ -57,12 +57,20 @@ module BaseServices
     def perform(params = {})
       params, send_notifications = extract(params, :send_notifications)
       service_context(send_notifications:) do
+        puts "---------------------xxxxxxxxxxxxxxxxxxxx    Performing service #{self.class.name}"
         service_call = validate_params(params)
+        puts  "---------------------1xxxxxxxxxxxxxxxxxxxx    Performed service #{self.class.name}"
         service_call = before_perform(params, service_call) if service_call.success?
+        puts  "---------------------2xxxxxxxxxxxxxxxxxxxx    Performed service #{self.class.name}"
         service_call = validate_contract(service_call) if service_call.success?
+        puts  "---------------------3xxxxxxxxxxxxxxxxxxxx    Performed service #{self.class.name}"
         service_call = after_validate(params, service_call) if service_call.success?
+        puts "---------------------4xxxxxxxxxxxxxxxxxxxx    Performed service #{self.class.name}"
         service_call = persist(service_call) if service_call.success?
+        puts "---------------------5xxxxxxxxxxxxxxxxxxxx    Performed service #{self.class.name}"
         service_call = after_perform(service_call) if service_call.success?
+        puts "---------------------6xxxxxxxxxxxxxxxxxxxx    Performed service #{self.class.name}"
+
 
         service_call
       end

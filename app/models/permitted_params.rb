@@ -521,6 +521,7 @@ class PermittedParams
           :budget_id,
           :parent_id,
           :priority_id,
+          :placeholder_user_id,
           :remaining_hours,
           :responsible_id,
           :start_date,

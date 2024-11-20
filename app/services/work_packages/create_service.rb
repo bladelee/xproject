@@ -44,6 +44,7 @@ class WorkPackages::CreateService < BaseServices::BaseCallable
     in_user_context(send_notifications:) do
       create(attributes, work_package)
     end
+    puts "perform work package: #{work_package.inspect}"
   end
 
   protected

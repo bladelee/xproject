@@ -53,6 +53,9 @@ import { HalResourceService } from 'core-app/features/hal/services/hal-resource.
 import isNewResource from 'core-app/features/hal/helpers/is-new-resource';
 import { IUserAutocompleteItem } from 'core-app/shared/components/autocompleter/user-autocompleter/user-autocompleter.component';
 import { CallableHalLink } from 'core-app/features/hal/hal-link/hal-link';
+import { debugLog } from 'core-app/shared/helpers/debug_output';
+
+import idFromLink from 'core-app/features/hal/helpers/id-from-link';
 
 @Component({
   templateUrl: './user-edit-field.component.html',
@@ -92,6 +95,26 @@ export class UserEditFieldComponent extends EditFieldComponent implements OnInit
       this.url = link.$link.href as string;
     }
   }
+
+  public get APIFilters():IAPIFilter[] {
+    const filters = [] as IAPIFilter[];
+    debugLog('Setting position filter', this.resource);
+
+    // if (this.resource.placeholderUser) {
+    //   debugLog('Setting position filter', this.resource.placeholderUser);
+    //   const position = this.resource.placeholderUser.name;
+    //   filters.push({ name: 'position', operator: '~', values: position });
+    // }
+    if (this.resource.placeholderUser) {
+        debugLog('get placeholderUser:', this.resource.placeholderUser);
+        const position = idFromLink(this.resource.placeholderUser.href);
+        filters.push({ name: 'position', operator: '=', values: [position] });
+    }
+
+
+    return filters;
+  }
+
 
   public onModelChange(user?:IUserAutocompleteItem):unknown {
     if (user) {

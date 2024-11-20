@@ -476,6 +476,8 @@ module API
 
         associated_resource :project
 
+        associated_resource :placeholder_user
+
         associated_resource :status
 
         associated_resource :author,

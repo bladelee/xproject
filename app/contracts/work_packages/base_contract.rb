@@ -43,6 +43,7 @@ module WorkPackages
     attribute :type_id
     attribute :priority_id
     attribute :category_id
+    attribute :placeholder_user_id
     attribute :version_id,
               permission: :assign_versions do
       validate_version_is_assignable
@@ -133,8 +134,8 @@ module WorkPackages
     validate :validate_status_exists
     validate :validate_status_transition
 
-    validate :validate_active_priority
-    validate :validate_priority_exists
+    # validate :validate_active_priority
+    # validate :validate_priority_exists
 
     validate :validate_category
     validate :validate_estimated_hours
@@ -191,7 +192,15 @@ module WorkPackages
       model.project.categories if model.project.respond_to?(:categories)
     end
 
+    def assignable_placeholder_users
+       puts "assignable_placeholder_users"
+  #    model.project.placeholder_users if model.project.respond_to?(:placeholder_user)
+       PlaceholderUser.xvisible
+    end
+
+
     def assignable_priorities
+      puts "assignable_priorities"
       IssuePriority.active
     end
 
@@ -306,6 +315,7 @@ module WorkPackages
     end
 
     def validate_priority_exists
+    #  puts "validate_priority_exists", Thread.current.backtrace
       errors.add :priority, :does_not_exist if model.priority.is_a?(Priority::InexistentPriority)
     end
 

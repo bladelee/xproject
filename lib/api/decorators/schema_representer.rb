@@ -373,16 +373,20 @@ module API
                        has_default: call_or_use(has_default),
                        writable: call_or_use(writable),
                        attribute_group: call_or_use(attribute_group) }
-
+      
         attributes[:allowed_values_getter] = allowed_values_getter if allowed_values_getter
+
+#        puts "schema_with_allowed_collection attributes: #{attributes}"
 
         representer = ::API::Decorators::AllowedValuesByCollectionRepresenter
                       .new(**attributes)
 
         if form_embedded
+          puts "form_embedded entered:  #{values_callback} "
           representer.allowed_values = instance_exec(&values_callback)
+          puts "form_embedded representer: #{representer.allowed_values}"
         end
-
+        
         representer
       end
 

@@ -34,6 +34,7 @@ module Queries::Users
     filter Filters::StatusFilter
     filter Filters::LoginFilter
     filter Filters::BlockedFilter
+    filter Filters::PositionFilter 
 
     order Orders::DefaultOrder
     order Orders::NameOrder

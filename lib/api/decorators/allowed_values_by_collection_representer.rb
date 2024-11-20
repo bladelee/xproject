@@ -63,6 +63,7 @@ module API
       end
 
       links :allowedValues do
+        puts "allowed_values: #{allowed_values}"
         next unless allowed_values && link_factory && writable
 
         allowed_values.map do |value|

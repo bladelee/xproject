@@ -60,15 +60,23 @@ export class EditCellHandler extends ClickOrEnterHandler implements TableEventHa
     // Get any existing edit state for this work package
     const form = table.editing.startEditing(workPackage, classIdentifier);
 
+    debugLog(`Starting active ${fieldName} on ${workPackage} at form:`,form);
+
     // Get the position where the user clicked.
     const positionOffset = getPosition(evt);
 
     // Activate the field
     form.activate(fieldName)
       .then((handler:EditFieldHandler) => {
+        handler.$onUserActivate.subscribe(() => {
+          debugLog(`Activated ${fieldName} in ${workPackage}`);
+        });
         handler.$onUserActivate.next();
         handler.focus(positionOffset);
+        debugLog('Edit Field handler:' , handler );
       })
-      .catch(() => target.addClass(readOnlyClassName));
+      .catch(() => {target.addClass(readOnlyClassName)
+        debugLog(`Fail activate ${fieldName} in ${workPackage}`);
+      });
   }
 }

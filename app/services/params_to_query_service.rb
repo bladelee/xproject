@@ -31,6 +31,7 @@ class ParamsToQueryService
                 :query_class
 
   def initialize(model, user, query_class: nil)
+    puts "-------------model: #{model.name}, query_class", query_class.inspect
     set_query_class(query_class, model)
     self.user = user
   end

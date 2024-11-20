@@ -94,7 +94,8 @@ export function initializeCoreEditFields(editFieldService:EditFieldService, sele
     editFieldService
       .addFieldType(TextEditFieldComponent, 'text', ['String'])
       .addFieldType(IntegerEditFieldComponent, 'integer', ['Integer'])
-      .addFieldType(ProgressPopoverEditFieldComponent, 'remainingTime', ['estimatedTime'])
+      .addFieldType(HoursDurationEditFieldComponent, 'duration', ['estimatedTime'])
+      // .addFieldType(ProgressPopoverEditFieldComponent, 'remainingTime', ['estimatedTime'])
       .addFieldType(ProjectEditFieldComponent, 'project', ['Project'])
       .addFieldType(UserEditFieldComponent, 'user', ['User'])
       .addFieldType(SelectEditFieldComponent, 'select', [
@@ -102,6 +103,7 @@ export function initializeCoreEditFields(editFieldService:EditFieldService, sele
         'Status',
         'Type',
         'Version',
+        'PlaceholderUser',
         'TimeEntriesActivity',
         'Category',
         'CustomOption',

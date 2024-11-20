@@ -40,4 +40,14 @@ class PlaceholderUser < Principal
   def to_s
     lastname
   end
+
+  def self.xvisible(user = User.current)
+    puts "visible called"
+    if user.allowed_globally?(:manage_placeholder_user) ||
+       user.allowed_in_any_project?(:manage_members)
+      all
+    else
+      in_visible_project(user)
+    end
+  end
 end

@@ -52,6 +52,7 @@ module API
                    :assignable_statuses,
                    :assignable_categories,
                    :assignable_priorities,
+                   :assignable_placeholder_users,
                    :assignable_versions,
                    :assignable_budgets,
                    to: :contract

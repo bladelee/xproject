@@ -86,8 +86,15 @@ module API
           -> do
             request = self # proc is executed in the context of the grape request
             endpoint.before_hook&.(request:)
+
+            puts "----------------------request: #{request}"
+
             params = endpoint.parse(request)
+
+            puts "----------------------params: #{params}"
             call = endpoint.process(request, params)
+
+            puts "---------------------call: #{call}"
 
             endpoint.render(request, call) do
               status endpoint.success_status
@@ -122,6 +129,7 @@ module API
             yield
             present_success(request, call)
           else
+            puts "-----------------Error: #{call.errors.full_messages}"
             present_error(call)
           end
         end

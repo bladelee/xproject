@@ -56,6 +56,7 @@ module API
           private
 
           def api_errors(call)
+            puts "api_errors  #{call}"
             ::API::Errors::ErrorBase.create_errors(call.errors)
           end
 

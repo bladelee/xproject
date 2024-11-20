@@ -18,7 +18,7 @@ su - postgres -c "$PGBIN/initdb -D /tmp/nulldb"
 su - postgres -c "$PGBIN/pg_ctl -D /tmp/nulldb -l /dev/null -l /tmp/nulldb/log -w start"
 
 # give some more time for DB to start
-sleep 5
+sleep 20
 
 echo "create database assets; create user assets with encrypted password 'p4ssw0rd'; grant all privileges on database assets to assets;" | su - postgres -c psql
 

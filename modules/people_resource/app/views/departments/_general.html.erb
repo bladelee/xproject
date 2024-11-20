@@ -1,0 +1,5 @@
+ <%= form_for @department, url: "", authenticity_token: false do |f| %>
+  <%= render :partial => 'form', :locals => {:f => f} %>
+
+  <%= submit_tag t(:button_save) %>
+<% end %>

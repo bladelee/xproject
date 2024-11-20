@@ -181,6 +181,11 @@ PATH
       grids
 
 PATH
+  remote: modules/people_resource
+  specs:
+    openproject-people_resource (1.0.0)
+
+PATH
   remote: modules/recaptcha
   specs:
     openproject-recaptcha (1.0.0)
@@ -1268,6 +1273,7 @@ DEPENDENCIES
   openproject-octicons (~> 19.10.0)
   openproject-octicons_helper (~> 19.10.0)
   openproject-openid_connect!
+  openproject-people_resource!
   openproject-primer_view_components (~> 0.29.0)
   openproject-recaptcha!
   openproject-reporting!

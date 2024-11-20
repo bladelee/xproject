@@ -1,0 +1,34 @@
+<div class="contextual">
+<%= link_to t(:label_department_new), {:controller => 'departments', :action => 'new'}, :class => 'icon icon-add'  %>
+</div>
+
+
+<h2><%=t(:label_department_plural)%></h2>
+
+<% if @departments.present? %>
+<div class="autoscroll">
+<table class="list">
+  <thead><tr>
+  <th><%=t(:label_department)%></th>
+  <th><%=t(:label_department_head)%></th>
+
+  </tr></thead>
+  <tbody>
+<% department_tree(@departments) do |department, level| %>
+  <tr class="<%= cycle("odd", "even") %> <%= department.css_classes %> <%= level > 0 ? "idnt idnt-#{level}" : nil %>">
+  <td class="name"><span><%= link_to department, '' %></span></td>
+  <td align="center"><%= link_to_user(department.head) %></td>
+
+  <td class="buttons">
+    <%= link_to(t(:button_edit), { controller: '/departments', action: 'edit', department_id: @departments, id: department }, :class => 'icon icon-edit') %>
+    <%= link_to(t(:button_delete),{ controller: '/departments', action: 'delete', department_id: @departments, id: department }, :method => :delete, :class => 'icon icon-del') %>
+  </td>
+
+  </tr>
+<% end %>
+  </tbody>
+</table>
+</div>
+<% else %>
+<p class="nodata"><%= t(:label_no_data) %></p>
+<% end %>

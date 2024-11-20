@@ -1,0 +1,56 @@
+<%= error_messages_for 'person' %>
+
+<% html_title "#{t(:label_people_person)} ##{@person.try(:id)}: #{@person.try(:name)}" %>
+
+<div class="contextual">
+  <%= link_to t(:label_profile), "", :class => 'icon icon-user' %>
+  <%= link_to t(:button_edit), "", :class => 'icon icon-edit' %>
+  <%= change_status_link(@person) %>
+</div>
+
+<h2><%= t(:label_people_person) %> #<%= @person.try(:id) %></h2>
+<div class="person details">
+  <%= content_tag('span', t(:label_people_is_system), :class => 'system')  if  @person.try(:is_system) %>
+  <table class="subject_header">
+    <tr>
+      <td class="avatar"><%= link_to avatar(@person, :size => "64", :full_size => true), @person.try(:avatar) %></td>
+      <td class="name" style="vertical-align: top;">
+        <h3><%= h @person.try(:name) %></h3>
+        <p>
+          <%= h @person.try(:job_title) %>
+          <% if @person.try(:department) %>
+            <%= " #{t(:label_people_at_department)} " %>
+            <%= department_tree_tag @person %>
+          <% end %>
+        </p>
+      </td>
+      <td class="subject_info">
+        <ul>
+          <% if @person.try(:phones) %>
+            <li class="phone icon icon-phone"><%=  @person.try(:phones) %></li>
+          <% end %>
+          <li class="email icon icon-email"><%= mail_to @person.try(:email) %></li>
+        </ul>
+      </td>
+    </tr>
+  </table>
+
+  <%= call_hook(:view_people_show_details_bottom, :person => @person) %>
+</div>
+
+
+<% content_for :sidebar do %>
+  <%= render :partial => 'attributes' %>
+  <%= call_hook(:view_people_sidebar_after_attributes, :person => @person) %>
+  <% if @person.try(:background).present? %>
+    <h3><%= t(:label_people_background) %></h3>
+    <div class="wiki"><%= textilizable(@person, :background) %></div>
+  <% end %>
+<% end %>
+
+
+
+<% content_for :header_tags do %>
+  <%= javascript_include_tag :redmine_people, plugin: 'redmine_people'  %>
+  <%= javascript_include_tag 'jquery.glanceyear.js', plugin: 'redmine_people' %>
+<% end %>

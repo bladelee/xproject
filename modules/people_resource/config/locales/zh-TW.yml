@@ -1,0 +1,237 @@
+# encoding: utf-8
+# Traditional Chinese strings go here for Rails i18n
+# Author: Salivaxiu@163.com
+# Based on file: en.yml
+
+zh-TW:
+  label_people: 人員
+  label_people_edit_person: 編輯個人信息
+  label_people_new_person: 新人員
+  label_people_group_plular: 組
+  label_people_search: 搜索名字
+  label_people_show_on_map: 地圖上顯示
+  label_people_person: 人員
+  label_people_all: 顯示所有人員
+  label_people_next_birthdays: 馬上過生日
+  label_people_new_people: 新人員
+  label_people_male: 男
+  label_people_female: 女
+  label_people_settings: 人員設置
+
+  button_people_edit_profile: 編輯屬性
+
+  label_people_avatar: 大頭貼
+  label_people_job_title: 職位
+  label_people_phone: 電話
+  label_people_phone_plural: 手機
+  label_people_skype: Skype
+  label_people_twitter: Twitter
+  label_people_facebook: Facebook
+  label_people_linkedin: LinkedIn
+  label_people_workday_length: 每日工作時長
+  label_people_middlename: 中間名
+  label_people_background: 背景信息
+  label_people_address: 地址
+  label_people_gender: 性別
+  label_people_birthday: 生日
+  label_people_appearance_date: 見面日期
+  label_people_age: 年齡
+
+  people_permission_edit_people: 編輯人員
+  people_permission_view_people: 瀏覽人員
+  people_permission_add_people: 增加人員
+  people_permission_delete_people: 刪除人員
+  people_permission_add_attachments: 增加附件
+  people_permission_edit_announcement: 編輯通知
+  people_permission_view_performance: 查看效能
+  people_permission_view_leave: 查看休假
+  people_permission_edit_leave: 編輯休假
+  people_permission_edit_personal_leave: 編輯個人休假
+
+  #0.0.2
+  label_people_acl_settings: ACL設置
+  label_people_visibility: 知名度
+  label_people_visibility_select: 顯示人員
+  label_people_visibility_resistered: 對於註冊用戶
+  label_people_visibility_selected: 對於選定用戶
+  label_people_visibility_anonymous: 對於匿名用戶
+
+  #0.0.3
+  label_department_plural: 部門
+  label_department_new: 新部門
+  label_department: 部門
+  label_department_head: 部門領導
+  label_people_department: 部門
+  label_people_at_department: 在
+  field_department_parent: 的子部門
+  people_permission_edit_departments: 編輯部門
+
+  #0.1.5
+  people_permission_delete_departments: 刪除部門
+
+  #0.1.6
+  label_people_new_mail: 新消息
+
+  #0.1.7
+  label_people_show_for_registered_users: 顯示註冊用戶的人員
+
+     #1.1.0
+  label_people_tags_plural: 標籤
+  label_visibility_public: 任何用戶
+  label_visibility_private: 只有我
+  label_people_default_list_style: 預設的清單樣式
+  label_people_list_partial_style: 清單樣式
+  label_people_list_excerpt: 摘錄列表
+  label_people_list_list: 名片
+
+  label_people_company: 公司
+
+  button_people_edit_query: 編輯查詢
+  button_people_delete_query: 刪除查詢
+  people_permission_manage_public_people_queries: 管理公開查詢
+  label_people_add_tag: + 添加標籤
+  field_person_full_name: 姓名
+  label_people_edit_tags: 編輯標籤
+  people_permission_manage_tags: 管理標籤
+  label_people_hide_age: 隱藏年齡
+  label_people_is_system: 系統
+  label_people_edit_own_data: 編輯自己的資料
+
+  # 1.2.0
+  label_announcement_description: 描述
+  label_announcement_frequency: 頻率
+  label_announcement_active: 活動
+  label_announcement_start_date: 開始日期
+  label_announcement_end_date: 結束日期
+  label_announcement_end_department: Department
+  label_announcement_new: 新通知
+  label_announcement_plural: 通知
+  label_announcement_successful_update: 通知成功更新
+  label_announcement: 通知
+  label_people_use_announcement: 使用通知
+  field_frequency: 頻率
+  field_end_date: 結束日期
+  field_kind: 類型
+
+  frequency_once: 只一次
+  frequency_everyday: 每一天
+  frequency_wday: 每週一次
+  frequency_mday: 每月一次
+
+  announcement_kind_notice: 注意
+  announcement_kind_warning: 警告
+  announcement_kind_error: 錯誤
+  announcement_status_active: 活動
+  announcement_status_all: 所有
+  label_people_close: 關閉
+  label_people_birthday_today: 今天生日
+  label_people_birthday_tomorrow: 明天生日
+  label_people_birthday_this_week: 本周生日
+  label_people_show_birthday_announcement: 顯示生日通知
+  label_people_subordinates: 下屬
+  label_people_manager: 經理
+  people_permission_edit_subordinates: 編輯下屬
+
+  label_people_default_group: 默認用戶組
+  label_people_choose_manager: 選擇經理
+
+  label_people_work_experience: 工作經歷
+  label_people_work_experience_new: 新工作經歷
+  label_people_work_experience_edit: 編輯工作經歷
+  label_people_previous_company_name: 上一家公司名
+  label_people_previous_job_title: 上一個工作職位
+  label_people_from_date: 開始日期
+  label_people_to_date: 結束日期
+  label_people_to_description: 描述
+
+  label_people_performance: 效能
+  label_people_total_hours: 總小時數
+  label_people_overtime: 加班
+  label_people_weekends: 周末
+
+  label_people_hour: 小時
+  label_people_minute: 分鐘
+  label_people_deviation: 偏差
+
+  label_time_spent: 耗時
+  label_people_period: 上一期間
+  label_people_calendar: 工作日曆
+  label_people_holidays: 假期
+  label_people_organization_chart: 公司架構
+  label_people_organization_name: 公司名
+  label_people_set_organization_name: 設置公司名
+  label_people_organization_head: 公司領導人
+  label_people_birthdays: 生日
+
+  label_people_holiday_name: 名稱
+  label_people_holiday_start_date: 開始日期
+  label_people_holiday_end_date: 結束日期
+  label_people_holiday_description: 描述
+  label_people_holiday_is_workday: 是工作日
+  label_people_holiday_notify: 提醒
+  label_people_holiday_notify_subject:  "添加從日期 %{from} 到 %{to} 为 %{name} 假日. "
+  label_people_holidays_next: 下一個假日
+
+  label_people_holiday_new: 新建假日
+  label_people_holiday_edit: 編輯假日
+
+  people_permission_manage_departments: 部門管理
+
+  people_permission_edit_work_experience: 編輯工作經歷
+  people_permission_edit_own_work_experience: 編輯自己的工作經歷
+  people_permission_manage_calendar: 管理工作日曆
+
+  notice_failed_to_save_people:  "無法將 %{count} 人員保存在所選的 %{total} 上"
+  people_label_bulk_edit_selected_people: 編輯所有選擇的人員
+
+  label_people_add_tags: 添加標籤
+  label_people_delete_tags: 刪除標籤
+  label_people_report_plural: 人員報表
+  label_people_user_activity: 用戶活動
+  label_people_average_time_per_day: 平均每日
+  label_people_total_coverage: 全部覆蓋範圍
+  label_people_filter_activity_type: 活動類型
+  label_people_filter_time_interval: 報表時間區間
+
+  label_activity_type_issue_create: 創建Issue
+  label_activity_type_issue_update: 更新Issue
+  label_activity_type_spent_time_added: 添加耗時
+
+  label_people_by_month: 每月
+  label_people_by_year: 每年
+
+  label_people_leave_plural: Leaves
+  label_people_leave_planner: 休假計畫
+  label_people_leave_type: 休假類型
+  label_people_leave_types: 休假類型
+  label_people_leave_type_new: 新建休假類型
+  label_people_leave_type_edit: 編輯休假類型
+  label_people_leave_new: 新休假
+  label_people_leave_edit: 編輯休假
+  label_people_leave_comment: 留言
+  label_people_graph: 圖表
+  label_people_not_approved: 未批准
+  label_people_scheduled_for: 給
+  label_people_added_day_off: 添加調休
+  label_people_appoved_notification: Day off status changed
+  label_people_notes_notification: Day off notes changed
+
+  notice_leave_type_successfully_destroyed: 休假類型已被成功銷毀
+
+  field_paid: 支付
+  field_approvable: 審批
+  field_approved: 已批准
+  field_color: 顏色
+  field_leave_type: 休假類型
+  field_hours_per_day: 小時/日
+  field_duration: 持續
+  field_hours_per_day_abbreviation: 小時/天
+
+  label_people_contact_plural: 聯繫人
+
+  people_permission_view_reports: 查看報告
+
+  activerecord:
+    errors:
+      messages:
+        greater_than_or_equal_to_start_date: 必須大於或等於開始日期

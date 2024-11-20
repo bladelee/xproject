@@ -1,0 +1,50 @@
+<%= error_messages_for 'department' %>
+
+<% html_title "#{t(:label_department)} ##{@department.try(:id)}: #{@department.try(:name)}" %>
+
+<div class="contextual">
+  <% if 1 %>
+    <%= link_to t(:button_edit), "", :class => 'icon icon-edit' %>
+    <%= link_to t(:button_delete),"", :confirm => t(:text_are_you_sure), :method => :delete, :class => 'icon icon-del' %>
+  <% end %>
+</div>
+
+<h2><%= t(:label_department) %> #<%= @department.try(:id) %></h2>
+
+<div class="department issue details">
+
+
+  <%= avatar(@department.try(:head), :size => "50") %>
+
+<div class="subject">
+<h3><%= @department.try(:name) %></h3>
+</div>
+        <p class="author">
+          <%= t(:label_department_head) %>
+          <%= link_to_user @department.try(:head) %>
+        </p>
+
+  <% if @department.try(:background) || @department.try(:attachments) -%>
+
+  <% if @department.try(:background) %>
+    <p><strong><%=t(:label_people_background)%></strong></p>
+    <div class="wiki">
+    <%= textilizable @department, :background, :attachments => @department.attachments %>
+    </div>
+  <% end %>
+  <% end -%>
+</div>
+
+<%= render_department_tabs department_tabs%>
+
+<% content_for :sidebar do %>
+  <div id="department_people">
+    <h3><%= t(:label_people) %></h3>
+    <%= render :partial => 'people/person_data', :collection => @department.try(:people,:active) %>
+  </div>
+
+<% end %>
+
+<% content_for :header_tags do %>
+  <%= javascript_include_tag :redmine_people, :plugin => 'redmine_people'  %>
+<% end %>

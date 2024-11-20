@@ -1,0 +1,98 @@
+<div id="attributes">
+
+<h3><%= t(:label_people_person) %></h3>
+
+<table class="person attributes vcard">
+  <%= call_hook(:view_people_sidebar_attributes_top) %>
+	<tr>
+		<th class = "first-name"><%= t(:field_name) %>:</th><td class="name fn "><%= @person.try(:firstname) %></td>
+	</tr>
+	<tr>
+		<th class = "middle-name"><%= t(:label_people_middlename) %>:</th><td class="name mn "><%= @person.try(:middlename) %></td>
+	</tr>
+	<tr>
+		<th class = "last-name"><%= t(:field_lastname) %>:</th><td class="name ln "><%= @person.try(:lastname) %></td>
+	</tr>
+	<% if !@person.try(:job_title).blank? %>
+	<tr> <th class = "job_title"><%= t(:label_people_job_title) %>:</th><td class="job_title title"><%= @person.try(:job_title) %></td></tr>
+	<% end %>
+	<% if !@person.try(:manager).blank? %>
+		<tr>
+		<th class = "manager"><%= t(:label_people_manager) %>:</th><td class="manager title"><%= link_to_user(@person.manager) %></td></tr>
+	<% end %>
+	<tr>
+		<th class = "address"><%= t(:label_people_address) %>:</th>
+		<td class="address adr"><%= @person.try(:address) %>
+				<% if !@person.try(:address).blank? %>
+					<br>
+					<%= link_to t(:label_people_show_on_map), "http://maps.google.com/maps?f=q&q=#{h @person.address.gsub("\r\n"," ").gsub("\n"," ")}+(#{h @person.name})&ie=UTF8&om=1"%>
+				<% end %>
+		</td>
+		</tr>
+	<tr class = "tel">
+		<th class = "phone"><%= t(:label_people_phone_plural) %>:</th>
+		<td class = "phones">
+
+			<span  class="value"><%= @person.try(:phones) %> <br></span>
+
+		</td>
+	</tr>
+	<tr class = "email">
+		<th><%= t(:field_mail) %>:</th>
+		<td>
+			<%= mail_to @person.try(:email)  %>
+		</td>
+	</tr>
+ 	<% unless @person.try(:skype).blank? %>
+	<tr>
+	  <th class = "skype"><%= t(:label_people_skype) %>:</th>
+	  <td class="skype icon icon-skype"><%= link_to @person.skype, "skype:#{@person.skype}?call" %></td>
+	</tr>
+	<% end %>
+  <% unless @person.try(:twitter).blank? %>
+	<tr>
+	  <th class = "twitter"><%= t(:label_people_twitter) %>:</th>
+	  <td class="twitter icon icon-twitter"><%= link_to @person.twitter, "http://twitter.com/" + @person.twitter %></td>
+	</tr>
+  <% end %>
+  <% unless @person.try(:facebook).blank? %>
+	<tr>
+	  <th class = "facebook"><%= t(:label_people_facebook) %>:</th>
+	  <td class="facebook icon icon-facebook"><%= link_to @person.facebook.gsub(/^.*facebook.com\//, ''), "http://facebook.com/#{@person.facebook}" %></td>
+	</tr>
+  <% end %>
+  <% unless @person.try(:linkedin).blank? %>
+	<tr>
+	  <th class = "linkedin"><%= t(:label_people_linkedin) %>:</th>
+	  <td class="linkedin icon icon-linkedin"><%= link_to @person.name, "http://www.linkedin.com/profile/view?id=#{@person.linkedin}"%></td>
+	</tr>
+  <% end %>
+
+	<% unless @person.try(:birthday).blank? %>
+	<tr> <th class = "birthday"><%= t(:label_people_birthday) %>:</th><td class="birthday bday" title="<%= "#{format_date(@person.birthday)}" %>"><%= "#{@person.birthday.day} #{t('date.month_names')[@person.birthday.month]}"%></td> </tr>
+	<% unless RedminePeople.hide_age? %>
+		<tr> <th class = "age"><%= t(:label_people_age) %>:</th><td class="ega"><%= @person.age %></td> </tr>
+	<% end %>
+	<% end %>
+
+	<% @person.try(:custom_values).each do |custom_value| %>
+		<% if !custom_value.value.blank? && (User.current.admin? || custom_value.custom_field.visible?) %>
+		<tr> <th class = "custom_field"><%= custom_value.custom_field.name%>:</th><td> <%=h show_value(custom_value) %></td> </tr>
+		<% end %>
+	<% end %>
+
+  <tr> <th class = "registered_on"> <%=t(:label_registered_on)%>:</th><td class="registered_on"> <%= format_date(@person.created_on) %></td> </tr>
+
+  <% if @person.time_zone %>
+  <tr> <th class = "time_zone"> <%=t(:field_time_zone)%>:</th><td class="time_zone"> <%= @person.time_zone %></td> </tr>
+  <% end %>
+
+  <% unless @person.last_login_on.nil? %>
+	<tr> <th class = "last_login_on"> <%=t(:field_last_login_on)%>:</th><td class="last_login_on"> <%= format_time(@person.last_login_on) %></td> </tr>
+  <% end %>
+
+	<%= call_hook(:view_people_sidebar_attributes_bottom) %>
+
+</table>
+
+</div>

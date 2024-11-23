@@ -27,9 +27,9 @@
 #++
 
 class CustomActionsController < ApplicationController
-  include EnterpriseTrialHelper
+  # include EnterpriseTrialHelper
   before_action :require_admin
-  before_action :require_enterprise_token
+  # before_action :require_enterprise_token
 
   self._model_object = CustomAction
   before_action :find_model_object, only: %i(edit update destroy)

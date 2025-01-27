@@ -68,8 +68,25 @@ OpenProject::Inflector.inflection(
   "clamav" => "ClamAV"
 )
 
+# lib = Rails.root.join('modules/people_resource/lib/redmine')
+# lib.join('modules/people_resource/lib/acts_as_attachable_global')
+# IGNORE_LIST = [
+#   'wiki_formatting/textile/redcloth3.rb',
+#   'core_ext.rb',
+#   'core_ext'
+# ]
+
 Rails.autoloaders.each do |autoloader|
   autoloader.inflector = OpenProject::Inflector.new(__FILE__)
+
+  # IGNORE_LIST.each do |mod|
+  #   autoloader.ignore lib.join(mod)
+  # end
+  autoloader.ignore(Rails.root.join('modules/people_resource/lib'))
+  # autoloader.ignore(Rails.root.join('modules/people_resource/lib/redmine'))
+  # autoloader.ignore(Rails.root.join('modules/people_resource/lib/acts_as_attachable_global'))
+  # autoloader.ignore(Rails.root.join('modules/people_resource/lib/plugins'))
+
 end
 
 Rails.autoloaders.main.ignore(Rails.root.join("lib/open_project/patches"))

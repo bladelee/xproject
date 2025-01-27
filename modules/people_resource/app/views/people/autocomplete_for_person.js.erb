@@ -4,3 +4,19 @@
         avatar: avatar(person, size: 16) }
     }.to_json
 %>
+
+<%
+=begin%>
+ <%= raw [{ id ：1 }].map { |person|
+      { id:  person.id}
+    }.to_json
+%> 
+<%
+=end%>
+
+<%
+=begin%>
+ <%= {id: 1}.to_json  %> 
+<%= @people.to_json  %> 
+<%
+=end%>

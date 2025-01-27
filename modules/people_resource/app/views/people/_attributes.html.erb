@@ -75,20 +75,16 @@
 	<% end %>
 	<% end %>
 
-	<% @person.try(:custom_values).each do |custom_value| %>
-		<% if !custom_value.value.blank? && (User.current.admin? || custom_value.custom_field.visible?) %>
-		<tr> <th class = "custom_field"><%= custom_value.custom_field.name%>:</th><td> <%=h show_value(custom_value) %></td> </tr>
-		<% end %>
-	<% end %>
 
-  <tr> <th class = "registered_on"> <%=t(:label_registered_on)%>:</th><td class="registered_on"> <%= format_date(@person.created_on) %></td> </tr>
 
-  <% if @person.time_zone %>
+  <tr> <th class = "registered_on"> <%=t(:label_registered_on)%>:</th><td class="registered_on"> <%= format_date(@person.try(:created_on)) %></td> </tr>
+
+  <% if @person.try(:time_zone) %>
   <tr> <th class = "time_zone"> <%=t(:field_time_zone)%>:</th><td class="time_zone"> <%= @person.time_zone %></td> </tr>
   <% end %>
 
-  <% unless @person.last_login_on.nil? %>
-	<tr> <th class = "last_login_on"> <%=t(:field_last_login_on)%>:</th><td class="last_login_on"> <%= format_time(@person.last_login_on) %></td> </tr>
+  <% unless @person.try(:last_login_on) %>
+	<tr> <th class = "last_login_on"> <%=t(:field_last_login_on)%>:</th><td class="last_login_on"> <%= format_time(@person.try(:last_login_on)) %></td> </tr>
   <% end %>
 
 	<%= call_hook(:view_people_sidebar_attributes_bottom) %>

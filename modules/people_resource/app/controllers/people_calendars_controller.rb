@@ -19,7 +19,7 @@
 
 class PeopleCalendarsController < ApplicationController
   
-  helper :calendars if Redmine::VERSION.to_s < '5.1'
+  # helper :calendars if Redmine::VERSION.to_s < '5.1'
   helper :queries
   helper :sort
   include PeopleHolidaysHelper

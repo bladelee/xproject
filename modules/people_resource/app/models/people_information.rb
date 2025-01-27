@@ -17,8 +17,10 @@
 # You should have received a copy of the GNU General Public License
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
+require_relative "../../lib/redmine/safe_attributes.rb"
+
 class PeopleInformation < ApplicationRecord
-  #include Redmine::SafeAttributes
+  include Redmine::SafeAttributes
   self.table_name = 'people_information'
   self.primary_key = 'user_id'
 
@@ -46,9 +48,9 @@ class PeopleInformation < ApplicationRecord
       attributes.delete('is_system')
     end
 
-    #empty = PeopleInformation.safe_attributes.flatten.map { |name| attributes[name].blank? }.all?
-    #attributes[:_destroy] = 1 if exists && empty
-    #false
+    empty = PeopleInformation.safe_attributes.flatten.map { |name| attributes[name].blank? }.all?
+    attributes[:_destroy] = 1 if exists && empty
+    false
   end
 
   def self.modified_system_fields?(person)

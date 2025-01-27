@@ -1,5 +1,5 @@
 <% content_for :header_tags do %>
-  <%= select2_assets %>
+  <%= select2_assets1 %>
 <% end %>
 
 <%= form_tag({:controller => :people_settings, :action => :update, :id => '1', :tab => 'general'},
@@ -12,7 +12,7 @@
 
   <p>
     <%= label_tag 'settings[organization_head]', l(:label_people_organization_head) %>
-    <%= select2_tag 'settings[organization_head]',
+    <%= local_select2_tag 'settings[organization_head]',
                     options_for_select2_people(RedminePeople.settings['organization_head']),
                     width: '20%',
                     url: autocomplete_for_person_people_path,

@@ -22,8 +22,34 @@
 module DepartmentsHelper
   include PeopleHelper
 
+  def dept_render_tabs(tabs, selected=params[:tab])
+    if tabs.any?
+      unless tabs.detect {|tab| tab[:name] == selected}
+        selected = nil
+      end
+      selected ||= tabs.first[:name]
+    #  render :partial => 'common/tabs', :locals => {:tabs => tabs, :selected_tab => selected}
+      render partial: 'common/common_tabs', :locals => {:tabs => tabs, :selected_tab => selected}
+  else
+      content_tag 'p', l(:label_no_data), :class => "nodata"
+    end
+  end
+
+  # Returns the tab action depending on the tab properties
+  def get_tab_action(tab)
+    if tab[:onclick]
+      return tab[:onclick]
+    elsif tab[:partial]
+      return "showTab('#{tab[:name]}', this.href)"
+    else
+      return nil
+    end
+  end  
+
   def department_tree(departments, &block)
-    Department.department_tree(departments, &block)
+    tree = Department.department_tree(departments, &block)
+    puts "department_tree called: #{tree}"
+    tree
   end
 
   def parent_department_select_tag(department)
@@ -37,7 +63,9 @@ module DepartmentsHelper
     options = ''
     options << "<option value=''></option>"
     options << department_tree_options_for_select(departments, :selected => selected)
-    content_tag('select', options.html_safe, :name => 'department[parent_id]', :id => 'department_parent_id')
+    
+    ret = content_tag('select', options.html_safe, :name => 'department[parent_id]', :id => 'department_parent_id')
+    content_tag('span', content_tag(:span, ret.html_safe, class: 'form--select-container -middle'), :class => 'form--field-container')
   end
 
   def department_tree_options_for_select(departments, options = {})
@@ -157,6 +185,29 @@ module DepartmentsHelper
     else
       content_tag 'p', t(:label_no_data), :class => "nodata"
     end
+  end
+
+  def local_select2_tag(name, option_tags = nil, options = {})
+    # if builder
+    #   puts "local_select2_tag called: #{name}, #{builder}, #{option_tags}, #{options}"
+    #   s = builder.select(name, option_tags, options)
+    #   puts "---xxx-----------------local_select2_tag builder result: #{s}"
+    # else
+      s = select_tag(name, option_tags, options)
+      puts "------x-------------------local_select2_tag result: #{s}"
+    # end
+
+    if options[:multiple] && options.fetch(:include_hidden, true)
+      s << hidden_field_tag("#{name}[]", '')
+    end
+
+
+    s = content_tag('span', content_tag(:span, s.html_safe, class: 'form--select-container -middle'), :class => 'form--field-container')
+    s + nonced_javascript_tag("select2Tag('#{sanitize_to_id(name)}', #{options.to_json});")
+  end  
+
+  def local_transform_to_select2(type, options = {})
+    nonced_javascript_tag("setSelect2Filter('#{type}', #{options.to_json});") unless type.empty?
   end
 
 end

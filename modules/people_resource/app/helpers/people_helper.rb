@@ -185,8 +185,14 @@ module PeopleHelper
   end
 
   def options_for_select2_people(selected)
+    puts "----------------------------------------------------------selected: #{selected}"
     if selected && (person = Person.all_visible.find_by_id(selected))
-      options_for_select([[person.name, person.id]], selected)
+      puts "person: #{person.name}"
+      options = options_for_select([[person.name, person.id]], selected)
+      puts "options: #{options}"
+      options
+    else
+      options_for_select([], selected)
     end
   end
 end

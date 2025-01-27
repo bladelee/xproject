@@ -2,7 +2,13 @@
   <%= form_tag({}, :data => {:cm_url => context_menu_people_path}) do %>
   <%= hidden_field_tag 'back_url', url_for(params.respond_to?(:to_unsafe_hash) ? params.to_unsafe_hash : params) %>
   <div class="autoscroll">
-      <table class="people index excerpt">
+      <table class="generic-table">
+        <thead class="-sticky">
+          <tr>
+             <th><%=t(:label_login)%></th>
+             <th><%=t(:label_firstname)%></th>
+          </tr>
+        </thead>
       <tbody>
       <% previous_group = false %>
       <% @people.each do |person| %>
@@ -18,25 +24,29 @@
             <% previous_group = group %>
           <% end %>
 
-         <tr class="hascontextmenu">
+         <tr class="user active">
               <td class="checkbox">
                   <%= check_box_tag "ids[]", person.id, false %>
               </td>
               <td class="avatar">
-                  <%= avatar(person, :size => "32") %>
+                  <%= avatar(person, :size => "mini") %>
               </td>
-              <td class="name">
-                  <h3><%= link_to person.name, person_path(person) %></h3>
-                  <p>
+              <td class="username">
+                  <h5><%= link_to person.name, person_path(person) %></h5>
+                  <%
+=begin%>
+ <p>
                       <%= mail_to person.mail %>
                       <div><%= person.phones.first %></div>
-                  </p>
+                  </p> 
+<%
+=end%>
               </td>
               <td class="info">
                   <div class="title_and_company" >
                       <%= h person.job_title %>
                       <% if person.department %>
-                          <%= " #{l(:label_people_at_department)} "  %>
+                          <%= " #{t(:label_people_at_department)} "  %>
                           <%= person.department %>
                      <% end %>
                    </div>
@@ -51,10 +61,5 @@
    </div>
    <% end %>
 <% else %>
-  <%
-=begin%>
- <%= render_flash_messages %> 
-<%
-=end%>
-  <p class="nodata"><%= l(:label_no_data) %></p>
+  <p class="nodata"><%= t(:label_no_data) %></p>
 <% end %>

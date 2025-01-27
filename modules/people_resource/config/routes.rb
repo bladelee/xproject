@@ -39,26 +39,27 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :people,controller: "people" do
-    collection do
-      get :bulk_edit, :context_menu, :edit_mails, :preview_email, :avatar
-      get "/edit/:id" => "people#edit"
-      put "update/:id" => "people#update"
-      get :autocomplete_for_person
-      #post "/", to: "people#add_people"
-      post :bulk_edit, :bulk_update, :send_mails, :add_manager
-      delete :bulk_destroy
-      get 'calendar' => 'people_calendars#index'
-      resources :holidays, except: :show, controller: :people_holidays, as: :people_holidays
-    end
-  end
+  # resources :people,controller: "people" do
+  #   collection do
+  #     get :bulk_edit, :context_menu, :edit_mails, :preview_email, :avatar
+  #     get "/edit/:id" => "people#edit"
+  #     put "update/:id" => "people#update"
+  #     patch "update/:id" => "people#update"
+  #     get :autocomplete_for_person
+  #     #post "/", to: "people#add_people"
+  #     post :bulk_edit, :bulk_update, :send_mails, :add_manager
+  #     delete :bulk_destroy
+  #     get 'calendar' => 'people_calendars#index'
+  #     resources :holidays, except: :show, controller: :people_holidays, as: :people_holidays
+  #   end
+  # end
 
 
   namespace :departments do
     resource :menu, only: %[show index]
   end
 
-=begin
+
 resources :people do
   collection do
     get :bulk_edit, :context_menu, :edit_mails, :preview_email, :avatar
@@ -104,5 +105,5 @@ constraints object_type: /(departments)/ do
   patch 'attachments/:object_type/:object_id', to: 'attachments#update_all', as: 'departments_attachments'
   get 'attachments/:object_type/:object_id/download', to: 'attachments#download_all', as: 'departments_attachments_download'
 end
-=end
+
 end

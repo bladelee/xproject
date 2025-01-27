@@ -17,11 +17,13 @@
 # You should have received a copy of the GNU General Public License
 # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
+require_relative "../../lib/redmine/safe_attributes.rb"
+
 class Person < User
 
-  #include Redmine::SafeAttributes
+  include Redmine::SafeAttributes
   #include Redmine::Pagination
-  attr_accessor :auth_source_id,:custom_field_values,:custom_fields, :status, :mail_notification,:notified_project_ids
+  #attr_accessor :auth_source_id,:custom_field_values,:custom_fields, :status, :mail_notification,:notified_project_ids
   #attr_accessor :admin,:custom_field_values,:custom_fields, :status, :login, :notified_project_ids, :mail_notification, :auth_source_id, :information_attributes,
   #              :is_system, :middlename, :gender,:birthday,:address,:phone,:job_title,:department_id,:manager_id,:appearance_date,:background
 
@@ -66,7 +68,7 @@ class Person < User
   scope :managers, lambda { joins("INNER JOIN #{PeopleInformation.table_name} ON #{Person.table_name}.id = #{PeopleInformation.table_name}.manager_id").uniq }
 
 
-=begin
+
   safe_attributes 'custom_field_values',
                   'custom_fields',
                   'information_attributes',
@@ -78,7 +80,7 @@ class Person < User
 
   safe_attributes 'tag_list',
     :if => lambda { |person, user| user.allowed_people_to?(:manage_tags, person) }
-=end
+
 
   def self.genders
     [['男', 0], ['女', 1]]

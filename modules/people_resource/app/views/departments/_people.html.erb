@@ -21,7 +21,7 @@
     </tbody>
   </table>
 <% else %>
-  <p class="nodata"><%= l(:label_no_data) %></p>
+  <p class="nodata"><%= t(:label_no_data) %></p>
 <% end %>
 </div>
 
@@ -30,16 +30,16 @@
 <% if people.any? %>
   <%= form_for(@department, :remote => true, :url => {:action => "add_people", :id => @department},
                :html => {:method => :post, :class => "select-users"}) do |f| %>
-    <fieldset><legend><%=l(:label_user_new)%></legend>
+    <fieldset><legend><%=t(:label_user_new)%></legend>
 
-    <p><%= label_tag "user_search", l(:label_user_search) %><%= text_field_tag 'user_search', nil %></p>
-    <%= javascript_tag "observeSearchfield('user_search', 'people', '#{ escape_javascript url_for(:action => "autocomplete_for_person", :id => @department)}')" %>
+    <p><%= label_tag "user_search", t(:label_user_search) %><%= text_field_tag 'user_search', nil %></p>
+    <%= nonced_javascript_tag "observeSearchfield('user_search', 'people', '#{ escape_javascript url_for(:action => "autocomplete_for_person", :id => @department)}')" %>
 
     <div id="people">
       <%= principals_check_box_tags 'person_ids[]', people %>
     </div>
 
-    <p><%= submit_tag l(:button_add) %></p>
+    <p><%= submit_tag t(:button_add) %></p>
     </fieldset>
   <% end %>
 <% end %>

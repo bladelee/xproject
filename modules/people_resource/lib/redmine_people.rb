@@ -68,22 +68,30 @@ REDMINE_PEOPLE_REQUIRED_FILES = [
   'redmine/activity/crm_fetcher',
   'redmine_people/helpers/redmine_people',
   'acts_as_attachable_global/init',
-  'redmine_people/patches/application_controller_patch',
-  'redmine_people/patches/user_patch',
-  'redmine_people/patches/application_helper_patch',
-  'redmine_people/patches/avatars_helper_patch',
-  'redmine_people/patches/users_controller_patch',
-  'redmine_people/patches/my_controller_patch',
-  'redmine_people/patches/calendar_patch',
-  'redmine_people/patches/query_patch',
-  'redmine_people/patches/mailer_patch',
-  'redmine_people/patches/attachments_controller_patch',
+  # 'redmine_people/patches/application_controller_patch',
+  # 'redmine_people/patches/user_patch',
+  # 'redmine_people/patches/application_helper_patch',
+  # 'redmine_people/patches/avatars_helper_patch',
+  # 'redmine_people/patches/users_controller_patch',
+  # 'redmine_people/patches/my_controller_patch',
+  # 'redmine_people/patches/calendar_patch',
+  # 'redmine_people/patches/query_patch',
+  # 'redmine_people/patches/mailer_patch',
+  # 'redmine_people/patches/attachments_controller_patch',
   'redmine_people/hooks/views_layouts_hook',
   'redmine_people/hooks/views_my_account_hook',
-  'redmine_people/patches/attachments_helper_patch',
-]
+  # 'redmine_people/patches/attachments_helper_patch',
+ ]
 
-REDMINE_PEOPLE_REQUIRED_FILES << 'redmine_people/patches/query_filter_patch'
+# REDMINE_PEOPLE_REQUIRED_FILES << 'redmine_people/patches/query_filter_patch'
 
 base_url = File.dirname(__FILE__)
-#REDMINE_PEOPLE_REQUIRED_FILES.each { |file| require(base_url + '/' + file) }
+require(base_url + '/redmine') 
+# puts "people resource ----base_url #{$LOADED_FEATURES}"
+
+require (base_url + '/../../../lib_static/redmine/i18n')
+require (base_url + '/redmine/hook')
+require (base_url + '/redmine/nested_set/traversing')
+Dir[File.dirname(__FILE__) + "/redmine/hook/*.rb"].each {|file| require file }
+
+REDMINE_PEOPLE_REQUIRED_FILES.each { |file| require(base_url + '/' + file) }

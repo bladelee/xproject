@@ -36,14 +36,20 @@ class DepartmentsController < ApplicationController
     def edit
       if params[:id]
         @department = Department.find(params[:id])
+        puts "------------------------------@department = #{@department.as_json}"
+        puts "------------------------------@department.head_id = #{@department.head_id}"
+        @department
       end
+      render layout: "global"
     end
 
     def new
       @department = Department.new
+      render layout: "global"
     end
 
     def show
+      render layout: "global"
     end
 
     def update
@@ -64,7 +70,7 @@ class DepartmentsController < ApplicationController
         end
       else
         respond_to do |format|
-          format.html { render :action => 'edit' }
+          format.html { render layout: "global", :action => 'edit' }
           #format.api  { render_validation_errors(@department) }
         end
       end
@@ -104,7 +110,7 @@ class DepartmentsController < ApplicationController
         end
       else
         respond_to do |format|
-          format.html { render :action => 'new' }
+          format.html { render layout: "global", :action => 'new' }
           #format.api  { render_validation_errors(@department) }
         end
       end
@@ -131,6 +137,7 @@ class DepartmentsController < ApplicationController
     end
 
     def autocomplete_for_person
+      puts '-----------------------department_autocomplete_for_person------------------------------'
       @people = Person.active.where(:type => 'User').not_in_department(@department).like(params[:q]).limit(100)
       render :layout => false
     end

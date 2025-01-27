@@ -18,6 +18,8 @@
   # along with redmine_people.  If not, see <http://www.gnu.org/licenses/>.
 
 class PeopleController < ApplicationController
+    # layout "admin"    
+    include Layout
     Mime::Type.register 'text/x-vcard', :vcf
 
 
@@ -29,19 +31,37 @@ class PeopleController < ApplicationController
                                                  :manager, :autocomplete_for_manager, :add_manager, :autocomplete_for_person]
 =end
 
-    #before_action :bulk_find_people, :only => [:context_menu, :bulk_edit, :bulk_update]
-    # before_action :limit_per_page_option, :only => [:load_tab, :show, :remove_subordinate]
-    #before_action :get_data_for_tab, only: [:load_tab, :show]
+    # before_action :bulk_find_people, :only => [:context_menu, :bulk_edit, :bulk_update]
+    before_action :bulk_find_people, :only => [:context_menu]
+    before_action :limit_per_page_option, :only => [:load_tab, :show, :remove_subordinate]
+    before_action :get_data_for_tab, only: [:load_tab, :show]
 
 
     include PeopleHelper
     helper :queries
     helper :departments
-    #helper :context_menus
+    helper :context_menus
     helper :custom_fields
     helper :sort
     include SortHelper
     helper :attachments
+
+    menu_item :people_resources
+
+    # Returns the number of objects that should be displayed
+    # on the paginated list
+    def per_page_option
+      per_page = nil
+      if params[:per_page] && Setting.per_page_options_array.include?(params[:per_page].to_s.to_i)
+        per_page = params[:per_page].to_s.to_i
+        session[:per_page] = per_page
+      elsif session[:per_page]
+        per_page = session[:per_page]
+      else
+        per_page = Setting.per_page_options_array.first || 25
+      end
+      per_page
+    end
 
     def index
       @people = Person.where(:type => 'User')
@@ -76,7 +96,7 @@ class PeopleController < ApplicationController
           offset: @offset
         )
       else
-        flash[:error] = @query.errors.full_messages.first if @query.errors.present?
+        #flash[:error] = @query.errors.full_messages.first if @query.errors.present?
       end
 
       respond_to do |format|
@@ -86,17 +106,20 @@ class PeopleController < ApplicationController
     end
 
     def show
+      @person = Person.where(:type => 'User').find(params[:id])
+      @information = PeopleInformation.where(:user_id => params[:id])
       respond_to do |format|
-        format.html
+        format.html { render layout: "global"}
       end
     end
 
-    def edit
-      #@auth_sources = AuthSource.all
-      @departments = Department.all.sort
-      @membership ||= Member.new
-      @person.build_information unless @person.information
-    end
+    # def edit
+    #   #@auth_sources = AuthSource.all
+    #   @departments = Department.all.sort
+    #   @membership ||= Member.new
+    #   @person = Person.where(:type => 'User').find(params[:id])
+    #   @person.try(:build_information) unless @person.try(:information)
+    # end
 
     def new
       @person = Person.new(language: Setting.default_language)
@@ -109,23 +132,62 @@ class PeopleController < ApplicationController
     end
 
     def update
-      (render_403; return false) unless @person.editable_by?(User.current)
-      @person = params[:person]
+      #params.permit!
+      #(render_403; return false) #unless @person.editable_by?(User.current)
+      #@person.safe_attributes = params[:person]
+
+      @person = Person.find(params[:id])
+      @person.firstname = params[:person][:firstname]
+      @person.lastname = params[:person][:lastname]
+      @person.mail = params[:person][:mail]
+
+      #@person.status = params[:person][:status]
+      #@person.information = params[:person][:information_attributes].permit!
+      #logger.debug "Failed to deduce event params for #{@person.firstname}"
       if @person.save
+
+
+        #peopleInformation = PeopleInformation.where(:user_id => params[:id])
+
+        logger.debug "-------Failed to deduce event params for #{params[:id]}"
+
+
+
+=begin
+        peopleInformation.middlename = params[:person][:information_attributes][:middlename]
+        peopleInformation.gender = params[:person][:information_attributes][:gender]
+        peopleInformation.birthday = params[:person][:information_attributes][:birthday]
+        peopleInformation.address = params[:person][:information_attributes][:address]
+        peopleInformation.phone = params[:person][:information_attributes][:phone]
+        peopleInformation.job_title = params[:person][:information_attributes][:job_title]
+        peopleInformation.department_id = params[:person][:information_attributes][:department_id]
+        peopleInformation.manager_id = params[:person][:information_attributes][:manager_id]
+        peopleInformation.appearance_date = params[:person][:information_attributes][:appearance_date]
+        peopleInformation.background = params[:person][:information_attributes][:background]
+
+        peopleInformation.save
+=end
+
+
         #attachments = Attachment.attach_files(@person, params[:attachments])
         #render_attachment_warning_if_needed(@person)
-        flash[:notice] = l(:notice_successful_update)
+        flash[:notice] = t(:notice_successful_update)
         attach_avatar
         respond_to do |format|
           format.html { redirect_to action: 'show', id: @person, tab: params[:tab] }
-          format.api  { head :ok }
+          #format.api  { head :ok }
         end
       else
         respond_to do |format|
-          format.html { render action: 'edit', status: 400 }
-          format.api  { render_validation_errors(@person) }
+          format.html { render layout: "global", action: 'edit', status: 400 }
+          #format.api  { render_validation_errors(@person) }
         end
       end
+    end
+
+
+    def product_params
+      params.require(:person).permit(:firstname, :lastname,:mail,:status)
     end
 
     def create
@@ -147,7 +209,7 @@ class PeopleController < ApplicationController
       if @person.save
 
         @people_information = PeopleInformation.new
-        @people_information.user_id = @person
+        @people_information.user_id = @person.id
         @people_information.is_system = params[:person][:information_attributes][:is_system]
         @people_information.middlename = params[:person][:information_attributes][:middlename]
         @people_information.gender = params[:person][:information_attributes][:gender]
@@ -197,6 +259,7 @@ class PeopleController < ApplicationController
         format.html { redirect_back_or_default(people_path) }
       end
     end
+
 
     def avatar
       attachment = Attachment.find(params[:id])
@@ -272,11 +335,19 @@ class PeopleController < ApplicationController
         format.js
       end
     end
-
+      # def autocomplete_for_person
+      #   Rails.logger.debug("------------------------debug1::  autocomplete_for_person  entered" )
+      #   puts '------------------------------xxxxxxx1----------'
+      #   @people = [1,2,3]
+      # end
     def autocomplete_for_person
+      Rails.logger.debug("------------------------debug1::  autocomplete_for_person  entered" )
+      puts '------------------------------xxxxxxx1----------'
       @people = User.active.sorted.like(params[:q]).limit(10)
-      @people = @people.visible if Person.respond_to?(:visible)
+      # @people = @people.visible if Person.respond_to?(:visible)
       @people = @people.to_a
+      puts "------------------------------xxxxxxx2--people: #{@people} , people.to_json: #{@people.to_json}"
+      Rails.logger.debug("--------------------------debug2::" +  @people.to_json )
       render layout: false
     end
 
@@ -316,9 +387,9 @@ class PeopleController < ApplicationController
     def attach_avatar
       return if params[:person_avatar].blank?
       params[:person_avatar][:description] = 'avatar'
-      @person.avatar.destroy if @person.avatar
-      Attachment.attach_files(@person, '1' => params[:person_avatar])
-      render_attachment_warning_if_needed(@person)
+      #@person.avatar.destroy if @person.avatar
+      #Attachment.attach_files(@person, '1' => params[:person_avatar])
+      #render_attachment_warning_if_needed(@person)
     end
 
     def detect_content_type(attachment)

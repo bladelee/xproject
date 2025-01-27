@@ -54,10 +54,4 @@
 
 
 
-<%= render :partial => 'people/sidebar', :locals => {:tags => @tags} %>
 
-<% content_for :header_tags do %>
-
-  <%= javascript_include_tag :redmine_people, :plugin => 'redmine_people'  %>
-  <meta name = "format-detection" content = "telephone=no">
-<% end %>

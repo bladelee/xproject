@@ -1,6 +1,10 @@
 
 <% html_title t(:label_department_plural) %>
 
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag :redmine_people, plugin: 'redmine_people'  %>
+<% end %>
+
     <%= render  :partial => "people_settings/departments" %>
 
 

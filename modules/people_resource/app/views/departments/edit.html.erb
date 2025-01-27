@@ -1,3 +1,15 @@
+<%
+=begin%>
+ <%= stylesheet_link_tag  'application', :media => 'all' %> 
+<%
+=end%>
+
+<% content_for :header_tags do %>
+  <%= javascript_include_tag 'application'  %>
+  <%= javascript_include_tag :redmine_people, :plugin => 'redmine_people'  %>
+  <%= stylesheet_link_tag :redmine_people, plugin: 'redmine_people'  %>
+<% end %>
+
 <h2><%= t(:label_department) %></h2>
 
 
@@ -5,12 +17,13 @@
         {:name => 'people', :partial => 'people', :label => :label_people}
         ]   %>   
 
-<%= render_tabs person_tabs %>  
+<%= dept_render_tabs person_tabs %>  
 
-<% content_for :header_tags do %>
-  <%= javascript_include_tag :redmine_people, :plugin => 'redmine_people'  %>
-<% end %>
+
 
 <% content_for :sidebar do %>
     <%= render :partial => 'people/sidebar' %>
 <% end %>
+
+ <%= render :partial => 'common/layout_bottom' %>
+

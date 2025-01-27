@@ -62,8 +62,9 @@ zh:
   label_department_head: 领导
   label_people_department: 部门
   label_people_at_department: 在
-  field_department_parent: 的子部门
+  field_department_parent: 子部门
   people_permission_edit_departments: 编辑部门
+  head_id: 领导
 
   #0.1.5:
   people_permission_delete_departments: 删除部门

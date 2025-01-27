@@ -35,11 +35,15 @@ require 'core_extensions'
 require "view_component"
 require "primer/view_components/engine"
 
+# 在gem之前加载，防止与redmineup库中定义的ApplicationRecord冲突
+require_relative '../lib_static/open_project/configuration'
+require_relative '../lib_static/open_project/acts/favorable.rb'
+require_relative '../lib_static/open_project/acts/watchable.rb'
+require_relative '../app/models/application_record.rb'
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups(:opf_plugins))
-
-require_relative '../lib_static/open_project/configuration'
 
 module OpenProject
   class Application < Rails::Application

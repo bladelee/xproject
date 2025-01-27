@@ -7,7 +7,7 @@
              :class => 'select-users') do %>
 
     <p><%= label_tag 'user_search', l(:label_user_search) %><%= text_field_tag 'user_search', nil %></p>
-    <%= javascript_tag "observeSearchfield('user_search', 'users_for_manager', '#{ escape_javascript url_for(:controller => :people, :action => :autocomplete_for_manager, :id => person) }')" %>
+    <%= nonced_javascript_tag "observeSearchfield('user_search', 'users_for_manager', '#{ escape_javascript url_for(:controller => :people, :action => :autocomplete_for_manager, :id => person) }')" %>
 
     <fieldset>
       <div id="users_for_manager" >

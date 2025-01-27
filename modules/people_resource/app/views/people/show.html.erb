@@ -3,8 +3,8 @@
 <% html_title "#{t(:label_people_person)} ##{@person.try(:id)}: #{@person.try(:name)}" %>
 
 <div class="contextual">
-  <%= link_to t(:label_profile), "", :class => 'icon icon-user' %>
-  <%= link_to t(:button_edit), "", :class => 'icon icon-edit' %>
+  <%= link_to t(:label_profile), user_path(@person), :class => 'icon icon-user' %>
+  <%= link_to t(:button_edit), {:controller => 'people', :action => 'edit', :id => @person}, :class => 'icon icon-edit' %>
   <%= change_status_link(@person) %>
 </div>
 
@@ -39,14 +39,14 @@
 </div>
 
 
-<% content_for :sidebar do %>
+
   <%= render :partial => 'attributes' %>
   <%= call_hook(:view_people_sidebar_after_attributes, :person => @person) %>
   <% if @person.try(:background).present? %>
     <h3><%= t(:label_people_background) %></h3>
     <div class="wiki"><%= textilizable(@person, :background) %></div>
   <% end %>
-<% end %>
+
 
 
 

@@ -60,7 +60,7 @@ module Queries
         
       #  puts "filter_for: #{key}", Thread.current.backtrace
         list = available_filters()  
-        puts "filter_for: #{list}"
+        # puts "filter_for: #{list}"
 
         raise ::Queries::Filters::MissingError if filter.nil?
 

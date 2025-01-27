@@ -53,7 +53,7 @@ class Department < ApplicationRecord
   end
 
   def css_classes
-    s = 'project'
+    s = 'people-resource'
     s << " root" if project.root?
     s << " child" if project.child?
     s << (project.leaf? ? " leaf" : " parent")
@@ -98,8 +98,9 @@ class Department < ApplicationRecord
 
       ancestors = []
       departments.sort_by(&:lft).each do |department|
-        while (ancestors.any?)
-          ancestors.pop
+        # while (ancestors.any?)
+        while (ancestors.any? && !department.is_descendant_of?(ancestors.last))
+        ancestors.pop
         end
         yield department, ancestors.size
         ancestors << department

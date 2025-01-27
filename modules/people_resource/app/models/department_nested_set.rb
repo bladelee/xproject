@@ -27,7 +27,7 @@ module DepartmentNestedSet
       before_destroy :destroy_children
     end
 
-    #base.send :include, Redmine::NestedSet::Traversing
+    base.send :include, Redmine::NestedSet::Traversing
   end
 
   private

@@ -86,6 +86,24 @@ module PaginationHelper
     end
   end
 
+
+  # Returns the number of objects that should be displayed
+  # on the paginated list
+  def per_page_option
+    per_page = nil
+    if params[:per_page] && Setting.per_page_options_array.include?(params[:per_page].to_s.to_i)
+      per_page = params[:per_page].to_s.to_i
+      session[:per_page] = per_page
+    elsif session[:per_page]
+      per_page = session[:per_page]
+    else
+      per_page = Setting.per_page_options_array.first || 25
+    end
+    per_page
+  end
+
+
+
   ##
   # Constructs the 'n items per page' entries
   # determined from available options in the settings.

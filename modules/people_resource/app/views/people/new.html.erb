@@ -2,17 +2,31 @@
 
 <%= labelled_tabular_form_for @person, :html => { :multipart => true, :method => :post, :id => "person_form" }  do |f|  %>
   <%= error_messages_for 'person' %>
-
-  <fieldset class="box tabular">
-    <legend><%=t(:label_authentication)%></legend>
-    <p><%= f.text_field :login, :required => true, :size => 25  %></p>
+<div class="form--section">
+  <%
+=begin%>
+ <fieldset class="box tabular"> 
+<%
+=end%>
+    <%
+=begin%>
+ <legend><%=t(:label_authentication)%></legend> 
+<%
+=end%>
+    <h3><%= t(:label_authentication) %></h3>
+    <div class="form--field -required"><%= f.text_field :login, :required => true, :size => 25 , :container_class => "-middle" %></div>
 
     <div id="password_fields" >
-    <p><%= f.password_field :password, :required => true, :size => 25  %>
-    <em class="info"><%= t(:text_caracters_minimum, :count => 8) %></em></p>
-    <p><%= f.password_field :password_confirmation, :required => true, :size => 25  %></p>
+    <div class="form--field -required"><%= f.password_field :password, :required => true, :size => 25 , :container_class => "-middle" %>
+    <em class="info"><%= t(:text_caracters_minimum, :count => 8) %></em></div>
+    <div class="form--field -required"><%= f.password_field :password_confirmation, :required => true, :size => 25 , :container_class => "-middle" %></div>
     </div>
-  </fieldset>
+  <%
+=begin%>
+ </fieldset> 
+<%
+=end%>
+  </div>
 
 
 

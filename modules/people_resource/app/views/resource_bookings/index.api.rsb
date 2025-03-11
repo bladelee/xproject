@@ -1,0 +1,17 @@
+api.array :resources, api_meta(:total_count => @resource_count) do
+    @resources.each do |resource|
+        api.resource do
+            api.id              resource.id
+            api.assigned_to_id  resource.assigned_to_id
+            api.project_id      resource.project_id
+            api.issue_id        resource.issue_id
+            api.start_date      resource.start_date
+            api.end_date        resource.end_date
+            api.hours_per_day   resource.hours_per_day
+            api.notes           resource.notes
+
+            api.created_at      resource.created_at
+            api.updated_at      resource.updated_at
+        end
+    end
+end

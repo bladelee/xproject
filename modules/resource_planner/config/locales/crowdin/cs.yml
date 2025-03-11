@@ -1,0 +1,17 @@
+#English strings go here
+cs:
+  plugin_openproject_resource_planner:
+    name: "Plánovač OpenProject týmu"
+    description: "Poskytuje zobrazení plánovače týmů."
+  permission_view_resource_planner: "Zobrazit plánovač týmu"
+  permission_manage_resource_planner: "Spravovat plánovač týmu"
+  project_module_resource_planner_view: "Týmové plánovače"
+  resource_planner:
+    label_resource_planner: "Týmový plánovač"
+    label_new_resource_planner: "Nový plánovač týmu"
+    label_create_new_resource_planner: "Vytvořit nový týmový plánovač"
+    label_resource_planner_plural: "Týmové plánovače"
+    label_assignees: "Řešitelé"
+    upsale:
+      title: "Týmový plánovač"
+      description: "Získejte kompletní přehled plánování týmu s týmovým plánovačem. Roztáhněte, zkrátte a přetáhněte pracovní balíčky pro úpravu datumů, přesuňte je nebo změňte řešitele."

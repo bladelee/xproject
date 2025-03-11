@@ -1,0 +1,17 @@
+#English strings go here
+lt:
+  plugin_openproject_resource_planner:
+    name: "OpenProject komandų planuotojas"
+    description: "Teikia komandų planavimo vaizdus."
+  permission_view_resource_planner: "Žiūrėti komandos planą"
+  permission_manage_resource_planner: "Tvarkyti komandos planą"
+  project_module_resource_planner_view: "Komandos planai"
+  resource_planner:
+    label_resource_planner: "Komandos planas"
+    label_new_resource_planner: "Naujas komandos planas"
+    label_create_new_resource_planner: "Kurti naują komandos planą"
+    label_resource_planner_plural: "Komandos planai"
+    label_assignees: "Paskirtieji"
+    upsale:
+      title: "Komandos planas"
+      description: "Gaukite pilną jūsų komandos plano vaizdą su Resource Planner. Pakeiskite datas prailgindami, sutrumpindami ar nuvilkdami darbo paketus, perkelkite juos ar pakeiskite paskirtuosius."

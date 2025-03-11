@@ -1,0 +1,17 @@
+#English strings go here
+ja:
+  plugin_openproject_resource_planner:
+    name: "OpenProject Resource Planner"
+    description: "Provides resource planner views."
+  permission_view_resource_planner: "チームプランナーを表示"
+  permission_manage_resource_planner: "チームプランナーの管理"
+  project_module_resource_planner_view: "チーム プランナー"
+  resource_planner:
+    label_resource_planner: "チーム プランナー"
+    label_new_resource_planner: "新しいチームプランナー"
+    label_create_new_resource_planner: "新しいチームプランナーを作成"
+    label_resource_planner_plural: "チーム プランナー"
+    label_assignees: "担当者"
+    upsale:
+      title: "チーム プランナー"
+      description: "Get a complete overview of your resource’s planning with Resource Planner. Stretch, shorten and drag-and-drop work packages to modify dates, move them or change assignees."

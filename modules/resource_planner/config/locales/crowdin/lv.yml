@@ -1,0 +1,17 @@
+#English strings go here
+lv:
+  plugin_openproject_resource_planner:
+    name: "OpenProject Resource Planner"
+    description: "Provides resource planner views."
+  permission_view_resource_planner: "Apskatīt komandas plānotāju"
+  permission_manage_resource_planner: "Pārvaldīt komandas plānotāju"
+  project_module_resource_planner_view: "Komandas plānotāji"
+  resource_planner:
+    label_resource_planner: "Komandas plānotājs"
+    label_new_resource_planner: "Jauns komandas plānotājs"
+    label_create_new_resource_planner: "Izveidot jaunu komandas plānotāju"
+    label_resource_planner_plural: "Komandas plānotāji"
+    label_assignees: "Atbildīgais"
+    upsale:
+      title: "Komandas plānotājs"
+      description: "Get a complete overview of your resource’s planning with Resource Planner. Stretch, shorten and drag-and-drop work packages to modify dates, move them or change assignees."

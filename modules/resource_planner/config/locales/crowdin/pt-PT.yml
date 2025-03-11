@@ -1,0 +1,17 @@
+#English strings go here
+pt-PT:
+  plugin_openproject_resource_planner:
+    name: "Planeador de equipas OpenProject"
+    description: "Fornece visualizações do planeador de equipas."
+  permission_view_resource_planner: "Ver planejador de equipe"
+  permission_manage_resource_planner: "Gerir planeador de equipa"
+  project_module_resource_planner_view: "Planeadores de equipa"
+  resource_planner:
+    label_resource_planner: "Planeador de equipa"
+    label_new_resource_planner: "Novo planeador de equipa"
+    label_create_new_resource_planner: "Criar novo planeador de equipa"
+    label_resource_planner_plural: "Planeadores de equipa"
+    label_assignees: "Responsáveis"
+    upsale:
+      title: "Planeador de equipa"
+      description: "Obtenha uma visão geral completa do planeamento da sua equipa com o Planeamento de Equipa. Encurte e arraste e solte pacotes de trabalho para modificar datas, mova-as ou altera os responsáveis."

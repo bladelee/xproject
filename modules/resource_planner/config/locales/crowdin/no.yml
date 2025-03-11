@@ -1,0 +1,17 @@
+#English strings go here
+"no":
+  plugin_openproject_resource_planner:
+    name: "OpenProject Resource Planlegger"
+    description: "Tilbyr resourceplanlegger visninger."
+  permission_view_resource_planner: "Vis resourceplanlegger"
+  permission_manage_resource_planner: "Administrer resourceplanlegger"
+  project_module_resource_planner_view: "Resourceplanlegger"
+  resource_planner:
+    label_resource_planner: "Resourceplanlegger"
+    label_new_resource_planner: "Ny resourceplanlegger"
+    label_create_new_resource_planner: "Opprett ny resourceplanlegger"
+    label_resource_planner_plural: "Resourceplanlegger"
+    label_assignees: "Tildelt"
+    upsale:
+      title: "Resourceplanlegger"
+      description: "Få en fullstendig oversikt over ditt resources planlegging med Resource Planner. Utvid, forkort og dra-og-slipp arbeidspakker for å endre datoer, flytte dem eller endre deltakere."

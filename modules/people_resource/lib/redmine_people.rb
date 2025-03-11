@@ -91,6 +91,7 @@ require(base_url + '/redmine')
 
 require (base_url + '/../../../lib_static/redmine/i18n')
 require (base_url + '/redmine/hook')
+require (base_url + '/redmine/utils')
 require (base_url + '/redmine/nested_set/traversing')
 Dir[File.dirname(__FILE__) + "/redmine/hook/*.rb"].each {|file| require file }
 

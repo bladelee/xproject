@@ -1,0 +1,59 @@
+<div id="query_form_with_buttons" class="hide-when-print">
+  <div id="query_form_content">
+    <fieldset id="filters" class="collapsible">
+      <legend onclick="toggleFieldset(this);" class="icon icon-<%= @query.new_record? ? 'expanded icon-expended' : "collapsed" %>"><%= l(:label_filter_plural) %></legend>
+      <div style="<%= @query.new_record? ? '' : 'display: none;' %>">
+        <%= render partial: 'queries/filters', locals: { query: @query } %>
+      </div>
+    </fieldset>
+    <fieldset id="options" class="collapsible collapsed">
+      <legend onclick="toggleFieldset(this);" class="icon icon-expanded icon-expended"><%= l(:label_options) %></legend>
+      <div style="<%= @query.new_record? ? '' : 'display: none;' %>">
+        <table>
+          <tr>
+            <td><%= label_tag :chart_type, l(:label_resources_chart_type) %></td>
+            <td><%= select_tag :chart_type,
+                  custom_options_for_select(chart_type_options, @query.chart_type),
+                  onchange: "$('#query_form').attr('action', this.value === 'issues_chart' ? 'resource_issues' : 'resource_bookings' ).submit();" 
+                %>
+            </td>
+          </tr>
+            <tr id="workload">
+              <td><%= label_tag :workload_type_type, l(:label_resources_workload_type) %></td>
+              <td><%= select_tag :workload_type, custom_options_for_select(workload_type_options, @query.workload_type) %></td>
+            </tr>
+          <tr>
+            <td><%= label_tag :line_title_type, l(:label_resources_line_title) %></td>
+            <td><%= select_tag :line_title_type, custom_options_for_select(line_title_type_options, @query.line_title_type) %></td>
+          </tr>
+          <tr>
+            <td><%= l(:button_show) %></td>
+            <td>  
+              <label for="show_versions">
+                <%= check_box_with_label('show_versions', :label_version_plural) %>
+              </label>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </fieldset>
+  </div>
+  <span class="contextual pagination">
+    <%= zoom_link(@rb_chart, :in) %>
+    <%= zoom_link(@rb_chart, :out) %>
+
+    <ul class="pages">
+      <li class="previous page">
+        <%= link_to_previous_month(@query.date_from.year, @query.date_from.month, :accesskey => accesskey(:previous)) %>
+      </li><li class="next page">
+        <%= link_to_next_month(@query.date_from.year, @query.date_from.month, :accesskey => accesskey(:next)) %>
+      </li>
+    </ul>
+  </span>  
+  <p class="buttons">  
+    <%= text_field 'query', 'date_from', size: 12, type: 'date' %><%= calendar_for('query_date_from') %>
+    <%= hidden_field_tag('zoom', @rb_chart.zoom) %>
+    <%= link_to_function l(:button_apply), '$("#query_form").submit()', class: 'icon icon-checked' %>
+    <%= link_to l(:button_clear), { project_id: @project, set_filter: 1 }, class: 'icon icon-reload' %>
+  </p>
+</div>

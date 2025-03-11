@@ -1,0 +1,79 @@
+<% if @rb_chart.empty? %>
+  <p class="nodata"><%= t(:label_no_data) %></p>
+<% else %>
+  <div id="utilization-report-chart" class="utilization-report chart autoscroll">
+    <table class="resources" style="position: relative;">
+      <thead>
+        <tr class="group">
+          <th>
+             <%= link_to_function("#{t(:button_collapse_all)}/#{t(:button_expand_all)}", 'toggleAllBookingRowGroups($(".expander"))', class: 'toggle-all') %>
+          </th>
+          <th></th>
+          <% @rb_chart.user_schedules.first.plans.each do |plan| %>
+            <th scope="col"><%= plan.date_title %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @rb_chart.user_schedules.each do |user_schedule| %>
+            <tr class="workload-data group open">
+              <td class="user" style="vertical-align: middle; padding-left: 5px; padding-right: 5px; min-width: 200px;">
+                <span class="expander icon icon-expended icon-expanded" onclick="toggleBookingRowGroup(this)" style="vertical-align: top; display: inline-block;">&nbsp;</span>
+                <div class="user" style="white-space: nowrap;display: inline-block;">
+                  <div class="avatar" style="float: left;margin-right: 5px;">
+                    <%= avatar(user_schedule.user, size: '32') %>
+                  </div>
+                  <div class="data">
+                    <h4 class="name" style="letter-spacing: -1px;margin: 0px;border-bottom: 0px;"><%= link_to_user user_schedule.user %></h4>
+                  </div>
+                </div>
+              </td>
+              <td class="total user total-workload-card <%= color_css_class(user_schedule.workload_percent) %>">
+                <p class="hours"><%= "#{user_schedule.total_allocated_hours } / #{t(:label_resources_f_hour_short, value: user_schedule.capacity_hours.round)}" if @query.show_hours  %></p>
+                <div class="percent"><%= "#{user_schedule.workload_percent}%" if @query.show_percent %></p>
+              </td>
+              <% user_schedule.plans.each do |plan| %>
+                <td class="<%= plan.today_css_class %> <%= plan.week_day_css_class %>"><%= plan.workload_card.render_for_utilization_report(@query.show_spent_time, @query.show_percent, @query.show_hours) %></td>
+              <% end %>
+            </tr>
+
+            <% user_schedule.plans_group_by_project.each do |project, plans_by_project|%>
+              <tr class="project-line workload-data booking-data">
+                <td class="project" style="vertical-align: middle; padding-left: 5px; padding-right: 5px; text-align: right;">
+                  <p><%= project ? link_to_project(project) : t(:label_blank_value) %></p>
+                  <p><%= user_schedule.user.roles_for_project(project).map(&:name).join(", ") %></p>
+                </td>
+                <td class="total project hours">
+                  <p class="hours"><%= t(:label_resources_f_hour_short, value: plans_by_project.sum(&:allocated_hours)) %></p>
+                </td>
+                <% plans_by_project.each do |plan| %>
+                  <td class="<%= plan.today_css_class %> <%= plan.week_day_css_class %>">
+                    <% if @query.group_by_project? %>
+                      <%= plan.project_day_plan.render %>
+                    <% else %>
+                      <% plan.booked_cards.each do |booked_card| %>
+                        <%= booked_card.small_block_render(@query.show_hours) %>
+                      <% end %>
+                    <% end %>
+                  </td>
+                <% end %>
+              </tr>
+            <% end %>
+
+            <tr class="separator" style="height: 5px;">
+              <td colspan="100%" style="background-color: #f6f7f8;"></td>
+            </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%= javascript_tag do %>
+    $(function () {
+      addEditableBookingCardOnClickListener();
+
+      $('.project-name').toggle(<%= @query.show_project_names %>);
+      $('.spent').toggle(<%= @query.show_spent_time %>);
+    });
+  <% end %>
+<% end %>

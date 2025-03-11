@@ -1,0 +1,17 @@
+#English strings go here
+ar:
+  plugin_openproject_resource_planner:
+    name: "OpenProject Resource Planner"
+    description: "Provides resource planner views."
+  permission_view_resource_planner: "عرض مخطط الفريق"
+  permission_manage_resource_planner: "إدارة مخطط الفريق"
+  project_module_resource_planner_view: "مخططي الفريق"
+  resource_planner:
+    label_resource_planner: "مخطط الفريق"
+    label_new_resource_planner: "New resource planner"
+    label_create_new_resource_planner: "إنشاء مخطط فريق جديد"
+    label_resource_planner_plural: "مخططي الفريق"
+    label_assignees: "المعينون"
+    upsale:
+      title: "مخطط الفريق"
+      description: "احصل على نظرة عامة كاملة لتخطيط فريقك مع فريق تخطيط العمل. تمديد, اختصار و سحب و إسقاط مجموعات العمل لتعديل التواريخ أو نقلها أو تغيير المحال إليهم."

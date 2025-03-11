@@ -1,0 +1,17 @@
+#English strings go here
+ro:
+  plugin_openproject_resource_planner:
+    name: "OpenProject Resource Planner"
+    description: "Provides resource planner views."
+  permission_view_resource_planner: "Vezi planificatorul echipei"
+  permission_manage_resource_planner: "Gestionează planificatorul de echipe"
+  project_module_resource_planner_view: "Planificatori de echipe"
+  resource_planner:
+    label_resource_planner: "Planificator de echipă"
+    label_new_resource_planner: "Noul planificator de echipe"
+    label_create_new_resource_planner: "Creați un nou planificator de echipă"
+    label_resource_planner_plural: "Planificatori de echipe"
+    label_assignees: "Responsabili"
+    upsale:
+      title: "Planificator de echipă"
+      description: "Obțineți o imagine de ansamblu completă a planificării echipei dumneavoastră cu Resource Planner. Întindeți, scurtați și glisați pachetele de lucru pentru a modifica datele, pentru a le muta sau pentru a schimba destinatarii."

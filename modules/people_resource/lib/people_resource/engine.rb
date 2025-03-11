@@ -52,6 +52,28 @@ module PeopleResource
       end
 =end
 
+      Rails.application.reloader.to_prepare do
+        OpenProject::AccessControl.map do |ac_map|
+          ac_map.project_module(:people_resource, dependencies: :work_package_tracking, order: 99)
+        end
+
+        OpenProject::AccessControl.permission(:view_work_packages).tap do |add|
+          add.controller_actions << "resource_bookings/index"
+          add.controller_actions << "resource_bookings/create"
+          add.controller_actions << "resource_bookings/show"
+          add.controller_actions << "resource_bookings/update"                    
+        end
+
+        # OpenProject::AccessControl.permission(:view_resources).tap do |add|
+        #   add.controller_actions << "resource_bookings/index"
+        # end
+      end
+
+      should_render_global_menu_item = Proc.new do
+        (User.current.logged? || !Setting.login_required?) &&
+        User.current.allowed_in_any_project?(:view_work_packages)
+      end
+
       should_render_global_menu_item = Proc.new do
         (User.current.logged? || !Setting.login_required?) &&
         User.current.allowed_in_any_project?(:view_work_packages)
@@ -108,6 +130,7 @@ module PeopleResource
       app.config.assets.precompile += %w( redmine_people.js redmine_people.css )
       app.config.assets.precompile += %w( select2.js  select2_helpers.js select2.css )
       app.config.assets.precompile += %w( jquery.glanceyear.js )
+      app.config.assets.precompile += %w( redmine_resources.js redmine_resources.css )
     end
 
     #add_view :Gantt,
@@ -118,6 +141,7 @@ end
 
 requires_redmineup version_or_higher: '1.0.5' rescue raise "\n\033[31mRedmine requires newer redmineup gem version.\nPlease update with 'bundle update redmineup'.\033[0m"
 require File.dirname(__FILE__) + '/../../lib/redmine_people'
+require File.dirname(__FILE__) + '/../../lib/redmine_resources'
 
 Redmineup::Settings.initialize_gem_settings
 # Redmineup::Currency.add_admin_money_menu 

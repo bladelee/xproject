@@ -1,0 +1,17 @@
+#English strings go here
+zh-CN:
+  plugin_openproject_resource_planner:
+    name: "OpenProject 资源管理器"
+    description: "提供资源管理器视图。"
+  permission_view_resource_planner: "查看资源管理器"
+  permission_manage_resource_planner: "管理资源管理器"
+  project_module_resource_planner_view: "资源管理器"
+  resource_planner:
+    label_resource_planner: "资源管理器"
+    label_new_resource_planner: "新的资源管理器"
+    label_create_new_resource_planner: "创建新的资源管理器"
+    label_resource_planner_plural: "资源管理器"
+    label_assignees: "受理人"
+    upsale:
+      title: "资源管理器"
+      description: "通过资源管理器，您可以获得团队计划的完整概览。您可以拉伸、缩短和拖放工作包来修改日期、移动工作包或更改受理人。"

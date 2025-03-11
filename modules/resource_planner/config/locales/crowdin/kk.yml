@@ -1,0 +1,17 @@
+#English strings go here
+kk:
+  plugin_openproject_resource_planner:
+    name: "OpenProject Resource Planner"
+    description: "Provides resource planner views."
+  permission_view_resource_planner: "View resource planner"
+  permission_manage_resource_planner: "Manage resource planner"
+  project_module_resource_planner_view: "Resource planners"
+  resource_planner:
+    label_resource_planner: "Resource planner"
+    label_new_resource_planner: "New resource planner"
+    label_create_new_resource_planner: "Create new resource planner"
+    label_resource_planner_plural: "Resource planners"
+    label_assignees: "Assignees"
+    upsale:
+      title: "Resource planner"
+      description: "Get a complete overview of your resource’s planning with Resource Planner. Stretch, shorten and drag-and-drop work packages to modify dates, move them or change assignees."

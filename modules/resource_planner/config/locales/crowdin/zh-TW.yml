@@ -1,0 +1,17 @@
+#English strings go here
+zh-TW:
+  plugin_openproject_resource_planner:
+    name: "OpenProject團隊計畫"
+    description: "Provides resource planner views."
+  permission_view_resource_planner: "查看團隊計劃"
+  permission_manage_resource_planner: "管理團隊規劃"
+  project_module_resource_planner_view: "團隊規劃"
+  resource_planner:
+    label_resource_planner: "團隊規劃"
+    label_new_resource_planner: "新團隊計劃"
+    label_create_new_resource_planner: "建立新的團隊計畫"
+    label_resource_planner_plural: "團隊規劃"
+    label_assignees: "執行者"
+    upsale:
+      title: "團隊規劃"
+      description: "Get a complete overview of your resource’s planning with Resource Planner. Stretch, shorten and drag-and-drop work packages to modify dates, move them or change assignees."

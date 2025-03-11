@@ -106,4 +106,18 @@ constraints object_type: /(departments)/ do
   get 'attachments/:object_type/:object_id/download', to: 'attachments#download_all', as: 'departments_attachments_download'
 end
 
+resources :resource_bookings do
+  get :issues_autocomplete, on: :collection
+  post :split, on: :member
+end
+
+resources :resource_bookings, only: [:index] do
+  get :index, on: :collection, defaults: { format: :json }
+end
+
+match 'resource_bookings/new', to: 'resource_bookings#new', via: :post
+match 'resource_bookings/:id', to: 'resource_bookings#update', via: :post, id: /\d+/
+
+get '/projects/:project_id/resource_bookings', to: 'resource_bookings#index', as: 'project_resource_bookings'
+get 'resource_bookings_loads', to: 'resource_bookings#index', as: 'project_resource_bookings_loads'
 end

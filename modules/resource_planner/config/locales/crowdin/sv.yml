@@ -1,0 +1,17 @@
+#English strings go here
+sv:
+  plugin_openproject_resource_planner:
+    name: "OpenProject Resource Planner"
+    description: "Provides resource planner views."
+  permission_view_resource_planner: "Visa resourceplanerare"
+  permission_manage_resource_planner: "Hantera resourceplanerare"
+  project_module_resource_planner_view: "Resource planerare"
+  resource_planner:
+    label_resource_planner: "Resource planerare"
+    label_new_resource_planner: "Ny resourceplanerare"
+    label_create_new_resource_planner: "Skapa ny resourceplanerare"
+    label_resource_planner_plural: "Resource planerare"
+    label_assignees: "Utförare"
+    upsale:
+      title: "Resource planerare"
+      description: "Få en fullständig överblick över ditt resources planering med Resource Planner. Tänj ut, förkorta och dra-och-släpp arbetspaket för att ändra datum, flytta dem eller ändra utförare."

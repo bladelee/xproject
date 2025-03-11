@@ -1,0 +1,17 @@
+#English strings go here
+hu:
+  plugin_openproject_resource_planner:
+    name: "OpenProject Resource Planner"
+    description: "Provides resource planner views."
+  permission_view_resource_planner: "Csoport tervező megtekintése"
+  permission_manage_resource_planner: "Csoport tervező kezelése"
+  project_module_resource_planner_view: "Csoport tervezők"
+  resource_planner:
+    label_resource_planner: "Csoport tervező"
+    label_new_resource_planner: "Új csapattervező"
+    label_create_new_resource_planner: "Új csoport tervező létrehozása"
+    label_resource_planner_plural: "Csoport tervezők"
+    label_assignees: "Megbízottak"
+    upsale:
+      title: "Csoport tervező"
+      description: "Szerezz áttekintést arról, hogy a csapatod mit tervez a Csapattervezővel. Nyújtsd, rövidítsd, fogd és dobd a munkacsomagokat, hogy módosítsd az időpontokat, áthelyezd őket vagy megváltoztasd a hozzárendelt felhasználót."

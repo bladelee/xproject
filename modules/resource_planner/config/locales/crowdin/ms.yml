@@ -1,0 +1,17 @@
+#English strings go here
+ms:
+  plugin_openproject_resource_planner:
+    name: "OpenProject Resource Planner"
+    description: "Provides resource planner views."
+  permission_view_resource_planner: "Paparkan perancang pasukan"
+  permission_manage_resource_planner: "Urus perancang pasukan"
+  project_module_resource_planner_view: "Perancang pasukan"
+  resource_planner:
+    label_resource_planner: "Perancang pasukan"
+    label_new_resource_planner: "Perancang pasukan baharu"
+    label_create_new_resource_planner: "Cipta perancang pasukan baharu"
+    label_resource_planner_plural: "Perancang pasukan"
+    label_assignees: "Penerima tugasan"
+    upsale:
+      title: "Perancang pasukan"
+      description: "Dapatkan ringkasan lengkap perancangan pasukan anda dengan Perancang Pasukan. Renggangkan, pendekkan, dan tarik dan lepas pakej kerja untuk mengubah tarikh, memindahkan mereka, atau menukar penerima tugasan."

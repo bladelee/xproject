@@ -1,0 +1,13 @@
+api.resource do
+  api.id              @resource_booking.id
+  api.assigned_to_id  @resource_booking.assigned_to_id
+  api.project_id      @resource_booking.project_id
+  api.issue_id        @resource_booking.issue_id
+  api.start_date      @resource_booking.start_date
+  api.end_date        @resource_booking.end_date
+  api.hours_per_day   @resource_booking.hours_per_day
+  api.notes           @resource_booking.notes
+
+  api.created_at      @resource_booking.created_at
+  api.updated_at      @resource_booking.updated_at
+end

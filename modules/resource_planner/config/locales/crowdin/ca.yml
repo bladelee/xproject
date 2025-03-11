@@ -1,0 +1,17 @@
+#English strings go here
+ca:
+  plugin_openproject_resource_planner:
+    name: "OpenProject Resource Planner"
+    description: "Provides resource planner views."
+  permission_view_resource_planner: "Veure planificador d'equips"
+  permission_manage_resource_planner: "Administrar planificador d'equips"
+  project_module_resource_planner_view: "Planificadors d'equips"
+  resource_planner:
+    label_resource_planner: "Planificador d'equips"
+    label_new_resource_planner: "Nou planificador d'equips"
+    label_create_new_resource_planner: "Crea un nou planificador d'equips"
+    label_resource_planner_plural: "Planificadors d'equips"
+    label_assignees: "Usuaris assignats"
+    upsale:
+      title: "Planificador d'equips"
+      description: "Obté una visió general completa del teu planificador d'equips amb el Planificador d'Equips. Estira, escurça i arrossega paquets de treball per modificar dates, moure-les o canviar l'usuari assignat. "

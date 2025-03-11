@@ -1,0 +1,17 @@
+#English strings go here
+de:
+  plugin_openproject_resource_planner:
+    name: "OpenProject-Resourceplaner"
+    description: "Stellt Ansichten für Resourceplaner zur Verfügung."
+  permission_view_resource_planner: "Resourceplaner anzeigen"
+  permission_manage_resource_planner: "Resourceplaner verwalten"
+  project_module_resource_planner_view: "Resourceplaner"
+  resource_planner:
+    label_resource_planner: "Resourceplaner"
+    label_new_resource_planner: "Neuer Resourceplaner"
+    label_create_new_resource_planner: "Neuen Resourceplaner erstellen"
+    label_resource_planner_plural: "Resourceplaner"
+    label_assignees: "Zugewiesene Benutzer"
+    upsale:
+      title: "Resourceplaner"
+      description: "Erhalten Sie einen kompletten Überblick über die Planung Ihres Resources mit dem Resourceplaner. Strecken, verkürzen und ziehen Sie Arbeitspakete zur Änderung von Terminen, Verschieben Sie Arbeitspakete oder Ändern Sie die zugewiesenen Benutzer."

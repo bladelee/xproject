@@ -1,0 +1,17 @@
+#English strings go here
+nl:
+  plugin_openproject_resource_planner:
+    name: "OpenProject Resource Planner"
+    description: "Provides resource planner views."
+  permission_view_resource_planner: "Bekijk resource planner"
+  permission_manage_resource_planner: "Resourceplanner beheren"
+  project_module_resource_planner_view: "Resource planners"
+  resource_planner:
+    label_resource_planner: "Resource planner"
+    label_new_resource_planner: "Nieuwe resourceplanner"
+    label_create_new_resource_planner: "Maak een nieuwe resourceplanner"
+    label_resource_planner_plural: "Resource planners"
+    label_assignees: "Toegewezen personen"
+    upsale:
+      title: "Resource planner"
+      description: "Krijg een compleet overzicht van de planning van je resource met Resource Planner. Verleng, verkort en sleep-en-plaats werkpakketten om data te wijzigen, ze te verplaatsen of taakontvangers te veranderen."

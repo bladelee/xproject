@@ -1,0 +1,17 @@
+#English strings go here
+vi:
+  plugin_openproject_resource_planner:
+    name: "OpenProject Resource Planner"
+    description: "Provides resource planner views."
+  permission_view_resource_planner: "Xem resource planner"
+  permission_manage_resource_planner: "Quản lý resource planner"
+  project_module_resource_planner_view: "Resource planners"
+  resource_planner:
+    label_resource_planner: "Resource planner"
+    label_new_resource_planner: "Resource planner mới"
+    label_create_new_resource_planner: "Tạo resource planner mới"
+    label_resource_planner_plural: "Resource planners"
+    label_assignees: "Những người được giao"
+    upsale:
+      title: "Resource planner"
+      description: "Có được cái nhìn tổng quan đầy đủ về việc lập kế hoạch của nhóm bạn với Resource Planner. Kéo dài, rút ​​ngắn và kéo thả các công việc để sửa đổi ngày tháng, di chuyển chúng hoặc thay đổi người được giao."

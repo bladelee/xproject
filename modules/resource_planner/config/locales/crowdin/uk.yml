@@ -1,0 +1,17 @@
+#English strings go here
+uk:
+  plugin_openproject_resource_planner:
+    name: "Планувальник команд OpenProject"
+    description: "Дає змогу переглядати дані планувальника команд."
+  permission_view_resource_planner: "Перегляд командного планувальника"
+  permission_manage_resource_planner: "Керування командним планувальником"
+  project_module_resource_planner_view: "Командні планувальники"
+  resource_planner:
+    label_resource_planner: "Командний планувальник"
+    label_new_resource_planner: "Новий командний планувальник"
+    label_create_new_resource_planner: "Створити новий командний планувальник"
+    label_resource_planner_plural: "Командні планувальники"
+    label_assignees: "Виконавці"
+    upsale:
+      title: "Командний планувальник"
+      description: "Командний планувальник надає повний огляд планування вашої команди. Розтягуйте, скорочуйте та перетягуйте пакети робіт, щоб переміщувати їх, змінювати дати або перепризначати виконавців."

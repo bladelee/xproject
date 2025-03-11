@@ -1,0 +1,7 @@
+<% html_title(t('resource_planner.label_resource_planner_plural')) -%>
+
+<%= toolbar title: t(:'resource_planner.label_resource_planner_plural') do %>
+  <%= render ::ResourcePlanner::AddButtonComponent.new(current_project: @project) %>
+<% end %>
+
+<%= render ::ResourcePlanner::TableComponent.new(rows: @views, current_user: current_user) %>

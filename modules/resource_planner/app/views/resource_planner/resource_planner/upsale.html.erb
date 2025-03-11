@@ -1,0 +1,10 @@
+<% html_title(t(:label_administration), t('resource_planner.upsale.title')) -%>
+
+<%= render template: 'common/upsale',
+           locals: {
+               feature_title: t('resource_planner.upsale.title'),
+               feature_description: t('resource_planner.upsale.description'),
+               feature_reference: 'resource_planner',
+               feature_video: 'enterprise/resource-planner-animation.mp4',
+               additional_classes: 'upsale-notification_hide-breadcrumb'
+           } %>

@@ -1,0 +1,17 @@
+#English strings go here
+bg:
+  plugin_openproject_resource_planner:
+    name: "OpenProject Resource Planner"
+    description: "Provides resource planner views."
+  permission_view_resource_planner: "Вижте екипния плановик"
+  permission_manage_resource_planner: "Управлявайте екипния плановик"
+  project_module_resource_planner_view: "Екипни плановици"
+  resource_planner:
+    label_resource_planner: "Екипен плановик"
+    label_new_resource_planner: "Нов екипен плановик"
+    label_create_new_resource_planner: "Създайте нов екипен плановик"
+    label_resource_planner_plural: "Екипни плановици"
+    label_assignees: "Правоприемници"
+    upsale:
+      title: "Екипен плановик"
+      description: "Получете пълен преглед на планирането на вашия екип с Resource Planner. Разтягайте, съкращавайте и плъзгайте и пускайте работни пакети, за да промените датите, да ги преместите или да промените възложителите."

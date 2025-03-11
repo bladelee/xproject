@@ -1,0 +1,17 @@
+#English strings go here
+it:
+  plugin_openproject_resource_planner:
+    name: "Pianificatore di resource OpenProject"
+    description: "Fornisce visualizzazioni di pianificazione di resource."
+  permission_view_resource_planner: "Visualizza il pianificatore di resource"
+  permission_manage_resource_planner: "Gestisci il pianificatore di resource"
+  project_module_resource_planner_view: "Organizzatori di gruppo"
+  resource_planner:
+    label_resource_planner: "Pianificatore di resource"
+    label_new_resource_planner: "Nuovo pianificatore di resource"
+    label_create_new_resource_planner: "Crea nuovo pianificatore di resource"
+    label_resource_planner_plural: "Organizzatori di gruppo"
+    label_assignees: "Assegnatari"
+    upsale:
+      title: "Pianificatore di resource"
+      description: "Ottieni una panoramica completa della pianificazione del tuo resource con Resource Planner. Allunga, accorcia e sposta le macro-attività per modificare le date, riprogrammarle o cambiare gli assegnatari."

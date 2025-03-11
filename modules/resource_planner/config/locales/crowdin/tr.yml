@@ -1,0 +1,17 @@
+#English strings go here
+tr:
+  plugin_openproject_resource_planner:
+    name: "OpenProject Takım Planlayıcı"
+    description: "Provides resource planner views."
+  permission_view_resource_planner: "Takım planlayıcıyı görüntüle"
+  permission_manage_resource_planner: "Takım planlayıcıyı yönet"
+  project_module_resource_planner_view: "Takım planlayıcıları"
+  resource_planner:
+    label_resource_planner: "Takım planlayıcısı"
+    label_new_resource_planner: "Yeni takım planlayıcı "
+    label_create_new_resource_planner: "Yeni takım planlayıcısı oluştur"
+    label_resource_planner_plural: "Takım planlayıcıları"
+    label_assignees: "Atananlar"
+    upsale:
+      title: "Takım planlayıcısı"
+      description: "Resource Planner ile ekibinizin planlamasına ilişkin eksiksiz bir genel bakış elde edin. Tarihleri değiştirmek, taşımak veya atananları değiştirmek için iş paketlerini genişletin, kısaltın ve sürükleyip bırakın."

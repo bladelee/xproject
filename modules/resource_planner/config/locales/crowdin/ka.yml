@@ -1,0 +1,17 @@
+#English strings go here
+ka:
+  plugin_openproject_resource_planner:
+    name: "OpenProject Resource Planner"
+    description: "Provides resource planner views."
+  permission_view_resource_planner: "გუნდის მგეგმავის ნახვა"
+  permission_manage_resource_planner: "გუნდის მგეგმავის მართვა"
+  project_module_resource_planner_view: "გუნდის მგეგმავები"
+  resource_planner:
+    label_resource_planner: "გუნდის მგეგმავი"
+    label_new_resource_planner: "ახალი გუნდის მგეგმავი"
+    label_create_new_resource_planner: "ახალი გუნდის მგეგმავის შექმნა"
+    label_resource_planner_plural: "გუნდის მგეგმავები"
+    label_assignees: "მიმნიჭებლები"
+    upsale:
+      title: "გუნდის მგეგმავი"
+      description: "მიიღეთ მთელი თქვენი გუნდის გეგმების მიმოხილვა მგეგმავთან ერთად. გაწელეთ, შეამოკლეთ და გადაათრიეთ სამუშაოს პაკეტები, მათი თარიღების შესაცვლელად, გადასაადგილებლად ან მიმნიჭებლის შესაცვლელად."

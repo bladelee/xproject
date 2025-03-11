@@ -51,4 +51,5 @@ group :opf_plugins do
 
   gem 'openproject-bim',                       path: 'modules/bim'
   gem 'people_resource',                       path: 'modules/people_resource'
+  gem 'resource_planner',                      path: 'modules/resource_planner'  
 end

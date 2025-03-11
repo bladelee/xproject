@@ -44,6 +44,7 @@ class Authorization::EnterpriseService
     placeholder_users
     readonly_work_packages
     team_planner_view
+    resource_planner_view
     two_factor_authentication
     work_package_query_relation_columns
     work_package_sharing

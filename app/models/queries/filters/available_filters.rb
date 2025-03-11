@@ -58,8 +58,9 @@ module Queries
       def filter_for(key, no_memoization: false)
         filter = get_initialized_filter(key, no_memoization)
         
-      #  puts "filter_for: #{key}", Thread.current.backtrace
-        list = available_filters()  
+        # puts "filter_for: #{key}", Thread.current.backtrace
+        # puts "filter_for: #{key}"        
+      #  list = available_filters()  
         # puts "filter_for: #{list}"
 
         raise ::Queries::Filters::MissingError if filter.nil?

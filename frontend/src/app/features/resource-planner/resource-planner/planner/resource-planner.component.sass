@@ -1,0 +1,107 @@
+@import "helpers"
+
+// This needs to match the resourceAreaWidth in the resource planner configuration
+$op-resource-planner-resource-width: 180px
+
+\:host
+  display: block
+  height: 100%
+  overflow: auto
+
+
+.op-resource-planner
+  $block: &
+
+  display: grid
+  grid-template-columns: auto 1fr
+  grid-template-rows: 55px 1fr
+  grid-template-areas: ". calendar" "addExisting calendar"
+  height: 100%
+  overflow: hidden
+
+  &--calendar-pane
+    grid-area: calendar
+    display: flex
+    flex-direction: column
+    overflow: hidden
+
+  &--calendar
+    overflow: auto
+
+  &--add-existing-pane
+    grid-area: addExisting
+    width: 264px
+    min-width: 264px
+    overflow: auto
+    margin-right: 10px
+    z-index: 2
+
+  &--add-existing-toggle
+    position: absolute
+
+  &--view-select-dropdown
+    position: absolute
+    right: 0
+
+  &--footer
+    grid-area: footer
+    display: flex
+    margin-top: 1rem
+
+  &--add-assignee
+    border-right: 1px solid transparent
+
+  &--remove-dropzone
+    flex: 1
+    border: 1px dashed #1A67A3
+    box-sizing: border-box
+    height: 2.25rem
+
+    display: flex
+    align-items: center
+    justify-content: center
+
+    &_active
+      background: #D1E5F5
+
+    &_forbidden
+      border-color: var(--content-form-danger-zone-bg-color)
+
+      #{$block}--dropzone-label
+        color: var(--content-form-danger-zone-bg-color)
+
+
+  &--dropzone-label
+    color: #1A67A3
+
+  &--no-data
+    min-height: 250px
+    padding: 2rem
+    background-color: #F3F3F3
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    border: 1px solid var(--borderColor-muted)
+    border-top: 0px
+
+
+  &--empty-state-image
+    width: 200px
+
+  &--empty-state-button
+    margin: 1rem 0
+
+.load-event-container 
+  display: flex          /* 使用 flex 布局 */
+  justify-content: center /* 水平居中 */
+  align-items: center     /* 垂直居中 */
+  height: 100%            /* 确保容器高度占满父元素 */
+
+
+
+.load-event-text
+      color: black        /* 更深的颜色，例如深灰色 */
+      font-size: 14px       /* 设置字体大小为 14px */
+      font-weight: bold     /* 设置字体加粗 */
+      margin: 0 4px         /* 可选：为文本之间添加一些间距 */

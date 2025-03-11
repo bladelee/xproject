@@ -50,6 +50,13 @@ import { ICKEditorContext } from 'core-app/shared/components/editor/components/c
 import isNewResource from 'core-app/features/hal/helpers/is-new-resource';
 import { IWorkPackageTimestamp } from 'core-app/features/hal/resources/work-package-timestamp-resource';
 
+
+export interface BookingItem {
+  resource_booking_id: number;
+  hours_per_day: number;
+  hours: number[];
+}
+
 export interface WorkPackageResourceEmbedded {
   activities:CollectionResource;
   assignee:HalResource|any;

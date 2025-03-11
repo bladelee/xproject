@@ -161,4 +161,156 @@
       containerType="single-view">
     </display-field>
   </div>
+
+  <style>
+    .daily-planned-hours {
+      display: flex;
+      justify-content: space-between;
+      min-height: 5px; 
+      align-items: flex-end;
+    }
+
+    .daily-planned-hours .section {
+      flex: 1;
+      /* border: 1px solid black; */
+      display: flex;
+      flex-direction: column;
+      justify-content:  space-between;
+      align-items: center;
+
+      border: 1px solid #000;
+      padding: 1px;
+      min-width: 15px;
+      min-height: 15px;
+      background-color: #7abb90;
+    }
+
+    /* 子块容器样式 */
+    .sub-container {
+        /* 平均分配父容器的宽度 */
+        flex: 1;
+        display: flex;
+        /* 子块在子容器内水平居中 */
+        justify-content: center;
+        /* 子块在子容器内垂直居中 */
+        align-items: center;
+    }
+
+    /* 子块样式 */
+    .child-block {
+        border: 1px solid #000;
+        border-radius: 5px;
+        padding: 1px;
+        /* min-width: 25px; */
+        min-width: 60px;
+        min-height: 15px;
+        background-color: #7abb90;
+        /* 使用 flexbox 布局让内容在子块内居中 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .button-container {
+      padding: 3px;
+      display: flex;
+      justify-content: center;
+        align-items: center;
+      min-height: 5px; 
+      /* align-items: flex-end; */
+    }    
+
+    .allocate-button {
+            /* 基本样式 */
+            display: inline-block;
+            padding: 2px 3px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            background-color: #f0f0f0;
+            color: #333;
+            transition: background-color 0.3s ease;
+        }
+
+        .allocate-button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .allocate-button:active {
+            background-color: #d0d0d0;
+        }
+
+    span {
+      font-size: 14px;
+    }
+  </style>
+
+  <!-- <div *ngIf="calcDisplayPlannedHours()?.length > 0" class="daily-planned-hours">
+      <div *ngFor="let hours of calcDisplayPlannedHours(); let i = index"  class="section">
+       <span> {{  hours + 'h' }} </span>
+      </div>
+  </div> -->
+
+  <div *ngIf="calcDisplayPlannedHours()?.length > 0" class="daily-planned-hours">
+      <div *ngFor="let hours of calcDisplayPlannedHours(); let i = index"  class="sub-container">
+       <div class="child-block"> {{  hours + 'h' }} </div>
+      </div>
+  </div>
+
+
+  <!-- <div *ngIf="displayPlannedHours?.length > 0" class="daily-planned-hours">
+    <div *ngFor="let hours of displayPlannedHours; let i = index" class="section">
+      <span> {{  hours + 'h' }} </span>
+    </div>
+  </div> -->
+
+  <!-- <ng-template #cachedHours let-hoursToDisplay="hours">
+    <div *ngIf="hoursToDisplay?.length > 0" class="daily-planned-hours">
+      <div *ngFor="let hours of hoursToDisplay; let i = index" class="section">
+        <span> {{  hours + 'h' }} </span>
+      </div>
+    </div>
+  </ng-template>
+
+  
+  <ng-container *ngIf="(calcDisplayPlannedHours() as hoursToCache) !== null; then cachedHours; else noHours"></ng-container>
+  
+  <ng-template #noHours>
+    <p>没有有效的工作时长数据。</p>
+  </ng-template> -->
+
+<!-- 
+  
+  <ng-container *ngTemplateOutlet="cachedHours; context: { $implicit: calcDisplayPlannedHours() }"></ng-container> -->
+
+
+  <div *ngIf=" windowStartDate && windowEndDate"  class="button-container">
+      <button
+      type="button"
+      class="spot-link op-wp-single-card--card-action allocate-button"
+      data-test-selector="op-wp-single-card--planned-hours-button"
+      title="分配工时"
+      (click)="showPlannedHours()">
+      <op-icon icon-classes="icon3 icon-clock"></op-icon>
+      分配工时
+    </button>
+  </div>
+
+  <!-- <div class="card-content">
+    <div class="section">
+      <span>3h</span>
+    </div>
+    <div class="section">
+      <span>3h</span>
+    </div>
+    <div class="section">
+      <span>2h</span>
+    </div>
+  </div>   -->
+
+
+
 </div>

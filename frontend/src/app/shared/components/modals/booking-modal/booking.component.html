@@ -1,0 +1,142 @@
+<form
+  class="spot-modal loading-indicator--location"
+  data-indicator-name="modal"
+  name="bookingForm"
+  (submit)="onSave($event)"
+  #bookingForm
+>
+  <h1 id="spotModalTitle" class="spot-modal--header">{{ text.title }}</h1>
+
+  <div class="spot-divider"></div>
+
+  <div class="spot-modal--body spot-container">
+    <div class="form--field">
+      <label class="form--label -bold" for="start-date">{{ text.label_start_date }}</label>
+      <div class="form--field-container">
+        <div class="form--text-field-container">
+          <span class="form--text-field">{{ startDate }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="form--field">
+      <label class="form--label -bold" for="end-date">{{ text.label_end_date }}</label>
+      <div class="form--field-container">
+        <div class="form--text-field-container">
+          <span class="form--text-field">{{ endDate }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="form--field">
+      <label class="form--label -bold" for="total-hours">{{ text.label_total_hours }}</label>
+      <div class="form--field-container">
+        <div class="form--text-field-container">
+          <span class="form--text-field">{{ totalPlannedHours }} 小时</span>
+        </div>
+      </div>
+    </div>
+    <div class="spot-divider"></div>
+
+    <h2 class="spot-subheader-extra-small">{{ text.label_default_hours_per_day }}</h2>
+    <div class="form--field">
+      <label class="form--label" for="default-hours-per-day">{{ text.label_default_hours_per_day }}</label>
+      <div class="form--field-container">
+        <div class="form--text-field-container">
+          <input
+            class=" hours-input"
+            type="number"
+            id="default-hours-per-day"
+            [(ngModel)]="defaultHoursPerDay"
+            (change)="onDefaultHoursChange($event)"
+            [min]="0"
+            [max]="12"
+            step="1"
+            name="default-hours-per-day"
+          />
+          <select
+            class=" hours-select"
+            id="default-hours-per-day-select"
+            [(ngModel)]="defaultHoursPerDay"
+            (change)="distributeHours()"
+            name="default-hours-per-day-select"
+          >
+            <option [ngValue]="1">1h</option>
+            <option [ngValue]="2">2h</option>
+            <option [ngValue]="4">4h</option>
+            <option [ngValue]="6">6h</option>
+            <option [ngValue]="8">8h</option>
+          </select>
+          <span class="hours-hint" *ngIf="defaultHoursPerDay === 0">
+            (工时不一致)
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="spot-divider"></div>
+
+    <!-- <h2 class="spot-subheader-extra-small">{{ text.label_daily_bookings }}</h2> -->
+    <div class="form--field" *ngFor="let booking of dailyBookings; let i = index">
+      <label class="form--label" for="booking-date-{{ i }}">{{ booking.date }}</label>
+      <div class="form--field-container">
+        <!-- <div class="form--text-field-container"> -->
+          <input
+            class="form--text-field"
+            type="number"
+            id="booking-date-{{ i }}"
+            [(ngModel)]="booking.hours"
+            (ngModelChange)="onHoursChange()"
+            min="0"
+            max="24"
+            step="0.5"
+            name="booking-hours-{{ i }}"
+          />
+          <span>小时</span>
+          <div class="date-controls" *ngIf="i === dailyBookings.length - 1">
+            <button
+              type="button"
+              class="button button_no-margin control-btn"
+              (click)="removeLastDay()"
+              [disabled]="dailyBookings.length <= 1"
+            >
+              -
+            </button>
+            <button
+              type="button"
+              class="button button_no-margin control-btn"
+              (click)="addNextDay()"
+              [disabled]="!canAddMoreDays()"
+            >
+              +
+            </button>
+          </div>
+        <!-- </div> -->
+      </div>
+    </div>
+
+    <div class="spot-divider"></div>
+
+    <div class="form--field">
+      <div [class.warning]="!isValidTotal">
+        已分配: {{ currentTotal | number:'1.0-1' }} / {{ totalPlannedHours }} 小时
+      </div>
+    </div>
+  </div>
+
+  <div class="spot-action-bar">
+    <div class="spot-action-bar--right">
+      <button
+        type="button"
+        class="button button_no-margin spot-modal--cancel-button spot-action-bar--action"
+        [textContent]="text.button_cancel"
+        (click)="onCancel($event)"
+      ></button>
+      <button
+        type="button"
+        class="button button_no-margin -primary -with-icon icon-save spot-action-bar--action"
+        [textContent]="isEditMode ? '保存' : '创建'"
+        [disabled]="!isValidTotal"
+        (click)="onSave($event)"
+      ></button>
+    </div>
+  </div>
+</form>

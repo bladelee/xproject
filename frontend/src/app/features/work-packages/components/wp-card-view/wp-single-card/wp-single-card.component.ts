@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  Injector,
   Input,
   OnInit,
   Output,
@@ -30,7 +31,7 @@ import { UntilDestroyedMixin } from 'core-app/shared/helpers/angular/until-destr
 import {
   WorkPackageViewFocusService,
 } from 'core-app/features/work-packages/routing/wp-view-base/view-services/wp-view-focus.service';
-import { WorkPackageResource } from 'core-app/features/hal/resources/work-package-resource';
+import { BookingItem, WorkPackageResource } from 'core-app/features/hal/resources/work-package-resource';
 import { isClickedWithModifier } from 'core-app/shared/helpers/link-handling/link-handling';
 import isNewResource from 'core-app/features/hal/helpers/is-new-resource';
 import { TimezoneService } from 'core-app/core/datetime/timezone.service';
@@ -43,6 +44,9 @@ import { getBaselineState } from 'core-app/features/work-packages/components/wp-
 import {
   CombinedDateDisplayField,
 } from 'core-app/shared/components/fields/display/field-types/combined-date-display.field';
+
+import { BookingComponent } from 'core-app/shared/components/modals/booking-modal/booking.component';
+import { OpModalService } from 'core-app/shared/components/modal/modal.service';
 
 @Component({
   selector: 'wp-single-card',
@@ -97,13 +101,126 @@ export class WorkPackageSingleCardComponent extends UntilDestroyedMixin implemen
 
   public baselineMode = ''||'added'||'updated'||'removed';
 
+  @Input() public windowStartDate: string = '';
+  @Input() public windowEndDate: string = '';
+  @Input() public resourceBookingItem: BookingItem | null = null;
+
+  private dailyPlannedHours: number[] = [];  
+  // displayPlannedHours: number[]|null = null;
+
+  // public text = {
+  //   removeCard: this.I18n.t('js.card.remove_from_list'),
+  //   detailsView: this.I18n.t('js.button_open_details'),
+  //   baseLineIconAdded: this.I18n.t('js.baseline.icon_tooltip.added'),
+  //   baseLineIconChanged: this.I18n.t('js.baseline.icon_tooltip.changed'),
+  //   baseLineIconRemoved: this.I18n.t('js.baseline.icon_tooltip.removed'),
+  // };
   public text = {
     removeCard: this.I18n.t('js.card.remove_from_list'),
     detailsView: this.I18n.t('js.button_open_details'),
     baseLineIconAdded: this.I18n.t('js.baseline.icon_tooltip.added'),
     baseLineIconChanged: this.I18n.t('js.baseline.icon_tooltip.changed'),
     baseLineIconRemoved: this.I18n.t('js.baseline.icon_tooltip.removed'),
+    dailyPlannedHours: this.I18n.t('js.card.daily_planned_hours'),
+    plannedHoursButton: this.I18n.t('js.card.planned_hours_button'), // 新增翻译文本
   };
+  // js:
+  // card:
+  //   daily_planned_hours: "Daily Planned Hours"
+  //   planned_hours_button: "计划工时"
+
+  public  calcDisplayPlannedHours(): number[]|null {
+
+
+    console.log('----------------resourceBookingItem =============', this.resourceBookingItem);
+
+    if (this.workPackage?.startDate === null || this.workPackage?.dueDate === null || this.windowStartDate === '' || this.windowEndDate === '') {
+      return null;
+    }
+    console.log('calcDisplayPlannedHours input', this.workPackage.startDate, this.workPackage.dueDate, this.windowStartDate, this.windowEndDate);
+    const result = 
+        this.calculateTaskVisibility( this.workPackage.startDate, this.workPackage.dueDate, this.windowStartDate, this.windowEndDate);
+    if (result) {
+      console.log('calcDisplayPlannedHours output', result);
+      const { visibleStart, visibleDays, startDayOffset } = result;
+      const dailyPlannedHours = this.dailyPlannedHours;
+      return  this.getWorkHoursSlice(dailyPlannedHours, startDayOffset, visibleDays);
+    }
+    return null;
+  }
+
+  private getWorkHoursSlice(workHoursArray: number[], startDayOffset: number, visibleDays: number): number[] {
+    // 确保 startDayOffset 是有效的索引
+    const startIndex = Math.max(0, startDayOffset);
+    // 计算结束索引，注意不能超过数组长度
+    const endIndex = Math.min(startIndex + visibleDays, workHoursArray.length);
+    // 截取数组
+
+    console.log('getWorkHoursSlice params', workHoursArray, startDayOffset, visibleDays);
+    return workHoursArray.slice(startIndex, endIndex);
+  }
+
+  private calculateTaskVisibility(
+    taskStartDate: string,
+    taskEndDate: string,
+    windowStartDate: string,
+    windowEndDate: string
+  ): { visibleStart: Date; visibleDays: number; startDayOffset: number } | null {
+
+    const taskStart = new Date(taskStartDate);
+    const taskEnd = new Date(taskEndDate);
+    const windowStart = new Date(windowStartDate);
+    const windowEnd = new Date(windowEndDate);
+
+    let tempDate = windowEnd.getDate();
+    // 减少一天  因为输入的时间总是后一天，向前调整一天
+    windowEnd.setDate(tempDate - 1);
+
+    const visibleStartRaw = new Date(Math.max(taskStart.getTime(), windowStart.getTime()));
+    const visibleEndRaw = new Date(Math.min(taskEnd.getTime(), windowEnd.getTime()));
+
+    if (visibleStartRaw > visibleEndRaw) {
+      return null;
+    }
+
+    const stripTime = (date: Date) => {
+      const d = new Date(date);
+      d.setHours(0, 0, 0, 0);
+      return d;
+    };
+
+    const visibleStartDate = stripTime(visibleStartRaw);
+    const visibleEndDate = stripTime(visibleEndRaw);
+    const tStartDate = stripTime(taskStart);
+
+    const timeDiff = visibleEndDate.getTime() - visibleStartDate.getTime();
+    const visibleDays = Math.floor(timeDiff / (86400 * 1000)) + 1;
+
+    const offsetTime = visibleStartDate.getTime() - tStartDate.getTime();
+    const startDayOffset = Math.floor(offsetTime / (86400 * 1000));
+
+    return {
+      visibleStart: visibleStartRaw,
+      visibleDays,
+      startDayOffset
+    };
+  }
+
+  public showPlannedHours(): void {
+  //  alert(`计划工时: ${this.dailyPlannedHours.join(', ')}`);
+    console.log(`workpackage=====: ${this.workPackage} ${this.workPackage.assignee.id}`, this.workPackage);
+    this.opModalService.show(BookingComponent, this.injector, {
+      startDate: this.workPackage.startDate, // 示例开始日期
+      endDate: this.workPackage.dueDate,   // 示例结束日期
+      totalPlannedHours: this.workPackage.estimatedTime || 8,    // 示例计划工时
+      dailyPlannedHours: this.dailyPlannedHours,
+      // project_id: this.workPackage.project_id,
+      assigned_to_id: this.workPackage.assignee.id,
+      work_package_id: this.workPackage.id,
+      resource_booking_id: this.resourceBookingItem ? this.resourceBookingItem.resource_booking_id : null,
+      housrs_per_day: this.resourceBookingItem ? this.resourceBookingItem.hours_per_day : null
+    });
+  }
 
   public isNewResource = isNewResource;
 
@@ -122,8 +239,12 @@ export class WorkPackageSingleCardComponent extends UntilDestroyedMixin implemen
     readonly cdRef:ChangeDetectorRef,
     readonly timezoneService:TimezoneService,
     readonly schemaCache:SchemaCacheService,
+    readonly opModalService:OpModalService,
+    readonly injector:Injector,
   ) {
     super();
+    // 在构造函数中计算显示时长数组
+    // this.displayPlannedHours = this.calcDisplayPlannedHours();
   }
 
   ngOnInit():void {
@@ -146,6 +267,8 @@ export class WorkPackageSingleCardComponent extends UntilDestroyedMixin implemen
         this.selected = selected;
         this.cdRef.detectChanges();
       });
+    
+      this.dailyPlannedHours = this.resourceBookingItem ? this.resourceBookingItem.hours : [];
   }
 
   public classIdentifier(wp:WorkPackageResource):string {

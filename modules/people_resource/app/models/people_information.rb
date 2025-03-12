@@ -30,7 +30,7 @@ class PeopleInformation < ApplicationRecord
 
   validate :validate_manager
 
-  attr_accessor 'phone', 'address', 'skype', 'birthday', 'job_title', 'company', 'middlename', 'gender', 'twitter',
+  safe_attributes 'phone', 'address', 'skype', 'birthday', 'job_title', 'company', 'middlename', 'gender', 'twitter',
                  'facebook', 'linkedin', 'department_id', 'background', 'appearance_date', 'is_system', 'manager_id'
 
   def start_date

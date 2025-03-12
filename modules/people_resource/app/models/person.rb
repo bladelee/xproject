@@ -23,8 +23,8 @@ class Person < User
 
   include Redmine::SafeAttributes
   #include Redmine::Pagination
-  #attr_accessor :auth_source_id,:custom_field_values,:custom_fields, :status, :mail_notification,:notified_project_ids
-  #attr_accessor :admin,:custom_field_values,:custom_fields, :status, :login, :notified_project_ids, :mail_notification, :auth_source_id, :information_attributes,
+  # attr_accessor :auth_source_id,:custom_field_values,:custom_fields, :status, :mail_notification,:notified_project_ids
+  # attr_accessor :admin,:custom_field_values,:custom_fields, :status, :login, :notified_project_ids, :mail_notification, :auth_source_id, :information_attributes,
   #              :is_system, :middlename, :gender,:birthday,:address,:phone,:job_title,:department_id,:manager_id,:appearance_date,:background
 
   self.inheritance_column = :_type_disabled
@@ -72,14 +72,14 @@ class Person < User
   safe_attributes 'custom_field_values',
                   'custom_fields',
                   'information_attributes',
-                  'auth_source_id',
-    :if => lambda { |person, user| (person.new_record? && user.allowed_people_to?(:add_people, person)) || user.allowed_people_to?(:edit_people, person) }
+                  'auth_source_id'
+    # :if => lambda { |person, user| (person.new_record? && user.allowed_people_to?(:add_people, person)) || user.allowed_people_to?(:edit_people, person) }
 
-  safe_attributes 'status',
-    :if => lambda { |person, user| user.allowed_people_to?(:edit_people, person) && person.id != user.id && !person.admin }
+  # safe_attributes 'status'
+    # :if => lambda { |person, user| user.allowed_people_to?(:edit_people, person) && person.id != user.id && !person.admin }
 
-  safe_attributes 'tag_list',
-    :if => lambda { |person, user| user.allowed_people_to?(:manage_tags, person) }
+  safe_attributes 'tag_list'
+    # :if => lambda { |person, user| user.allowed_people_to?(:manage_tags, person) }
 
 
   def self.genders

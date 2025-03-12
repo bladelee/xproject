@@ -49,36 +49,36 @@ module OpenProject::Calendar
         User.current.allowed_in_any_project?(:view_calendar)
       end
 
-      # menu :top_menu,
-      #      :calendar_view, { controller: "/calendar/calendars", action: "index", project_id: nil },
-      #      context: :modules,
-      #      caption: :label_calendar_plural,
-      #      icon: "calendar",
-      #      after: :gantt,
-      #      if: should_render
+      menu :top_menu,
+           :calendar_view, { controller: "/calendar/calendars", action: "index", project_id: nil },
+           context: :modules,
+           caption: :label_calendar_plural,
+           icon: "calendar",
+           after: :gantt,
+           if: should_render
 
-      # menu :global_menu,
-      #      :calendar_view,
-      #      { controller: "/calendar/calendars", action: "index", project_id: nil },
-      #      caption: :label_calendar_plural,
-      #      icon: "calendar",
-      #      after: :gantt,
-      #      if: should_render
+      menu :global_menu,
+           :calendar_view,
+           { controller: "/calendar/calendars", action: "index", project_id: nil },
+           caption: :label_calendar_plural,
+           icon: "calendar",
+           after: :gantt,
+           if: should_render
 
-      # menu :project_menu,
-      #      :calendar_view,
-      #      { controller: "/calendar/calendars", action: "index" },
-      #      caption: :label_calendar_plural,
-      #      icon: "calendar",
-      #      after: :gantt
+      menu :project_menu,
+           :calendar_view,
+           { controller: "/calendar/calendars", action: "index" },
+           caption: :label_calendar_plural,
+           icon: "calendar",
+           after: :gantt
 
-      # menu :project_menu,
-      #      :calendar_menu,
-      #      { controller: "/calendar/calendars", action: "index" },
-      #      parent: :calendar_view,
-      #      partial: "calendar/calendars/menu",
-      #      last: true,
-      #      caption: :label_calendar_plural
+      menu :project_menu,
+           :calendar_menu,
+           { controller: "/calendar/calendars", action: "index" },
+           parent: :calendar_view,
+           partial: "calendar/calendars/menu",
+           last: true,
+           caption: :label_calendar_plural
     end
 
     add_view :WorkPackagesCalendar,

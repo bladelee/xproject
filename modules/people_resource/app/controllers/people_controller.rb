@@ -23,10 +23,11 @@ class PeopleController < ApplicationController
     Mime::Type.register 'text/x-vcard', :vcf
 
 
-=begin
     before_action :find_person, :only => [:show, :edit, :update, :destroy,
                                           :destroy_avatar, :load_tab, :remove_subordinate]
+
     before_action :find_managers, :only => [:manager, :autocomplete_for_manager, :add_manager]
+=begin    
     before_action :authorize_people, :except => [:avatar, :context_menu,  :autocomplete_tags,
                                                  :manager, :autocomplete_for_manager, :add_manager, :autocomplete_for_person]
 =end
@@ -113,13 +114,13 @@ class PeopleController < ApplicationController
       end
     end
 
-    # def edit
-    #   #@auth_sources = AuthSource.all
-    #   @departments = Department.all.sort
-    #   @membership ||= Member.new
-    #   @person = Person.where(:type => 'User').find(params[:id])
-    #   @person.try(:build_information) unless @person.try(:information)
-    # end
+    def edit
+      #@auth_sources = AuthSource.all
+      @departments = Department.all.sort
+      @membership ||= Member.new
+      @person = Person.where(:type => 'User').find(params[:id])
+      @person.try(:build_information) unless @person.try(:information)
+    end
 
     def new
       @person = Person.new(language: Setting.default_language)
@@ -132,58 +133,69 @@ class PeopleController < ApplicationController
     end
 
     def update
-      #params.permit!
-      #(render_403; return false) #unless @person.editable_by?(User.current)
-      #@person.safe_attributes = params[:person]
-
-      @person = Person.find(params[:id])
-      @person.firstname = params[:person][:firstname]
-      @person.lastname = params[:person][:lastname]
-      @person.mail = params[:person][:mail]
-
-      #@person.status = params[:person][:status]
-      #@person.information = params[:person][:information_attributes].permit!
-      #logger.debug "Failed to deduce event params for #{@person.firstname}"
+      # (render_403; return false) unless @person.editable_by?(User.current)
+      @person.safe_attributes = params[:person]
       if @person.save
-
-
-        #peopleInformation = PeopleInformation.where(:user_id => params[:id])
-
-        logger.debug "-------Failed to deduce event params for #{params[:id]}"
-
-
-
-=begin
-        peopleInformation.middlename = params[:person][:information_attributes][:middlename]
-        peopleInformation.gender = params[:person][:information_attributes][:gender]
-        peopleInformation.birthday = params[:person][:information_attributes][:birthday]
-        peopleInformation.address = params[:person][:information_attributes][:address]
-        peopleInformation.phone = params[:person][:information_attributes][:phone]
-        peopleInformation.job_title = params[:person][:information_attributes][:job_title]
-        peopleInformation.department_id = params[:person][:information_attributes][:department_id]
-        peopleInformation.manager_id = params[:person][:information_attributes][:manager_id]
-        peopleInformation.appearance_date = params[:person][:information_attributes][:appearance_date]
-        peopleInformation.background = params[:person][:information_attributes][:background]
-
-        peopleInformation.save
-=end
-
-
-        #attachments = Attachment.attach_files(@person, params[:attachments])
-        #render_attachment_warning_if_needed(@person)
+        # attachments = Attachment.attach_files(@person, params[:attachments])
+        # render_attachment_warning_if_needed(@person)
         flash[:notice] = t(:notice_successful_update)
-        attach_avatar
+        # attach_avatar
         respond_to do |format|
           format.html { redirect_to action: 'show', id: @person, tab: params[:tab] }
-          #format.api  { head :ok }
+          # format.api  { head :ok }
         end
       else
         respond_to do |format|
-          format.html { render layout: "global", action: 'edit', status: 400 }
-          #format.api  { render_validation_errors(@person) }
+          format.html { render action: 'edit', status: 400 }
+          # format.api  { render_validation_errors(@person) }
         end
       end
     end
+
+
+    # def update
+    #   params.permit!
+    #   # (render_403; return false) # unless @person.editable_by?(User.current)
+    #   # @person.safe_attributes = params[:person]
+    #   @person = Person.find(params[:id])
+    #   @person.firstname = params[:person][:firstname]
+    #   @person.lastname = params[:person][:lastname]
+    #   @person.mail = params[:person][:mail]
+
+    #   @person.status = params[:person][:status]
+    #   @person.information = params[:person][:information_attributes].permit!
+    #   logger.debug "Failed to deduce event params for #{@person.firstname}"
+    #   if @person.save
+    #     peopleInformation = PeopleInformation.where(:user_id => params[:id])
+    #     logger.debug "-------Failed to deduce event params for #{params[:id]}"
+
+    #     peopleInformation.middlename = params[:person][:information_attributes][:middlename]
+    #     peopleInformation.gender = params[:person][:information_attributes][:gender]
+    #     peopleInformation.birthday = params[:person][:information_attributes][:birthday]
+    #     peopleInformation.address = params[:person][:information_attributes][:address]
+    #     peopleInformation.phone = params[:person][:information_attributes][:phone]
+    #     peopleInformation.job_title = params[:person][:information_attributes][:job_title]
+    #     peopleInformation.department_id = params[:person][:information_attributes][:department_id]
+    #     peopleInformation.manager_id = params[:person][:information_attributes][:manager_id]
+    #     # peopleInformation.appearance_date = params[:person][:information_attributes][:appearance_date]
+    #     # peopleInformation.background = params[:person][:information_attributes][:background]
+    #     peopleInformation.save
+
+    #     #attachments = Attachment.attach_files(@person, params[:attachments])
+    #     #render_attachment_warning_if_needed(@person)
+    #     flash[:notice] = t(:notice_successful_update)
+    #     attach_avatar
+    #     respond_to do |format|
+    #       format.html { redirect_to action: 'show', id: @person, tab: params[:tab] }
+    #       #format.api  { head :ok }
+    #     end
+    #   else
+    #     respond_to do |format|
+    #       format.html { render layout: "global", action: 'edit', status: 400 }
+    #       #format.api  { render_validation_errors(@person) }
+    #     end
+    #   end
+    # end
 
 
     def product_params
@@ -314,7 +326,8 @@ class PeopleController < ApplicationController
     end
 
     def autocomplete_for_manager
-      @managers = @managers.like(params[:q]).limit(100).preload([:avatar, :email_address]).to_a
+     #  @managers = @managers.like(params[:q]).limit(100).preload([:avatar, :email_address]).to_a
+     @managers = @managers.like(params[:q]).limit(100).to_a    
     end
 
     def add_manager

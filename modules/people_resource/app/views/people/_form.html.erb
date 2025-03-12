@@ -49,15 +49,16 @@
       <div class="form--field -required"><%= information.text_field :job_title, :label => t(:label_people_job_title) , :container_class => "-middle" %></div>
       <% unless @departments.blank? %>
         <div class="form--field -required"><%= information.select :department_id, department_tree_options_for_select(@departments,  :selected => @person.department_id), :include_blank => true, :label => t(:label_people_department)  , :container_class => "-middle" %></div>
-      <% end %>    
+      <% end %>
+
       <% if @person.available_managers.any? || @person.new_record? %>
         <div class="form--field -required" id="person_information_attributes_manager_id_wrap">
           <label class="form--label"><%= t(:label_people_manager) %></label>
           <%= hidden_field_tag 'person[information_attributes][manager_id]', nil %>
           <span class=" form--field-container"><span class="form--select-container -middle">
-          <%= select_tag 'person[information_attributes][manager_id]',
+          <%= local_select2_tag  'person[information_attributes][manager_id]',
                           options_for_select(@person.available_managers.where(id: information.object.manager_id).map { |manager| [manager.name, manager.id] }, information.object.manager_id),
-                          url: '',
+                          url: autocomplete_for_manager_person_path(id: f.object.id || 'new'),
                           placeholder: '',
                           format_state: 'formatStateWithAvatar',
                           allow_clear: true %>

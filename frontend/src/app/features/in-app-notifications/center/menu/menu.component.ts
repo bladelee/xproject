@@ -94,20 +94,20 @@ export class IanMenuComponent implements OnInit {
       icon: 'watching',
       ...getUiLinkForFilters({ filter: 'reason', name: 'watched' }),
     },
-    {
-      key: 'dateAlert',
-      title: this.I18n.t('js.notifications.menu.date_alert'),
-      icon: 'date-alert',
-      isEnterprise: true,
-      ...this.eeGuardedDateAlertRoute,
-    },
-    {
-      key: 'shared',
-      title: this.I18n.t('js.notifications.menu.shared'),
-      isEnterprise: true,
-      icon: 'share',
-      ...this.eeGuardedShareRoute,
-    },
+    // {
+    //   key: 'dateAlert',
+    //   title: this.I18n.t('js.notifications.menu.date_alert'),
+    //   icon: 'date-alert',
+    //   isEnterprise: true,
+    //   ...this.eeGuardedDateAlertRoute,
+    // },
+    // {
+    //   key: 'shared',
+    //   title: this.I18n.t('js.notifications.menu.shared'),
+    //   isEnterprise: true,
+    //   icon: 'share',
+    //   ...this.eeGuardedShareRoute,
+    // },
   ];
 
   notificationsByProject$ = this.ianMenuService.notificationsByProject$.pipe(

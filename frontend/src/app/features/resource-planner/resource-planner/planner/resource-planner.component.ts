@@ -854,9 +854,10 @@ private async bookingInit(): Promise<void> {
       // 1. 获取 assigneeIds 并确保不为空
       const assigneeIds = await firstValueFrom(
         this.principalIds$.pipe(
+          tap((ids) => debugLog(`Assignee IDs: ${ids}`)),
           take(1),
           filter((ids) => !!ids?.length),
-          // defaultIfEmpty([])
+          defaultIfEmpty([])
         )
       );
 
@@ -866,7 +867,7 @@ private async bookingInit(): Promise<void> {
       }
 
       // 2. 过滤无效 ID
-      const validAssigneeIds = assigneeIds.filter((id): id is string => id !== null);
+      const validAssigneeIds = assigneeIds.filter(id => typeof id === 'string');
       if (validAssigneeIds.length === 0) {
         debugLog('All assignee IDs are invalid.');
         return;
@@ -878,10 +879,10 @@ private async bookingInit(): Promise<void> {
       const datesInRange = this.getDatesInRange(dateFrom, dateTo);
 
       // 4. 并行请求数据并更新缓存
-      await this.fetchAndCacheWorkLoadData(validAssigneeIds, datesInRange);
+      await this.fetchAndCacheWorkLoadData(validAssigneeIds as string[], datesInRange);
 
       // 5. 更新状态
-      this.loadData$.next(this.getLoadDataFromCache(datesInRange, validAssigneeIds));
+      this.loadData$.next(this.getLoadDataFromCache(datesInRange, validAssigneeIds as string[]));
     } catch (error) {
       console.error('Failed to load work package data:', error);
       this.toastService.addError(this.I18n.t('js.resource_planner.load_data_error'));

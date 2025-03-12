@@ -214,7 +214,7 @@ export class WorkPackageSingleCardComponent extends UntilDestroyedMixin implemen
       endDate: this.workPackage.dueDate,   // 示例结束日期
       totalPlannedHours: this.workPackage.estimatedTime || 8,    // 示例计划工时
       dailyPlannedHours: this.dailyPlannedHours,
-      // project_id: this.workPackage.project_id,
+      project_id: this.workPackage.project.id,
       assigned_to_id: this.workPackage.assignee.id,
       work_package_id: this.workPackage.id,
       resource_booking_id: this.resourceBookingItem ? this.resourceBookingItem.resource_booking_id : null,

@@ -59,12 +59,13 @@ export class BookingComponent extends OpModalComponent {
 
   private workPackage_id: string;
   private bookingResourceId: number|null;
-
-
+  private assigned_to_id: number|null;
+  private project_id: number | null;
 
   ngOnInit() {
     // 判断是否为编辑模式
-    this.isEditMode = !!(this.defaultDailyHours || this.existingBookings);
+    this.isEditMode =  this.defaultDailyHours !== undefined && this.defaultDailyHours !== null || 
+      (this.existingBookings?.length ?? 0) > 0;
     
     if (this.isEditMode && this.existingBookings) {
       // 编辑模式：使用现有数据
@@ -96,6 +97,8 @@ export class BookingComponent extends OpModalComponent {
     this.bookingResourceId = this.locals.resource_booking_id as number|null; 
     this.defaultDailyHours = this.locals.housrs_per_day as number|null; 
     this.existingBookings = this.locals.dailyPlannedHours as number[]; 
+    this.assigned_to_id = this.locals.assigned_to_id as number|null;
+    this.project_id = this.locals.project_id as number|null;
 
     console.log('this.locals====',this.locals);
   }
@@ -310,8 +313,8 @@ export class BookingComponent extends OpModalComponent {
       this.create.emit(result);
 
       const newResourceBooking = {
-        project_id: 1,
-        assigned_to_id: 4,
+        project_id: this.project_id,
+        assigned_to_id: this.assigned_to_id ,
         work_package_id: this.workPackage_id,
         author_id: 4,
         start_date: this.startDate,

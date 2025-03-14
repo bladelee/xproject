@@ -51,7 +51,9 @@ export interface ResourceBookingResponse {
   providedIn: 'root'
 }) 
 export class ResourceBookingService {
-  private apiUrl = 'http://localhost:4200/resource_bookings';
+  private readonly appBasePath = window.appBasePath || '';  
+  private apiUrl = this.appBasePath + '/resource_bookings';
+
 
   // 使用BehaviorSubject保持最新状态
   private newBookingSubject = new BehaviorSubject<any>(null);

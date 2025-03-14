@@ -216,6 +216,7 @@ export class WorkPackageSingleCardComponent extends UntilDestroyedMixin implemen
       dailyPlannedHours: this.dailyPlannedHours,
       project_id: this.workPackage.project.id,
       assigned_to_id: this.workPackage.assignee.id,
+      author_id: this.workPackage.author.id,
       work_package_id: this.workPackage.id,
       resource_booking_id: this.resourceBookingItem ? this.resourceBookingItem.resource_booking_id : null,
       housrs_per_day: this.resourceBookingItem ? this.resourceBookingItem.hours_per_day : null

@@ -60,6 +60,7 @@ export class BookingComponent extends OpModalComponent {
   private workPackage_id: string;
   private bookingResourceId: number|null;
   private assigned_to_id: number|null;
+  private author_id: number|null;
   private project_id: number | null;
 
   ngOnInit() {
@@ -99,6 +100,7 @@ export class BookingComponent extends OpModalComponent {
     this.existingBookings = this.locals.dailyPlannedHours as number[]; 
     this.assigned_to_id = this.locals.assigned_to_id as number|null;
     this.project_id = this.locals.project_id as number|null;
+    this.author_id = this.locals.author_id as number|null;
 
     console.log('this.locals====',this.locals);
   }
@@ -316,7 +318,7 @@ export class BookingComponent extends OpModalComponent {
         project_id: this.project_id,
         assigned_to_id: this.assigned_to_id ,
         work_package_id: this.workPackage_id,
-        author_id: 4,
+        author_id: this.author_id,
         start_date: this.startDate,
         end_date: this.endDate,
         hours_per_day: this.defaultHoursPerDay,

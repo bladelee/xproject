@@ -83,6 +83,7 @@ module API
       mount ::API::V3::Views::ViewsAPI
       mount ::API::V3::WorkPackages::WorkPackagesAPI
       mount ::API::V3::WikiPages::WikiPagesAPI
+      mount ::API::V3::Stations::StationsAPI
 
       get "/" do
         RootRepresenter.new({}, current_user:)

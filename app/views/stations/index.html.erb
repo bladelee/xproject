@@ -1,0 +1,42 @@
+<%= render partial: 'toolbar' %>
+
+<div class="generic-table--container">
+  <div class="generic-table--results-container">
+    <table class="generic-table">
+      <colgroup>
+        <col highlight-col>
+        <col highlight-col>
+        <col>
+      </colgroup>
+      <thead>
+        <tr>
+          <th>
+            <div class="generic-table--sort-header-outer">
+              <div class="generic-table--sort-header">
+                <%= Station.human_attribute_name(:name) %>
+              </div>
+            </div>
+          </th>
+          <th>
+            <div class="generic-table--sort-header-outer">
+              <div class="generic-table--sort-header">
+                <%= Station.human_attribute_name(:position) %>
+              </div>
+            </div>
+          </th>
+          <th><div class="generic-table--empty-header"></div></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @stations.any? %>
+          <%= render partial: 'station', collection: @stations %>
+        <% else %>
+          <tr class="no-data-row">
+            <td colspan="3"><%= t(:no_results_title_text) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    
+  </div>
+</div> 

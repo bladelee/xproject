@@ -36,3 +36,53 @@ Mime::SET << Mime[:csv] unless Mime::SET.include?(Mime[:csv])
 
 Mime::Type.register "application/pdf", :pdf unless Mime::Type.lookup_by_extension(:pdf)
 Mime::Type.register "image/png", :png unless Mime::Type.lookup_by_extension(:png)
+
+
+  # module ActionController
+  #   module MimeResponds
+  #     class Collector
+  #       def api(&)
+  #         any(:xml, :json, &)
+  #       end
+  #     end
+  #   end
+  # end
+  
+  # module ActionController
+  #   class Base
+  #     # Displays an explicit message instead of a NoMethodError exception
+  #     # when trying to start Redmine with an old session_store.rb
+  #     # TODO: remove it in a later version
+  #     def self.session=(*args)
+  #       $stderr.puts "Please remove config/initializers/session_store.rb and run `rake generate_secret_token`.\n" +
+  #         "Setting the session secret with ActionController.session= is no longer supported."
+  #       exit 1
+  #     end
+  #   end
+  # end
+  
+  # module ActionView
+  #   LookupContext.prepend(Module.new do
+  #     def formats=(values)
+  #       if Array(values).intersect?([:xml, :json])
+  #         values << :api
+  #       end
+  #       super
+  #     end
+  #   end)
+  # end
+  
+  # module ActionController
+  #   Base.prepend(Module.new do
+  #     def rendered_format
+  #       if lookup_context.formats.first == :api
+  #         return request.format
+  #       end
+  
+  #       super
+  #     end
+  #   end)
+  # end
+  
+  # Mime::SET << 'api'
+  # Mime::Type.register "application/json", :api unless Mime::Type.lookup_by_extension(:api)

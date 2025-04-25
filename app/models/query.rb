@@ -107,11 +107,18 @@ class Query < ApplicationRecord
   end
 
   def validate_work_package_filters
+
     filters.each do |filter|
+      Rails.logger.debug "xxxFilter Field: #{filter.field}, Operator: #{filter.operator}, Values: #{filter.values}, Valid: #{filter.valid?}"
       unless filter.valid?
         errors.add :base, filter.error_messages
       end
     end
+    # filters.each do |filter|
+    #   unless filter.valid?
+    #     errors.add :base, filter.error_messages
+    #   end
+    # end
   end
 
   def validate_columns

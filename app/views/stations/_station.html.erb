@@ -1,0 +1,22 @@
+<tr>
+  <td>
+    <%= link_to station.name,
+                edit_station_path(station),
+                title: station.name %>
+  </td>
+  <td><%= station.position %></td>
+  <td class="buttons">
+    <%= link_to edit_station_path(station),
+                class: 'icon icon-edit',
+                title: t(:button_edit) do %>
+      <%= t(:button_edit) %>
+    <% end %>
+    <%= link_to station_path(station),
+                class: 'icon icon-delete',
+                data: { confirm: t(:text_are_you_sure) },
+                method: :delete,
+                title: t(:button_delete) do %>
+      <%= t(:button_delete) %>
+    <% end %>
+  </td>
+</tr> 

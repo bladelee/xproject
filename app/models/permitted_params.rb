@@ -179,6 +179,10 @@ class PermittedParams
     params.require(:status).permit(*self.class.permitted_attributes[:status])
   end
 
+  def station
+    params.require(:station).permit(*self.class.permitted_attributes[:station])
+  end
+
   def settings
     permitted_params = params.require(:settings).permit
     all_valid_keys = AllowedSettings.all
@@ -522,6 +526,7 @@ class PermittedParams
           :parent_id,
           :priority_id,
           :placeholder_user_id,
+          :station_id,
           :remaining_hours,
           :responsible_id,
           :start_date,
@@ -559,6 +564,10 @@ class PermittedParams
         placeholder_user: %i(
           name
         ),
+        station: %i[
+          name
+          position
+        ],
         project_type: [
           :name,
           { type_ids: [] }

@@ -1,0 +1,18 @@
+<div class="toolbar-container">
+  <div class="toolbar">
+    <div class="title-container">
+      <h2><%= t(:label_station_plural) %></h2>
+    </div>
+    <ul class="toolbar-items">
+      <li class="toolbar-item">
+        <%= link_to new_station_path,
+                    { class: 'button -alt-highlight',
+                      aria: { label: t(:label_station_new) },
+                      title: t(:label_station_new) } do %>
+          <%= op_icon('button--icon icon-add') %>
+          <span class="button--text"><%= t(:label_station_new) %></span>
+        <% end %>
+      </li>
+    </ul>
+  </div>
+</div> 

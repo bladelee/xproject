@@ -54,6 +54,7 @@ class WorkPackage < ApplicationRecord
   belongs_to :version, optional: true
   belongs_to :priority, class_name: "IssuePriority"
   belongs_to :category, class_name: "Category", optional: true
+  belongs_to :station, class_name: "Station"
   belongs_to :placeholder_user, class_name: "PlaceholderUser", optional: true
 
   has_many :time_entries, dependent: :delete_all
@@ -117,6 +118,10 @@ class WorkPackage < ApplicationRecord
 
   scope :without_version, -> {
     where(version_id: nil)
+  }
+
+  scope :without_station, ->(station) {
+    where(station_id: station.id)
   }
 
   scope :with_query, ->(query) {
@@ -332,6 +337,11 @@ class WorkPackage < ApplicationRecord
     write_attribute(:priority_id, pid)
   end
 
+  def station_id=(sid)
+    self.station = nil
+    write_attribute(:station_id, sid)
+  end
+
   def placeholder_user_id=(pid)
     # self.priority = nil
     self.placeholder_user = nil
@@ -417,6 +427,11 @@ class WorkPackage < ApplicationRecord
     count_and_group_by project:,
                        field: "priority_id",
                        joins: IssuePriority.table_name
+  end
+  def self.by_station(project)
+    count_and_group_by project:,
+                       field: "station_id",
+                       joins: Station.table_name
   end
 
   def self.by_category(project)

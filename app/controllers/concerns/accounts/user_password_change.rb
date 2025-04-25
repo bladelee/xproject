@@ -40,7 +40,7 @@ module Accounts::UserPasswordChange
     # auth sources in the admin UI, so this shouldn't normally happen.
     return if redirect_if_password_change_not_allowed(user)
 
-    # Ensure the current password is validated
+    # Ensure the current password is validated    修改密码
     unless user.check_password?(params[:password], update_legacy:)
       flash_and_log_invalid_credentials(is_logged_in: !show_user_name)
       return render_password_change(user, nil, show_user_name:)

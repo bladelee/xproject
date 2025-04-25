@@ -253,7 +253,7 @@ zh-CN:
       failed: "项目 %{name} 删除失败"
       failed_text: "删除项目 %{name} 的请求已失败。该项目仍位于存档中。"
       completed: "项目 %{name} 删除完成"
-      completed_text: "删除项目“%{name}”的请求已完成。"
+      completed_text: "删除项目 %{name} 的请求已完成。"
       completed_text_children: "此外，下列子项目已被删除："
     index:
       open_as_gantt: "以甘特视图打开"
@@ -296,7 +296,7 @@ zh-CN:
       types:
         no_results_title_text: 目前有可用的类型。
         form:
-          enable_type_in_project: '启用类型“%{type}”'
+          enable_type_in_project: '启用类型"%{type}"'
       versions:
         no_results_title_text: 目前这个项目没有版本。
         no_results_content_text: 创建一个新的版本
@@ -394,18 +394,18 @@ zh-CN:
     text: "文本"
   placeholder_users:
     right_to_manage_members_missing: >
-      不允许删除岗位。您无权管理任何成员包含岗位的项目中的成员。
-    delete_tooltip: "删除岗位"
+      不允许删除资源类别。您无权管理任何成员包含资源类别的项目中的成员。
+    delete_tooltip: "删除资源类别"
     deletion_info:
-      heading: "删除岗位 %{name}"
+      heading: "删除资源类别 %{name}"
       data_consequences: >
-        出现的所有岗位（例如，作为受理人、负责人或其他用户值）将被重新分配给一个名为“已删除用户”的帐户。 由于每个已删除帐户的数据都会被重新分配给此帐户，因此无法将用户创建的数据与另一个已删除帐户的数据区分。
+        出现的所有资源类别（例如，作为受理人、负责人或其他用户值）将被重新分配给一个名为"已删除用户"的帐户。 由于每个已删除帐户的数据都会被重新分配给此帐户，因此无法将用户创建的数据与另一个已删除帐户的数据区分。
       irreversible: "此操作不可逆"
-      confirmation: "输入岗位名 %{name} 以确认删除。"
+      confirmation: "输入资源类别名 %{name} 以确认删除。"
     upsale:
-      title: 岗位
+      title: 资源类别
       description: >
-        岗位是一种将工作包分配给不属于您项目的用户的方法。它们在一系列场景中十分有用；例如，如果您需要跟踪尚未命名或可用的资源的任务，或者如果您不想让该人员访问 OpenProject 但仍希望跟踪分配给他们的任务。
+        资源类别是一种将工作包分配给不属于您项目的用户的方法。它们在一系列场景中十分有用；例如，如果您需要跟踪尚未命名或可用的资源的任务，或者如果您不想让该人员访问 OpenProject 但仍希望跟踪分配给他们的任务。
   prioritiies:
     edit:
       priority_color_text: |
@@ -706,7 +706,8 @@ zh-CN:
         parent_work_package: "父级"
         priority: "优先级"
         progress: "% 完成"
-        placeholder_user: "岗位"
+        station: "岗位"
+        placeholder_user: "资源类别"
         readonly: "只读"
         remaining_hours: "剩余工作"
         remaining_time: "剩余工作"
@@ -1060,7 +1061,7 @@ zh-CN:
       news: "新闻"
       notification:
         other: "通知"
-      placeholder_user: "岗位"
+      placeholder_user: "资源类别"
       project: "项目"
       query: "自定义查询"
       role:
@@ -2072,9 +2073,9 @@ zh-CN:
   label_permissions: "权限"
   label_permissions_report: "权限报告"
   label_personalize_page: "对此页面进行个性化设置"
-  label_placeholder_user: "岗位"
-  label_placeholder_user_new: "新岗位"
-  label_placeholder_user_plural: "岗位"
+  label_placeholder_user: "资源类别"
+  label_placeholder_user_new: "新资源类别"
+  label_placeholder_user_plural: "资源类别"
   label_planning: "规划"
   label_please_login: "请登录"
   label_plugins: "插件"
@@ -2571,12 +2572,17 @@ zh-CN:
   permission_add_work_packages: "添加工作包"
   permission_add_messages: "发布消息"
   permission_add_project: "创建项目"
+
+  permission_view_all_employees: "管理所有员工"
+  permission_manage_department_employees: "管理部门员工"
+  permission_manage_project_employees: "管理项目员工"
+
   permission_add_work_package_attachments: "添加附件"
   permission_add_work_package_attachments_explanation: "允许在没有编辑工作包权限的情况下添加附件"
   permission_archive_project: "归档项目"
   permission_create_user: "创建用户"
   permission_manage_user: "编辑用户"
-  permission_manage_placeholder_user: "创建、编辑和删除岗位"
+  permission_manage_placeholder_user: "创建、编辑和删除资源类别"
   permission_add_subprojects: "创建子项目"
   permission_add_work_package_watchers: "添加关注者"
   permission_assign_versions: "分配版本"

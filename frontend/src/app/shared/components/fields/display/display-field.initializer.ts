@@ -69,6 +69,7 @@ export function initializeCoreDisplayFields(displayFieldService:DisplayFieldServ
         'TimeEntriesActivity',
         'Version',
         'Category',
+        'Station',
         'PlaceholderUser',
         'CustomOption'])
       .addFieldType(ResourcesDisplayField, 'resources', ['[]CustomOption'])

@@ -1,0 +1,41 @@
+<section class="form--section">
+  <%= form_for @station, html: { class: 'form -bordered' } do |f| %>
+    <% if @station.errors.any? %>
+      <div class="notification-box -error">
+        <div class="notification-box--content">
+          <h3><%= t(:notice_error_occurred) %></h3>
+          <ul>
+            <% @station.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="form--field -required">
+      <%= f.label :name, class: 'form--label' %>
+      <div class="form--field-container">
+        <%= f.text_field :name,
+                        container_class: '-middle',
+                        class: 'form--text-field',
+                        required: true %>
+      </div>
+    </div>
+
+    <div class="form--field">
+      <%= f.label :position, class: 'form--label' %>
+      <div class="form--field-container">
+        <%= f.number_field :position,
+                          container_class: '-middle',
+                          class: 'form--text-field' %>
+      </div>
+    </div>
+
+    <div class="form--field">
+      <%= f.button t(:button_save),
+                   class: 'button -highlight -with-icon icon-checkmark',
+                   type: 'submit' %>
+    </div>
+  <% end %>
+</section> 

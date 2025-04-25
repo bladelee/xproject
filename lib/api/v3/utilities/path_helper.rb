@@ -106,6 +106,9 @@ module API
           index :activity
           show :activity
 
+          index :station
+          show :station
+
           def self.api_spec
             "#{root}/spec.json"
           end

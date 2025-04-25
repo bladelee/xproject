@@ -206,11 +206,11 @@ export class ResourcePlannerComponent extends UntilDestroyedMixin implements OnI
   private principalIds$ = this.wpTableFilters
     .live$()
     .pipe(
-      this.untilDestroyed(),
-      map((queryFilters) => {
-        const assigneeFilter = queryFilters.find((queryFilter) => queryFilter.id === 'assignee');
-        return ((assigneeFilter?.values || []) as HalResource[]).map((p) => p.id);
-      }),
+        this.untilDestroyed(),
+        map((queryFilters) => {
+            const assigneeFilter = queryFilters.find((queryFilter) => queryFilter.id === 'assignee');
+            return ((assigneeFilter?.values || []) as HalResource[]).map((p) => p.id).filter(id => typeof id === 'string');
+        }),
     );
 
   private assigneeCaps$ = this.wpTableFilters
@@ -542,22 +542,28 @@ export class ResourcePlannerComponent extends UntilDestroyedMixin implements OnI
   }
 
   // 设置缓存
-  private setToCache(assigneeId: string, date: string, data: { entries: WorkLoads, idMapping: { [workPackageId: string]: BookingItem } }): void {
+  private setToCache(assigneeId: string | null, date: string, data: { entries: WorkLoads, idMapping: { [workPackageId: string]: BookingItem } }): void {
+    if (!assigneeId) {
+        return;
+    }
     if (!this.loadCache[assigneeId]) {
-      this.loadCache[assigneeId] = {};
+        this.loadCache[assigneeId] = {};
     }
     this.loadCache[assigneeId][date] = { entries: data.entries };
 
     // 更新 workPackageToResourceBookingMap
     Object.entries(data.idMapping).forEach(([workPackageId, bookingItem]) => {
-      this.workPackageToResourceBookingMap[workPackageId] = bookingItem;
+        this.workPackageToResourceBookingMap[workPackageId] = bookingItem;
     });
-  }
+}
 
   // 从缓存中获取数据
-  private getFromCache(assigneeId: string, date: string): { entries: WorkLoads } | undefined {
+  private getFromCache(assigneeId: string | null, date: string): { entries: WorkLoads } | undefined {
+    if (!assigneeId) {
+        return undefined;
+    }
     return this.loadCache[assigneeId]?.[date];
-  }
+}
 
   // 清空缓存
   private clearCache(): void {
@@ -587,16 +593,20 @@ export class ResourcePlannerComponent extends UntilDestroyedMixin implements OnI
   private async updateFn(updatedBooking: any): Promise<void> {
     console.log('new or updated Booking:', updatedBooking);
     if (updatedBooking === null) {
-      return;
+        return;
     }
 
     const bookingItem = { 
-      resource_booking_id: updatedBooking.id,
-      hours_per_day: updatedBooking.hours_per_day,
-      hours: updatedBooking.hours
+        resource_booking_id: updatedBooking.id,
+        hours_per_day: updatedBooking.hours_per_day,
+        hours: updatedBooking.hours
     };
 
     const assigneeId = updatedBooking.assigned_to_id;
+    // 添加非空检查
+    if (!assigneeId) {
+        return;
+    }
     const workPackageId = updatedBooking.work_package_id;
     const startDate = moment(updatedBooking.start_date);
     const endDate = moment(updatedBooking.end_date);
@@ -645,7 +655,18 @@ export class ResourcePlannerComponent extends UntilDestroyedMixin implements OnI
     });
 
     // 获取缓存数据（参数调整为动态生成的datesInRange）
-    const loadData = this.getLoadDataFromCache(datesInRange, [assigneeId]);
+    const assigneeIds = await this.getAssigneeIds();
+    if (assigneeIds.length === 0) {
+        debugLog('No assignees found, skipping workload fetch.');
+        return;
+    }
+    // 2. 过滤无效 ID
+    const validAssigneeIds = assigneeIds.filter(id => typeof id === 'string')  as string[];;
+    if (validAssigneeIds.length === 0) {
+        debugLog('All assignee IDs are invalid.');
+        return;
+    }
+    const loadData = this.getLoadDataFromCache(datesInRange, validAssigneeIds);
 
     // 更新全局映射
     this.workPackageToResourceBookingMap[workPackageId] = bookingItem;
@@ -806,10 +827,10 @@ export class ResourcePlannerComponent extends UntilDestroyedMixin implements OnI
       for (const date in work_loads) {
         const { planned_h_total, work_packages } = work_loads[date];
         // 处理具体日期的数据
-        console.log(`User ID: ${user_id}, Date: ${date}, Planned Hours Total: ${planned_h_total}`);
+        // console.log(`User ID: ${user_id}, Date: ${date}, Planned Hours Total: ${planned_h_total}`);
         for (const workPackageId in work_packages) {
           const { planned_h } = work_packages[workPackageId];
-          console.log(`Work Package ID: ${workPackageId}, Planned Hours: ${planned_h}`);
+          // console.log(`Work Package ID: ${workPackageId}, Planned Hours: ${planned_h}`);
         }
       }
     });
@@ -820,7 +841,7 @@ private async bookingInit(): Promise<void> {
   try {
     const resourceBooking = await this.resourceBookingService.getResourceBooking(5);
     if (resourceBooking) {
-      console.log('Resource Booking:', resourceBooking);
+      // console.log('Resource Booking:', resourceBooking);
     }
   } catch (error) {
     console.error('Error in bookingInit:', error);
@@ -841,7 +862,7 @@ private async bookingInit(): Promise<void> {
       return null;
     }    
 
-    console.log('-----xxxxxxxxxxx--------------getResourceBookingIdByWorkPackageId', bookingItem);
+    // console.log('-----xxxxxxxxxxx--------------getResourceBookingIdByWorkPackageId', bookingItem);
     return bookingItem;
   }   
 
@@ -849,89 +870,133 @@ private async bookingInit(): Promise<void> {
   
   private async getWorkLoadData(dateFrom: string, dateTo: string): Promise<void> {
     try {
-      debugLog('Fetching assignee IDs...');
-      
-      // 1. 获取 assigneeIds 并确保不为空
-      const assigneeIds = await firstValueFrom(
-        this.principalIds$.pipe(
-          tap((ids) => debugLog(`Assignee IDs: ${ids}`)),
-          take(1),
-          filter((ids) => !!ids?.length),
-          defaultIfEmpty([])
-        )
-      );
+        const assigneeIds = await this.getAssigneeIds();
+        if (assigneeIds.length === 0) {
+            debugLog('No assignees found, skipping workload fetch.');
+            return;
+        }
+        // 2. 过滤无效 ID
+        const validAssigneeIds = assigneeIds.filter(id => typeof id === 'string') as string[];
+        if (validAssigneeIds.length === 0) {
+            debugLog('All assignee IDs are invalid.');
+            return;
+        }
+        debugLog(`Fetching workload data for ${validAssigneeIds.length} assignees...`);
 
-      if (assigneeIds.length === 0) {
-        debugLog('No assignees found, skipping workload fetch.');
-        return;
-      }
+        // 3. 获取日期范围内的所有日期
+        const datesInRange = this.getDatesInRange(dateFrom, dateTo);
 
-      // 2. 过滤无效 ID
-      const validAssigneeIds = assigneeIds.filter(id => typeof id === 'string');
-      if (validAssigneeIds.length === 0) {
-        debugLog('All assignee IDs are invalid.');
-        return;
-      }
+        // 4. 初始化缓存结构
+        validAssigneeIds.forEach(assigneeId => {
+            if (!assigneeId)
+               return; 
+            if (!this.loadCache[assigneeId]) {
+                this.loadCache[assigneeId] = {};
+            }
+            datesInRange.forEach(date => {
+                if (!this.loadCache[assigneeId][date]) {
+                    this.loadCache[assigneeId][date] = {
+                        entries: {
+                            [date]: {
+                                planned_h_total: 0,
+                                work_packages: {}
+                            }
+                        }
+                    };
+                }
+            });
+        });
 
-      debugLog(`Fetching workload data for ${validAssigneeIds.length} assignees...`);
+        // 5. 并行请求数据并更新缓存
+        await this.fetchAndCacheWorkLoadData(validAssigneeIds as string[], datesInRange);
 
-      // 3. 获取日期范围内的所有日期
-      const datesInRange = this.getDatesInRange(dateFrom, dateTo);
-
-      // 4. 并行请求数据并更新缓存
-      await this.fetchAndCacheWorkLoadData(validAssigneeIds as string[], datesInRange);
-
-      // 5. 更新状态
-      this.loadData$.next(this.getLoadDataFromCache(datesInRange, validAssigneeIds as string[]));
+        // 6. 更新状态
+        const loadData = this.getLoadDataFromCache(datesInRange, validAssigneeIds as string[]);
+        this.loadData$.next(loadData);
+        this.ucCalendar.getApi().refetchEvents();
     } catch (error) {
-      console.error('Failed to load work package data:', error);
-      this.toastService.addError(this.I18n.t('js.resource_planner.load_data_error'));
+        console.error('Failed to load work package data:', error);
+        this.toastService.addError(this.I18n.t('js.resource_planner.load_data_error'));
     }
+}
+
+  private async getAssigneeIds() {
+    debugLog('Fetching assignee IDs...');
+
+    // 过滤掉非字符串类型的ID
+    const assigneeIds = await firstValueFrom(
+      this.principalIds$.pipe(
+        tap((ids) => debugLog(`Assignee IDs: ${ids}`)),
+        take(1),
+        filter((ids) => Array.isArray(ids) && ids.length > 0), // 确保是数组且有元素
+        map(ids => ids.filter(id => typeof id === 'string')), // 过滤非字符串类型
+        defaultIfEmpty([])
+      )
+    );
+    return assigneeIds;
   }
 
-  // 从后台获取数据并更新缓存
-  private async fetchAndCacheWorkLoadData(assigneeIds: string[], datesInRange: string[]): Promise<void> {
+private async fetchAndCacheWorkLoadData(assigneeIds: string[], datesInRange: string[]): Promise<void> {
     const userIds = assigneeIds.map(Number).filter(userId => !isNaN(userId));
     if (userIds.length === 0) {
-      return;
+        return;
     }
 
     try {
-      const response = await firstValueFrom(
-        this.resourceBookingService.getUserWorkLoads(userIds, datesInRange[0], datesInRange[datesInRange.length - 1])
-      );
+        const response = await firstValueFrom(
+            this.resourceBookingService.getUserWorkLoads(userIds, datesInRange[0], datesInRange[datesInRange.length - 1])
+        );
 
-      response.forEach(userWorkLoads => {
-        const assigneeId = userWorkLoads.user_id.toString();
-        const idMapping = userWorkLoads.id_mappings?.reduce((acc, mapping: IdMapping) => ({
-          ...acc,
-          [mapping.work_package_id]: {
-            resource_booking_id: mapping.resource_booking_id,
-            hours_per_day: mapping.hours_per_day,
-            hours: mapping.hours
-          }
-        }), {}) || {};
+        response.forEach(userWorkLoads => {
+            const assigneeId = userWorkLoads.user_id.toString();
+            const idMapping = userWorkLoads.id_mappings?.reduce((acc, mapping: IdMapping) => ({
+                ...acc,
+                [mapping.work_package_id]: {
+                    resource_booking_id: mapping.resource_booking_id,
+                    hours_per_day: mapping.hours_per_day,
+                    hours: mapping.hours
+                }
+            }), {}) || {};
 
-        const entries = userWorkLoads.work_loads || {};
-        datesInRange.forEach(date => {
-          // 确保 entries[date] 是 WorkLoads 的正确结构
-          const entry = entries[date] || { 
-            planned_h_total: 0, 
-            work_packages: {} 
-          };
-          this.setToCache(assigneeId, date, { 
-            entries: { [date]: entry }, // 明确构建符合 WorkLoads 类型的结构
-            idMapping 
-          });
+            const entries = userWorkLoads.work_loads || {};
+            // datesInRange.forEach(date => {
+            //     // 确保 entries[date] 是 WorkLoads 的正确结构
+            //     const entry = entries[date] || { 
+            //         planned_h_total: 0, 
+            //         work_packages: {} 
+            //     };
+            //     // 保留现有数据，只更新变化的部分
+            //     const existingEntry = this.loadCache[assigneeId]?.[date]?.entries[date] || {};
+            //     this.loadCache[assigneeId][date] = { 
+            //         entries: { 
+            //             [date]: {
+            //                 ...existingEntry,
+            //                 ...entry
+            //             }
+            //         }
+            //     };
+            datesInRange.forEach(date => {
+              // 确保 entries[date] 是 WorkLoads 的正确结构
+              const entry = entries[date] || { 
+                planned_h_total: 0, 
+                work_packages: {} 
+              };
+              this.setToCache(assigneeId, date, { 
+                entries: { [date]: entry }, // 明确构建符合 WorkLoads 类型的结构
+                idMapping 
+              });                
+                
+                
+            });
         });
-      });
+        console.log('----------------------loadCache-----------------------------', this.loadCache);
     } catch (error) {
-      console.error(`Error fetching data for assigneeIds ${assigneeIds}:`, error);
+        console.error(`Error fetching data for assigneeIds ${assigneeIds}:`, error);
     }
-  }
+}
 
-  // 获取日期范围内的所有日期
-  private getDatesInRange(dateFrom: string, dateTo: string): string[] {
+// 获取日期范围内的所有日期
+private getDatesInRange(dateFrom: string, dateTo: string): string[] {
     const dates: string[] = [];
     let currentDate = moment(dateFrom);
 

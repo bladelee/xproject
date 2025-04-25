@@ -50,6 +50,7 @@ import { ICKEditorContext } from 'core-app/shared/components/editor/components/c
 import isNewResource from 'core-app/features/hal/helpers/is-new-resource';
 import { IWorkPackageTimestamp } from 'core-app/features/hal/resources/work-package-timestamp-resource';
 
+import { StationResource } from 'core-app/features/hal/resources/station-resource';
 
 export interface BookingItem {
   resource_booking_id: number;
@@ -78,6 +79,7 @@ export interface WorkPackageResourceEmbedded {
   timeEntries:HalResource[]|any[];
   type:TypeResource;
   version:HalResource|any;
+  station:StationResource|any;
   watchers:CollectionResource;
   // For regular work packages
   startDate:string;

@@ -226,7 +226,10 @@ gem "turbo-rails", "~> 2.0.0"
 gem "httpx"
 
 gem 'redmineup'
-gem 'vcard'
+# gem 'vcard'
+
+gem 'importmap-rails', "~> 2.1.0" 
+gem 'stimulus-rails', "~> 1.3.4" 
 
 group :test do
   gem "launchy", "~> 3.0.0"

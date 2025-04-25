@@ -132,16 +132,16 @@ export class WorkPackageSingleCardComponent extends UntilDestroyedMixin implemen
   public  calcDisplayPlannedHours(): number[]|null {
 
 
-    console.log('----------------resourceBookingItem =============', this.resourceBookingItem);
+    // console.log('----------------resourceBookingItem =============', this.resourceBookingItem);
 
     if (this.workPackage?.startDate === null || this.workPackage?.dueDate === null || this.windowStartDate === '' || this.windowEndDate === '') {
       return null;
     }
-    console.log('calcDisplayPlannedHours input', this.workPackage.startDate, this.workPackage.dueDate, this.windowStartDate, this.windowEndDate);
+    // console.log('calcDisplayPlannedHours input', this.workPackage.startDate, this.workPackage.dueDate, this.windowStartDate, this.windowEndDate);
     const result = 
         this.calculateTaskVisibility( this.workPackage.startDate, this.workPackage.dueDate, this.windowStartDate, this.windowEndDate);
     if (result) {
-      console.log('calcDisplayPlannedHours output', result);
+      // console.log('calcDisplayPlannedHours output', result);
       const { visibleStart, visibleDays, startDayOffset } = result;
       const dailyPlannedHours = this.dailyPlannedHours;
       return  this.getWorkHoursSlice(dailyPlannedHours, startDayOffset, visibleDays);
@@ -156,7 +156,7 @@ export class WorkPackageSingleCardComponent extends UntilDestroyedMixin implemen
     const endIndex = Math.min(startIndex + visibleDays, workHoursArray.length);
     // 截取数组
 
-    console.log('getWorkHoursSlice params', workHoursArray, startDayOffset, visibleDays);
+    // console.log('getWorkHoursSlice params', workHoursArray, startDayOffset, visibleDays);
     return workHoursArray.slice(startIndex, endIndex);
   }
 

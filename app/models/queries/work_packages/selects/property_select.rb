@@ -56,6 +56,12 @@ class Queries::WorkPackages::Selects::PropertySelect < Queries::WorkPackages::Se
       default_order: "asc",
       sortable: false
     },
+    station: {
+      association: "station",
+      default_order: "asc",
+      sortable: false,
+      groupable: "#{WorkPackage.table_name}.station_id"
+    },
     status: {
       association: "status",
       sortable: "position",

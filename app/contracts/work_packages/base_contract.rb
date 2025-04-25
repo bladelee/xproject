@@ -43,6 +43,7 @@ module WorkPackages
     attribute :type_id
     attribute :priority_id
     attribute :category_id
+    attribute :station_id
     attribute :placeholder_user_id
     attribute :version_id,
               permission: :assign_versions do
@@ -190,6 +191,10 @@ module WorkPackages
 
     def assignable_categories
       model.project.categories if model.project.respond_to?(:categories)
+    end
+
+    def assignable_stations
+      Station.xvisible
     end
 
     def assignable_placeholder_users

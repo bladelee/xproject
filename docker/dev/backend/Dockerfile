@@ -49,7 +49,11 @@ RUN apt-get install -y nodejs
 RUN curl -fsSL https://apt.cli.rs/pubkey.asc | tee -a /usr/share/keyrings/rust-tools.asc
 RUN curl -fsSL https://apt.cli.rs/rust-tools.list | tee /etc/apt/sources.list.d/rust-tools.list
 RUN apt update
-RUN apt install watchexec-cli
+# RUN apt install watchexec-cli
+RUN wget https://github.com/watchexec/watchexec/releases/download/v1.25.1/watchexec-1.25.1-x86_64-unknown-linux-gnu.tar.xz  -O watchexec.tar.xz \
+    && tar xf watchexec.tar.xz   \  
+    && cp watchexec-*/watchexec /usr/local/bin/   \  
+    && rm -rf watchexec*
 
 COPY ./docker/dev/backend/scripts/setup /usr/sbin/setup
 COPY ./docker/dev/backend/scripts/run-app /usr/sbin/run-app

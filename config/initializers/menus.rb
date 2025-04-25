@@ -288,6 +288,12 @@ Redmine::MenuManager.map :admin_menu do |menu|
             parent: :users_and_permissions,
             enterprise_feature: "placeholder_users"
 
+  menu.push :stations,
+            { controller: "/stations" },
+            if: Proc.new { User.current.admin? },
+            caption: :label_station_plural,
+            parent: :users_and_permissions
+
   menu.push :groups,
             { controller: "/groups" },
             if: Proc.new { User.current.admin? },

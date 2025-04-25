@@ -40,6 +40,7 @@ require_relative '../lib_static/open_project/configuration'
 require_relative '../lib_static/open_project/acts/favorable.rb'
 require_relative '../lib_static/open_project/acts/watchable.rb'
 require_relative '../app/models/application_record.rb'
+require_relative '../lib/remove_csp_middleware.rb'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -116,6 +117,9 @@ module OpenProject
     # Ensure that tempfiles are cleared after request
     # http://stackoverflow.com/questions/4590229
     config.middleware.use Rack::TempfileReaper
+
+    # Remove CSP middleware  新增
+    # config.middleware.insert_before ActionDispatch::ContentSecurityPolicy::Middleware, RemoveCspMiddleware
 
     # Add lookbook preview paths when enabled
     if OpenProject::Configuration.lookbook_enabled?

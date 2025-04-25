@@ -26,19 +26,22 @@
 # See COPYRIGHT and LICENSE files for more details.
 #++
 
-module Queries::Users
-  ::Queries::Register.register(UserQuery) do
-    filter Filters::NameFilter
-    filter Filters::AnyNameAttributeFilter
-    filter Filters::GroupFilter
-    filter Filters::StatusFilter
-    filter Filters::LoginFilter
-    filter Filters::BlockedFilter
-    filter Filters::PositionFilter 
-    filter Filters::StationFilter
+module API
+  module V3
+    module Stations
+      class StationRepresenter < ::API::Decorators::Single
+        include API::Caching::CachedRepresenter
 
-    order Orders::DefaultOrder
-    order Orders::NameOrder
-    order Orders::GroupOrder
+        self_link
+
+        property :id, render_nil: true
+        property :name
+
+
+        def _type
+          "Station"
+        end
+      end
+    end
   end
 end

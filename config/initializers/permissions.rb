@@ -29,6 +29,32 @@
 Rails.application.reloader.to_prepare do
   OpenProject::AccessControl.map do |map|
     map.project_module nil, order: 100 do
+
+      map.permission :view_all_employees,
+            { 
+              departments: %i[show] # 假设涉及部门关联操作，可根据实际路由调整 
+            },
+            permissible_on: :global,
+            require: :loggedin
+            # contract_actions: { users: %i[read] }
+
+      map.permission :manage_department_employees,
+            {
+              # users: %i[index new create edit update destroy],
+              departments: %i[show] # 假设涉及部门关联操作，可根据实际路由调整
+            },
+            permissible_on: :global,
+            require: :loggedin,
+            contract_actions: { users: %i[create read update destroy] }
+
+      map.permission :manage_project_employees,
+            {
+              projects: %i[show], # 关联项目查看权限
+              # users: %i[new create edit update destroy]
+            },
+            permissible_on: :global,
+            require: :member # 假设需要项目成员权限基础
+      
       map.permission :add_project,
                      { projects: %i[new] },
                      permissible_on: :global,
@@ -177,6 +203,35 @@ Rails.application.reloader.to_prepare do
                      permissible_on: :global,
                      require: :loggedin,
                      grant_to_admin: true
+
+      map.permission :view_all_employees,
+                     {
+                       employees: %i[index show],
+                       admin: %i[index]
+                     },
+                     permissible_on: :global,
+                     require: :loggedin,
+                     contract_actions: { employees: %i[read] }
+
+      map.permission :manage_department_employees,
+                     {
+                       employees: %i[index show new create edit update],
+                       "employees/departments": %i[index show edit update],
+                       admin: %i[index]
+                     },
+                     permissible_on: :global,
+                     require: :loggedin,
+                     contract_actions: { employees: %i[read create update] }
+
+      map.permission :manage_project_employees,
+                     {
+                       employees: %i[index show edit update],
+                       "employees/projects": %i[index show edit update assign remove],
+                       admin: %i[index]
+                     },
+                     permissible_on: :global,
+                     require: :loggedin,
+                     contract_actions: { employees: %i[read update] }
     end
 
     map.project_module :work_package_tracking, order: 90 do |wpt|
@@ -347,6 +402,12 @@ Rails.application.reloader.to_prepare do
                      require: :member,
                      contract_actions: { work_packages: %i[assigned] },
                      grant_to_admin: false
+
+      wpt.permission :manage_stations,
+                    { stations: %i[index show new create edit update deletion_info destroy] },
+                    require: :loggedin,
+                    permissible_on: :global,
+                    grant_to_admin: true
     end
 
     map.project_module :news do |news|

@@ -476,6 +476,8 @@ module API
 
         associated_resource :project
 
+        associated_resource :station
+        
         associated_resource :placeholder_user
 
         associated_resource :status

@@ -255,6 +255,17 @@ module API
                                          },
                                          has_default: false
 
+          schema_with_allowed_collection :station,
+                                         value_representer: Stations::StationRepresenter,
+                                         link_factory: ->(station) {
+                                           {
+                                             href: api_v3_paths.station(station.id),
+                                             title: station.name
+                                           }
+                                         },
+                                         has_default: false
+
+
           schema_with_allowed_collection :placeholder_user,
                                          value_representer: PlaceholderUsers::PlaceholderUserRepresenter,
 #                                       value_representer: PlaceholderUsers::PlaceholderUserSqlRepresenter,

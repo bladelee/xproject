@@ -26,53 +26,35 @@
 # See COPYRIGHT and LICENSE files for more details.
 #++
 
+require "api/v3/stations/station_collection_representer"
+require "api/v3/stations/station_representer"
+
 module API
   module V3
-    module WorkPackages
-      module Schema
-        class SpecificWorkPackageSchema < BaseWorkPackageSchema
-          attr_reader :work_package
-
-          include AssignableCustomFieldValues
-          include AssignableValuesContract
-
-          def initialize(work_package:)
-            @work_package = work_package
+    module Stations
+      class StationsAPI < ::API::OpenProjectAPI
+        resources :stations do
+          after_validation do
+            authorize_in_any_work_package(:view_work_packages)
           end
 
-          delegate :project_id,
-                   :project,
-                   :type,
-                   :id,
-                   :milestone?,
-                   :available_custom_fields,
-                   to: :@work_package
-
-          delegate :assignable_types,
-                   :assignable_statuses,
-                   :assignable_categories,
-                   :assignable_priorities,
-                   :assignable_placeholder_users,
-                   :assignable_versions,
-                   :assignable_budgets,
-                   :assignable_stations,
-                   to: :contract
-
-          def no_caching?
-            true
+          get do
+            StationCollectionRepresenter.new(Station.all,
+                                            self_link: nil,
+                                            current_user:)
           end
 
-          private
+          route_param :id, type: Integer, desc: "Station ID" do
+            helpers do
+              # Note that naming the method #status or having
+              # a variable named @status colides with grape.
+              def work_package_station
+                Station.find(params[:id])
+              end
+            end
 
-          def contract
-            @contract ||= contract_class(work_package).new(work_package, User.current)
-          end
-
-          def contract_class(work_package)
-            if work_package.new_record?
-              ::WorkPackages::CreateContract
-            else
-              ::WorkPackages::UpdateContract
+            get do
+              StationRepresenter.new(work_package_station, current_user:)
             end
           end
         end

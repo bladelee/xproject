@@ -59,10 +59,12 @@ module Sessions
     # otherwise the memoized superclass is being used
     delegate :connection, :connection_pool, to: :class
 
-    ##
-    # Save while updating the user_id reference and updated_at column
+
     def save
       return false unless loaded?
+
+      # 添加调试代码
+      Rails.logger.error "------------------Session data before save: #{data.inspect}"
 
       if @new_record
         insert!
@@ -70,6 +72,20 @@ module Sessions
         update!
       end
     end
+
+    ##
+    # Save while updating the user_id reference and updated_at column
+    # def save
+    #   return false unless loaded?
+
+    #   Rails.logger.error "Saving seesion. Backtrace: #{Thread.current.backtrace.join("\n")}"
+
+    #   if @new_record
+    #     insert!
+    #   else
+    #     update!
+    #   end
+    # end
 
     private
 

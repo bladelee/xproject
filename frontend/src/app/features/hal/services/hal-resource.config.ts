@@ -68,6 +68,7 @@ import { QueryFilterResource } from 'core-app/features/hal/resources/query-filte
 import { SchemaResource } from 'core-app/features/hal/resources/schema-resource';
 import { MeetingResource } from 'core-app/features/hal/resources/meeting-resource';
 
+import { StationResource } from 'core-app/features/hal/resources/station-resource';
 const halResourceDefaultConfig:{ [typeName:string]:HalResourceFactoryConfigInterface } = {
   WorkPackage: {
     cls: WorkPackageResource,
@@ -111,6 +112,9 @@ const halResourceDefaultConfig:{ [typeName:string]:HalResourceFactoryConfigInter
   },
   Type: {
     cls: TypeResource,
+  },
+  Station: {
+    cls: StationResource,
   },
   PlaceholderUser: {
     cls: PlaceholderUserResource,

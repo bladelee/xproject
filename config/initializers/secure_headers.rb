@@ -79,8 +79,10 @@ Rails.application.config.after_initialize do
       # Allow images from anywhere including data urls and blobs (used in resizing)
       img_src: %w(* data: blob:),
       # Allow scripts from self
-      script_src:,
-      # Allow unsafe-inline styles
+      # script_src:,
+      script_src: %w('self' 'unsafe-inline'),
+      script_src_elem: %w('self' 'unsafe-inline'),
+# Allow unsafe-inline styles
       style_src: assets_src + %w('unsafe-inline'),
       # Allow object-src from Release API
       object_src: [OpenProject::Configuration[:security_badge_url]],

@@ -691,4 +691,8 @@ Rails.application.routes.draw do
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
     mount GoodJob::Engine => "good_job"
   end
+
+  resources :stations do
+    get :deletion_info, on: :member
+  end
 end

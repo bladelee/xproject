@@ -2751,6 +2751,11 @@ Project attributes and sections are defined in the <a href=%{admin_settings_url}
     welcome: "Welcome to %{app_title}"
     select_language: "Please select your language"
 
+  permission_view_all_employees: "Manage All Employees"
+  permission_manage_department_employees: "Manage Department Employees"
+  permission_manage_project_employees: "Manage Project Employees"
+
+
   permission_add_work_package_notes: "Add notes"
   permission_add_work_packages: "Add work packages"
   permission_add_messages: "Post messages"

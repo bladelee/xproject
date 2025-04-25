@@ -103,6 +103,7 @@ export function initializeCoreEditFields(editFieldService:EditFieldService, sele
         'Status',
         'Type',
         'Version',
+        'Station',
         'PlaceholderUser',
         'TimeEntriesActivity',
         'Category',

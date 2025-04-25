@@ -157,7 +157,7 @@ export class ResourceBookingService {
   }
 
   private _createResourceBooking(resourceBooking: Omit<ResourceBookingResponse, 'id' | 'created_at' | 'updated_at'>): Observable<ResourceBookingResponse> {
-    return this.http.post<ResourceBookingResponse>(this.apiUrl, resourceBooking);
+    return this.http.post<ResourceBookingResponse>(this.apiUrl + '/create', resourceBooking);
   }
 
   private _updateResourceBooking(id: number, resourceBooking: Partial<Omit<ResourceBookingResponse, 'id' | 'created_at' | 'updated_at'>>): Observable<ResourceBookingResponse> {

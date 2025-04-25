@@ -26,19 +26,51 @@
 # See COPYRIGHT and LICENSE files for more details.
 #++
 
-module Queries::Users
-  ::Queries::Register.register(UserQuery) do
-    filter Filters::NameFilter
-    filter Filters::AnyNameAttributeFilter
-    filter Filters::GroupFilter
-    filter Filters::StatusFilter
-    filter Filters::LoginFilter
-    filter Filters::BlockedFilter
-    filter Filters::PositionFilter 
-    filter Filters::StationFilter
+class Station < ApplicationRecord
+  #default_scope { order_by_position }
+  #before_destroy :check_integrity
+  #include ::Scopes::Scoped
+  acts_as_list
 
-    order Orders::DefaultOrder
-    order Orders::NameOrder
-    order Orders::GroupOrder
+  validates :name,
+            presence: true,
+            uniqueness: { case_sensitive: false },
+            length: { maximum: 256 }
+
+  def to_s; name end
+
+  def self.visible(user = User.current)
+    if user.admin?
+      all
+    else
+      none
+    end
   end
+
+  def self.xvisible(user = User.current)
+    puts "visible called"
+    if user.allowed_globally?(:manage_placeholder_user) ||
+       user.allowed_in_any_project?(:manage_members)
+      all
+    else
+      in_visible_project(user)
+    end
+  end
+
+  ##
+  # Overrides cache key so that changes to EE state are reflected
+=begin
+  def cache_key
+    super + "/" + can_readonly?.to_s
+  end
+=end
+
+=begin
+  private
+
+  def check_integrity
+    raise "Can't delete status" if WorkPackage.where(station_id: id).exists?
+  end
+=end
+
 end

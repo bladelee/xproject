@@ -18,6 +18,7 @@ import { ProjectResource } from 'core-app/features/hal/resources/project-resourc
 import { PostResource } from 'core-app/features/hal/resources/post-resource';
 import { SchemaResource } from 'core-app/features/hal/resources/schema-resource';
 
+import { StationResource } from 'core-app/features/hal/resources/station-resource';
 export class States extends StatesGroup {
   name = 'MainStore';
 
@@ -36,6 +37,7 @@ export class States extends StatesGroup {
   /* /api/v3/types */
   types = multiInput<TypeResource>();
 
+  stations = multiInput<StationResource>();
   /* /api/v3/statuses */
   statuses = multiInput<StatusResource>();
 

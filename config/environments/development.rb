@@ -38,6 +38,7 @@ Rails.application.configure do
 
   # Do not eager load code on boot by default.
   config.eager_load = ENV["EAGER_LOAD"].present?
+  # config.eager_load = true
 
   # Asynchronous file watcher
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
@@ -51,11 +52,14 @@ Rails.application.configure do
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
   if Rails.root.join("tmp/caching-dev.txt").exist?
-    config.action_controller.perform_caching = true
-    config.action_controller.enable_fragment_cache_logging = true
+    # config.action_controller.perform_caching = true
+    # config.action_controller.enable_fragment_cache_logging = true
+    config.action_controller.perform_caching = false
+    config.action_controller.enable_fragment_cache_logging = false
     config.cache_store = :memory_store
     config.public_file_server.headers = {
-      "Cache-Control" => "public, max-age=#{2.days.to_i}"
+      # "Cache-Control" => "public, max-age=#{2.days.to_i}"
+      "Cache-Control" => "no-cache, no-store, max-age=0, must-revalidate"
     }
   else
     config.cache_store = :null_store
@@ -90,10 +94,10 @@ Rails.application.configure do
 
   # Disable compression and asset digests, but disable debug
   config.assets.debug = false
-  config.assets.digest = false
+  config.assets.digest = true
 
   # Suppress logger output for asset requests.
-  config.assets.quiet = true unless config.log_level == :debug
+  # config.assets.quiet = true unless config.log_level == :debug
 
   config.log_level = :debug
 

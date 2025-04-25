@@ -148,6 +148,14 @@ module Users::PermissionChecks
     end
   end
 
+  def allowed_to_manage_placeholder_user?
+    allowed_globally?(:manage_placeholder_user)
+  end
+
+  def allowed_to_manage_stations?
+    allowed_globally?(:manage_stations)
+  end
+
   private
 
   def user_permissible_service

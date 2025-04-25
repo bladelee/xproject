@@ -1,2 +1,4 @@
 gem 'redmineup'
 # gem 'vcard'
+gem "importmap-rails"
+gem "stimulus-rails"

@@ -30,6 +30,7 @@ class Person < User
   self.inheritance_column = :_type_disabled
 
   has_one :information, :class_name => 'PeopleInformation', :foreign_key => :user_id, :dependent => :destroy
+  belongs_to :station
 
   delegate :phone, :address, :skype, :birthday, :job_title, :company, :middlename, :gender, :twitter,
            :facebook, :linkedin, :department_id, :background, :appearance_date, :is_system, :manager_id,
@@ -72,7 +73,8 @@ class Person < User
   safe_attributes 'custom_field_values',
                   'custom_fields',
                   'information_attributes',
-                  'auth_source_id'
+                  'auth_source_id',
+                  'station_id'
     # :if => lambda { |person, user| (person.new_record? && user.allowed_people_to?(:add_people, person)) || user.allowed_people_to?(:edit_people, person) }
 
   # safe_attributes 'status'
@@ -194,6 +196,93 @@ class Person < User
     end
   end
 
+  attr_reader :global_role
+
+  def initialize(*)
+    super
+    @global_role = nil
+  end
+
+  # 定义角色枚举
+  module Roles
+    ADMIN = 'admin'
+    DEPARTMENT_MANAGER = 'department_manager'
+    PROJECT_MANAGER = 'project_manager'
+    EMPLOYEE = 'employee'
+
+    ALL = [ADMIN, DEPARTMENT_MANAGER, PROJECT_MANAGER, EMPLOYEE].freeze
+
+    def self.options_for_select
+      [
+        ['管理员', ADMIN],
+        ['部门经理', DEPARTMENT_MANAGER],
+        ['项目经理', PROJECT_MANAGER],
+        ['普通员工', EMPLOYEE]
+      ]
+    end
+  end
+
+  # 修改 global_role 方法使用新的枚举
+  def global_role
+    return @global_role if @global_role.present?
+    
+    roles = Authorization::UserGlobalRolesQuery.query(User.current)
+
+    if roles.any? == false
+      @global_role = Roles::EMPLOYEE
+    elsif roles.any? { |r| r.has_permission?(:view_all_employees) }
+      @global_role = Roles::ADMIN
+    elsif roles.any? { |r| r.has_permission?(:manage_department_employees) }
+      @global_role = Roles::DEPARTMENT_MANAGER
+    elsif roles.any? { |r| r.has_permission?(:manage_project_employees) }
+      @global_role = Roles::PROJECT_MANAGER
+    else
+      @global_role = Roles::EMPLOYEE
+    end
+    
+    @global_role
+  end
+
+  # 修改角色判断方法使用新的枚举
+  def admin?
+    global_role == Roles::ADMIN
+  end
+
+  def department_manager?
+    global_role == Roles::DEPARTMENT_MANAGER
+  end
+
+  def project_manager?
+    global_role == Roles::PROJECT_MANAGER
+  end
+
+  def employee?
+    global_role == Roles::EMPLOYEE
+  end
+
+  # 修改 managed_projects 方法使用新的枚举
+  def managed_projects
+    return Project.all if admin?
+    members.active.joins(:roles)
+          .where(roles: { code: Roles::PROJECT_MANAGER })
+          .map(&:project)
+  end
+
+  # 添加一些辅助方法
+  def role_name
+    case global_role
+    when Roles::ADMIN
+      '管理员'
+    when Roles::DEPARTMENT_MANAGER
+      '部门经理'
+    when Roles::PROJECT_MANAGER
+      '项目经理'
+    else
+      '普通员工'
+    end
+  end
+
+  # 类方法
   class << self
     def emails
       joins(:email_address).pluck("LOWER(#{EmailAddress.table_name}.address)")
@@ -243,6 +332,14 @@ class Person < User
         return 'LOWER(firstname + lastname) LIKE :search OR LOWER(lastname + firstname) LIKE :search OR'
       end
       'LOWER(firstname || lastname) LIKE :search OR LOWER(lastname || firstname) LIKE :search OR'
+    end
+
+    def roles_for_select
+      Roles.options_for_select
+    end
+
+    def valid_role?(role)
+      Roles::ALL.include?(role)
     end
   end
 end

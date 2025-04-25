@@ -21,6 +21,7 @@
 
 module ResourceBookingsHelper
   include RedmineResources::Charts::Helpers::ChartHelper
+  include RedmineResources::Charts::Helpers::MultiSelectFormHelper
 
   def warning_messages_for(*objects)
     objects = objects.map { |o| o.is_a?(String) ? instance_variable_get("@#{o}") : o }.compact

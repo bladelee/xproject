@@ -23,6 +23,8 @@ module RedmineResources
   module Charts
     module Helpers
       module ChartHelper
+      # include  ::WorkPackagesHelper::AccessibilityHelper
+
         RED_BAR = 'red_bar'.freeze
         YELLOW_BAR = 'yellow_bar'.freeze
         GREEN_BAR = 'green_bar'.freeze
@@ -63,10 +65,11 @@ module RedmineResources
         def render_resource_booking_attributes(resource_booking, html = false, empty_line = ''.html_safe)
           s = render_attributes(tooltip_resource_booking_attributes(resource_booking), html)
 
-          if resource_booking.is_a?(Issue)
-            s << empty_line + render_tooltip_issue_attributes(resource_booking, html)
-          elsif resource_booking.issue
-            s << empty_line + render_tooltip_issue_attributes(resource_booking.issue, html)
+          # if resource_booking.is_a?(Issue)
+          #   s << empty_line + render_tooltip_issue_attributes(resource_booking, html)
+          # elsif resource_booking.issue
+          if resource_booking.work_package
+            s << empty_line + render_tooltip_issue_attributes(resource_booking.work_package, html)
           end
 
           if resource_booking.notes.present?
@@ -81,19 +84,19 @@ module RedmineResources
           @cached_label_dates ||= I18n.t(:label_resources_dates)
           @cached_label_scheduled ||= I18n.t(:label_resources_scheduled)
           @cached_label_total ||= I18n.t(:label_total)
-          if resource_booking.is_a?(Issue)
-            issue = resource_booking
-            hours_per_day = issue.hours_per_day
-            working_days_amount = issue.working_days_amount
-            non_working_days_amount = issue.non_working_days_amount
-            attributes = [{ name: @cached_label_dates, value: dates_range_labet(resource_booking.start_date, resource_booking.due_date, '%a, %d %b') }]
-          else
+          # if resource_booking.is_a?(Issue)
+          #   issue = resource_booking
+          #   hours_per_day = issue.hours_per_day
+          #   working_days_amount = issue.working_days_amount
+          #   non_working_days_amount = issue.non_working_days_amount
+          #   attributes = [{ name: @cached_label_dates, value: dates_range_labet(resource_booking.start_date, resource_booking.due_date, '%a, %d %b') }]
+          # else
             hours_per_day = resource_booking.hours_per_day
             working_days_amount = resource_booking.working_days_amount
             non_working_days_amount = resource_booking.total_days - working_days_amount
 
-            attributes = [{ name: @cached_label_dates, value: dates_range_labet(resource_booking.start_date, resource_booking.get_end_date, '%a, %d %b') }]
-          end
+            attributes = [{ name: @cached_label_dates, value: dates_range_labet(resource_booking.start_date, resource_booking.get_end_date, '%Y-%m-%d') }]
+          # end
 
           if hours_per_day
             attributes << { name: @cached_label_scheduled, value: scheduled_labet(hours_per_day, working_days_amount, non_working_days_amount) }
@@ -111,15 +114,18 @@ module RedmineResources
         end
 
         def total_scheduled_labet(hours_per_day, working_days_amount, non_working_days_amount)
-          I18n.t('datetime.distance_in_words.x_hours', to_int_if_whole(working_days_amount * hours_per_day)) +
+          # I18n.t('datetime.distance_in_words.x_hours', to_int_if_whole(working_days_amount * hours_per_day)) 
+            to_int_if_whole(working_days_amount * hours_per_day).to_s +
             scheduled_label_end(working_days_amount, non_working_days_amount)
         end
 
         def scheduled_label_end(working_days_amount, non_working_days_amount)
           @cached_label_scheduled_for ||= I18n.t(:label_resources_scheduled_for)
 
-          s = " #{@cached_label_scheduled_for} " + I18n.t('datetime.distance_in_words.x_days', working_days_amount)
-          s << " (#{I18n.t(:label_resources_x_day_off, non_working_days_amount)})" if non_working_days_amount > 0
+          # s = " #{@cached_label_scheduled_for} " + I18n.t('datetime.distance_in_words.x_days', working_days_amount)
+          # s << " (#{I18n.t(:label_resources_x_day_off, non_working_days_amount)})" if non_working_days_amount > 0
+          s = " #{@cached_label_scheduled_for} " +  working_days_amount.to_s
+          s << " (#{non_working_days_amount})" if non_working_days_amount > 0          
           s
         end
 
@@ -135,9 +141,10 @@ module RedmineResources
 
           options = { only_path: true }.merge(options)
 
-          [{ name: @cached_label_issue,       value: link_to_issue(issue, only_path: options[:only_path]) },
-           { name: @cached_label_project,     value: link_to_project(issue.project, only_path: options[:only_path]) },
-           { name: @cached_label_status,      value: h(issue.status.name) },
+          # [{ name: @cached_label_issue,       value: link_to_issue(issue, only_path: options[:only_path]) },
+          # [{ name: @cached_label_issue,       value: helpers.link_to_work_package(issue, only_path: options[:only_path]) },
+          # { name: @cached_label_project,     value: helpers.link_to_project(issue.project, only_path: options[:only_path]) },
+          [ { name: @cached_label_status,      value: h(issue.status.name) },
            { name: @cached_label_start_date,  value: format_date(issue.start_date) },
            { name: @cached_label_due_date,    value: format_date(issue.due_date) },
            { name: @cached_label_assigned_to, value: h(issue.assigned_to) },
@@ -277,28 +284,37 @@ module RedmineResources
         end
 
         def edit_path_for(resource_booking)
-          return edit_resource_issue_path(resource_booking, project_id: @project) if resource_booking.is_a?(Issue)
-          if resource_booking.new_record?
-            new_path_for(resource_booking)
-          else
-            edit_resource_booking_path(resource_booking, project_id: @project)
-          end
+          # return edit_resource_issue_path(resource_booking, project_id: @project) if resource_booking.is_a?(Issue)
+          # if resource_booking.new_record?
+          #   new_path_for(resource_booking)
+          # else
+          #   edit_resource_booking_path(resource_booking, project_id: @project)
+          # end
+          return '/'
         end
 
         def update_path_for(resource_booking)
-          return resource_issue_path(resource_booking, project_id: @project) if resource_booking.is_a?(Issue)
-          if resource_booking.new_record?
-            new_path_for(resource_booking)
-          else
-            resource_booking_path(resource_booking, project_id: @project)
-          end
+          # return resource_issue_path(resource_booking, project_id: @project) if resource_booking.is_a?(Issue)
+          # if resource_booking.new_record?
+          #   new_path_for(resource_booking)
+          # else
+          #   resource_booking_path(resource_booking, project_id: @project)
+          # end
+          return '/'
         end
 
-        def dates_range_labet(from, to, format = :short)
+        # def dates_range_labet(from, to, format = :short)
+        #   if from == to || !to
+        #     I18n.t(from, format: format)
+        #   else
+        #     I18n.t(from, format: format) + ' - ' + I18n.t(to, format: format)
+        #   end
+        # end
+        def dates_range_labet(from, to, format = '%a, %d %b')
           if from == to || !to
-            I18n.t(from, format: format)
+            from.strftime(format)
           else
-            I18n.t(from, format: format) + ' - ' + I18n.t(to, format: format)
+            from.strftime(format) + ' - ' + to.strftime(format)
           end
         end
 

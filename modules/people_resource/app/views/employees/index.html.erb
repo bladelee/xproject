@@ -1,21 +1,14 @@
-<% content_for :header_tags do %>
-  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-  <%= stylesheet_link_tag :redmine_resources, plugin: 'redmine_resources'  %>
-  <%= javascript_importmap_tags  %>
-<% end %>
-
-<h2><%= t(:label_resources_calendar_plural) %></h2>
+<h1>员工列表</h1>
 
 <div class="filters">
-  <%= form_tag resource_bookings_path, method: :post do %>
+  <%= form_tag employees_path, method: :post do %>
     <div class="resource-filter-item" data-controller="department-selector">
       <%= label_tag :department_ids, "部门：" %>
       
       <!-- 已选部门标签显示区域 -->
       <div class="selected-departments" data-department-selector-target="selectedContainer">
-        <% department_ids = params[:department_ids] || session.dig(:filter_params, "department_ids") %>
-        <% if department_ids.present? %>
-          <% Department.where(id: department_ids).each do |dept| %>
+        <% if params[:department_ids].present? %>
+          <% Department.where(id: params[:department_ids]).each do |dept| %>
             <span class="department-tag">
               <%= dept.name %>
               <a href="#" class="remove-tag" data-id="<%= dept.id %>" data-action="click->department-selector#removeTag">×</a>
@@ -38,18 +31,14 @@
             <div class="department-item" data-id="<%= dept.id %>">
               <div style="display: flex; align-items: center;">
                 <%= check_box_tag 'department_select[]', dept.id, 
-                    department_ids&.include?(dept.id.to_s),
+                    params[:department_ids]&.include?(dept.id.to_s),
                     id: "department_select_#{dept.id}",
                     class: 'department-checkbox',
                     data: { department_selector_target: "checkbox" } %>
                 <%= label_tag "department_select_#{dept.id}", dept.name %>
               </div>
             </div>
-            <%= render partial: 'employees/department_children_select', locals: { 
-              children: dept.children, 
-              level: 1, 
-              selected_ids: department_ids 
-            } %>
+            <%= render partial: 'department_children_select', locals: { children: dept.children, level: 1 } %>
           <% end %>
         </div>
         <div class="dropdown-actions">
@@ -61,15 +50,24 @@
       </div>
     </div>
 
-    <!-- 项目筛选 -->
+    <div class="resource-filter-item">
+      <%= label_tag :name, "姓名：" %>
+      <%= text_field_tag :name, params[:name], class: "form-control" %>
+    </div>
+
+    <div class="resource-filter-item">
+      <%= label_tag :position, "职位：" %>
+      <%= text_field_tag :position, params[:position], class: "form-control" %>
+    </div>
+
+    <!-- 在部门筛选后添加项目筛选 -->
     <div class="resource-filter-item" data-controller="project-selector">
       <%= label_tag :project_ids, "项目：" %>
       
       <!-- 已选项目标签显示区域 -->
       <div class="selected-projects" data-project-selector-target="selectedContainer">
-        <% project_ids = params[:project_ids] || session.dig(:filter_params, "project_ids") %>
-        <% if project_ids.present? %>
-          <% Project.where(id: project_ids).each do |project| %>
+        <% if params[:project_ids].present? %>
+          <% Project.where(id: params[:project_ids]).each do |project| %>
             <span class="project-tag">
               <%= project.name %>
               <a href="#" class="remove-tag" data-id="<%= project.id %>" data-action="click->project-selector#removeTag">×</a>
@@ -92,7 +90,7 @@
             <div class="project-item">
               <div style="display: flex; align-items: center;">
                 <%= check_box_tag 'project_select[]', project.id, 
-                    project_ids&.include?(project.id.to_s),
+                    params[:project_ids]&.include?(project.id.to_s),
                     id: "project_select_#{project.id}",
                     class: 'project-checkbox',
                     data: { project_selector_target: "checkbox" } %>
@@ -110,21 +108,26 @@
       </div>
     </div>
 
-    <div class="resource-filter-item">
-      <%= label_tag :start_date, "起始时间：" %>
-      <%= date_field_tag :start_date, 
-          params[:start_date] || session.dig(:filter_params, "start_date"), 
-          class: "form-control date-picker" %>
-    </div>
-
     <%= submit_tag "筛选", class: "btn btn-primary" %>
     <%= button_tag "重置", type: :submit, name: :reset, class: "btn btn-secondary" %>
   <% end %>
 </div>
 
-<% if @query.valid? %> 
-  <% @rb_chart.view = self %>
-  <%= render partial: "resource_bookings/charts/#{@query.chart_type}" %>
-<% end %> 
-
-<% html_title(t(:label_resources)) -%>
+<table class="table mt-4">
+  <thead>
+    <tr>
+      <th>姓名</th>
+      <th>部门</th>
+      <th>职位</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @employees.each do |employee| %>
+      <tr>
+        <td><%= employee.name %></td>
+        <td><%= employee.department&.full_path %></td>
+        <td><%= employee.position %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table> 

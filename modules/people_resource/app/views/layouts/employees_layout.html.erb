@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<%
+  nonce_value = SecureRandom.base64(16)
+%>
+<head>
+  <title>部门员工管理系统</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag nonce: nonce_value %>
+
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%
+=begin%>
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js" nonce="<%= nonce_value %>"></script> 
+<%
+=end%>
+  <%= javascript_importmap_tags  %>
+</head>
+
+  <body>
+    <div class="container mt-4">
+      <%= yield %>
+    </div>
+  </body>
+</html> 

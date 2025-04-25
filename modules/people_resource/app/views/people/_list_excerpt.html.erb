@@ -53,6 +53,16 @@
                   <div class="tags">
                   </div>
               </td>
+              <td class="buttons">
+                <%= link_to(t(:button_edit),
+                          edit_person_path(person),
+                          class: 'icon icon-edit') %>
+                <%= link_to(t(:button_delete),
+                          person_path(person),
+                          method: :delete,
+                          data: { confirm: t(:text_are_you_sure) },
+                          class: 'icon icon-del') %>
+              </td>
           </tr>
 
       <% end %>

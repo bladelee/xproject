@@ -26,7 +26,8 @@ module RedmineResources
 
         def initialize(date, is_workday, resource_bookings, time_entries, workday_length)
           @date = date
-          @date_title = I18n.t(@date, format: '%a, %d')
+          # @date_title = I18n.t(@date, format: '%a, %d')
+          @date_title = @date.strftime('%m-%d')
           @today_css_class = 'today' if @date == User.current.today
 
           @is_workday = is_workday
@@ -63,7 +64,10 @@ module RedmineResources
             time_entries = time_entries_by_project_and_issue[key_by(project, issue)] || []
 
             if is_workday || time_entries.present?
+
+              puts 'Components::BookedCard.new= ', issue
               booked_cards << Components::BookedCard.new(date, issue, project, resource_booking, time_entries, is_workday)
+              puts 'booked cards ', booked_cards
             end
 
             booked_cards

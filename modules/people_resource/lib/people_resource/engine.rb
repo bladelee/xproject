@@ -102,6 +102,16 @@ module PeopleResource
            if: should_render_global_menu_item
 
       menu :global_menu,
+            :resource_bookings,
+            { controller: "/resource_bookings", action: "index", project_id: nil },
+            caption: :label_resources_calendar_plural,
+            after: :people_resources,
+            last: true,
+            icon: "view-timeline",
+            if: should_render_global_menu_item
+
+
+      menu :global_menu,
            :peoples,
            { controller: "/people", action: "index" },
            #{ controller: "/departments/departments", action: "index", project_id: nil },
@@ -131,7 +141,56 @@ module PeopleResource
       app.config.assets.precompile += %w( select2.js  select2_helpers.js select2.css )
       app.config.assets.precompile += %w( jquery.glanceyear.js )
       app.config.assets.precompile += %w( redmine_resources.js redmine_resources.css )
+      # app.config.assets.precompile += %w( app/javascript/controllers/*.js )
+      # app.config.assets.precompile += %w( app/javascript/application2.js ) 
+      # app.config.assets.paths << Engine.root.join("app/javascript")
+      # 确保 JavaScript 路径被正确添加
+      # app.config.javascript_path = "javascript"
+      # app.config.assets.paths << root.join("app")      
+      # app.config.assets.precompile += %w( javascript/application.js )
+
+      # 添加 controllers 目录到资源路径
+      app.config.assets.paths << root.join("app/javascript")
+      # app.config.assets.paths << root.join("app/javascript/controllers")
+      app.config.assets.precompile += %w( application2.js )
+      app.config.assets.precompile += %w( controllers/application.js )
+      app.config.assets.precompile += %w( controllers/index.js )
+      app.config.assets.precompile += %w( controllers/department_selector_controller.js )
+      app.config.assets.precompile += %w( controllers/project_selector_controller.js )           
+
     end
+
+    initializer "my_plugin.importmap", before: "importmap" do |app|
+      # 关键代码：将插件的 importmap.rb 路径添加到主应用的 importmap 路径列表中
+      app.config.importmap.paths << root.join("config/importmap.rb")
+      app.config.importmap.cache_sweepers << root.join("app/javascript")
+    end
+
+    # initializer "people_resource.content_security_policy" do |app|
+    #   # app.config.content_security_policy = nil
+    #   # app.config.content_security_policy do |policy|
+    #   #   policy.script_src  :self, 
+    #   #                       :https, 
+    #   #                       "http://localhost:3000",
+    #   #                       "ws://localhost:3000",
+    #   #                       "http://localhost:4200/employees",
+    #   #                       "ws://localhost:4200",
+    #   #                       "https://www.ssa.gov",
+    #   #                       :strict_dynamic,
+    #   #                       :unsafe_inline    # 允许内联脚本  
+    #   # end
+    #   # app.config.content_security_policy_nonce_generator = -> request { SecureRandom.base64(16) }
+    #   # app.config.content_security_policy_nonce_directives = %w(script-src)
+    #   # 完全禁用 CSP
+    #   app.config.content_security_policy do |policy|
+    #     policy.default_src "*"
+    #     policy.script_src "*", :unsafe_inline, :unsafe_eval
+    #     policy.style_src "*", :unsafe_inline
+    #   end
+    #   # 禁用 nonce 生成
+    #   app.config.content_security_policy_nonce_generator = nil
+    #   app.config.content_security_policy_nonce_directives = []
+    # end
 
     #add_view :Gantt,
     #         contract_strategy: "Gantt::Views::ContractStrategy"

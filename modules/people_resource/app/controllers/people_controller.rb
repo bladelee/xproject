@@ -100,6 +100,9 @@ class PeopleController < ApplicationController
         #flash[:error] = @query.errors.full_messages.first if @query.errors.present?
       end
 
+      # 添加岗位列表
+      @stations = Station.order(:position) if User.current.admin?
+
       respond_to do |format|
         format.html {render partial: people_list_style, layout: false if request.xhr?}
       end

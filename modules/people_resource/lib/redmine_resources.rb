@@ -52,7 +52,7 @@ module RedmineResources
   # 1 = Monday ... 7 = Sunday
   def self.first_wday
     if Setting.start_of_week.blank?
-      (l(:general_first_day_of_week).to_i - 1)%7 + 1
+      (I18n.t(:general_first_day_of_week).to_i - 1)%7 + 1
     else
       Setting.start_of_week.to_i
     end
@@ -115,6 +115,7 @@ REDMINE_RESOURCES_REQUIRED_FILES = [
   # 'redmine_resources/patches/issue_patch',
   # 'redmine_resources/patches/notifiable_patch',
   'redmine_resources/charts/helpers/chart_helper',
+  'redmine_resources/charts/helpers/multi_select_form_helper',
   'redmine_resources/charts/components/base_component',
   'redmine_resources/charts/components/base_card',
   'redmine_resources/charts/components/booked_card',

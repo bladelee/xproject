@@ -1,0 +1,21 @@
+<% if children.any? %>
+  <div class="department-children">
+    <% children.each do |child| %>
+      <div class="department-item" style="padding-left: <%= level * 20 %>px;" data-parent="<%= child.parent_id %>">
+        <div style="display: flex; align-items: center;">
+          <%= check_box_tag 'department_select[]', child.id,
+              selected_ids&.include?(child.id.to_s),
+              id: "department_select_#{child.id}",
+              class: 'department-checkbox',
+              data: { department_selector_target: "checkbox" } %>
+          <%= label_tag "department_select_#{child.id}", child.name %>
+        </div>
+      </div>
+      <%= render partial: 'employees/department_children_select', locals: { 
+        children: child.children, 
+        level: level + 1,
+        selected_ids: selected_ids 
+      } %>
+    <% end %>
+  </div>
+<% end %> 

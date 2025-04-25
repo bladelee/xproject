@@ -33,6 +33,7 @@
                 <div class="percent"><%= "#{user_schedule.workload_percent}%" if @query.show_percent %></p>
               </td>
               <% user_schedule.plans.each do |plan| %>
+                <% Rails.logger.debug "user_schedule: plan #{plan.inspect}" %> 
                 <td class="<%= plan.today_css_class %> <%= plan.week_day_css_class %>"><%= plan.workload_card.render_for_utilization_report(@query.show_spent_time, @query.show_percent, @query.show_hours) %></td>
               <% end %>
             </tr>
@@ -44,17 +45,33 @@
                   <p><%= user_schedule.user.roles_for_project(project).map(&:name).join(", ") %></p>
                 </td>
                 <td class="total project hours">
-                  <p class="hours"><%= t(:label_resources_f_hour_short, value: plans_by_project.sum(&:allocated_hours)) %></p>
+                  <p class="hours">
+                  <%
+=begin%>
+ <%= t(:label_resources_f_hour_short, value: plans_by_project.sum(&:allocated_hours)) %> 
+<%
+=end%>
+                    <%= plans_by_project.sum(&:allocated_hours) %>     
+                  </p>
                 </td>
                 <% plans_by_project.each do |plan| %>
+                
                   <td class="<%= plan.today_css_class %> <%= plan.week_day_css_class %>">
-                    <% if @query.group_by_project? %>
+                    <%
+=begin%>
+ <% if @query.group_by_project? %>
                       <%= plan.project_day_plan.render %>
-                    <% else %>
+                    <% else %> 
+<%
+=end%>
                       <% plan.booked_cards.each do |booked_card| %>
                         <%= booked_card.small_block_render(@query.show_hours) %>
                       <% end %>
-                    <% end %>
+                    <%
+=begin%>
+ <% end %> 
+<%
+=end%>
                   </td>
                 <% end %>
               </tr>

@@ -30,9 +30,11 @@ module RedmineResources
 
         def render
           if @is_workday && @planned_hours > 0
+
+          # <p class="hours">#{I18n.t(:label_resources_f_hour_short, value: @planned_hours)}</p>           
             <<-HTML.html_safe
               <div class="small-booking-card booking">
-                <p class="hours">#{I18n.t(:label_resources_f_hour_short, value: @planned_hours)}</p>
+                <p class="hours">#{@planned_hours}</p>
                 <p class="percent">#{@workload_percent}%</p>
               </div>
             HTML

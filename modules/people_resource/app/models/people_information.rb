@@ -25,8 +25,12 @@ class PeopleInformation < ApplicationRecord
   self.primary_key = 'user_id'
 
   belongs_to :person, :foreign_key => :user_id
-  belongs_to :department
-  belongs_to :manager, :class_name => 'Person'
+  belongs_to :department, :class_name => "Department"
+  belongs_to :manager, :class_name => "Person"
+  belongs_to :station
+
+  validates_presence_of :user
+  validates_uniqueness_of :user_id
 
   validate :validate_manager
 

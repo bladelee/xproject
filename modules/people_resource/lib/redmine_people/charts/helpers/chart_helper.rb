@@ -54,13 +54,21 @@ module RedminePeople
           end
         end
 
-        def dates_range_label(from, to, format = :short)
-          if from == to
-            I18n.l(from, format: format)
+        # def dates_range_label(from, to, format = :short)
+        #   if from == to
+        #     I18n.l(from, format: format)
+        #   else
+        #     I18n.l(from, format: format) + ' - ' + I18n.l(to, format: format)
+        #   end
+        # end
+        def dates_range_labet(from, to, format = '%a, %d %b')
+          if from == to || !to
+            from.strftime(format)
           else
-            I18n.l(from, format: format) + ' - ' + I18n.l(to, format: format)
+            from.strftime(format) + ' - ' + to.strftime(format)
           end
         end
+
       end
     end
   end

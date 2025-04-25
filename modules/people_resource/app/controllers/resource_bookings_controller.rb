@@ -36,6 +36,8 @@ class ResourceBookingsController < ApplicationController
   include QueriesHelper
   include Redmine::Utils::DateCalculation
 
+  helper_method :current_employee
+
   # def index
   #   retrieve_query
 
@@ -107,78 +109,88 @@ class ResourceBookingsController < ApplicationController
 
 
   def index
-    retrieve_query
-
-    if @query.valid?
-      respond_to do |format|
-        format.html do
-          @rb_chart = @query.chart_class.new(@project, @query, params)
-        end
-        format.json do
-          Rails.logger.info "----------------@resources = ResourceBooking.visible"        
-          # @resources = ResourceBooking.visible
-          # @resource_count = @resources.count
-          # render json: { resources: @resources, resource_count: @resource_count }
-          index_json
+    respond_to do |format|
+      format.html do
+        set_chart_display_default_params
+        filter_users 
+        retrieve_query      
+        @rb_chart = @query.chart_class.new(@project, @query, params)
+        render layout: "global"
+      end
+      format.json do
+        retrieve_query         
+        if @query.valid?
+            Rails.logger.info "----------------@resources = ResourceBooking.visible"        
+            # @resources = ResourceBooking.visible
+            # @resource_count = @resources.count
+            # render json: { resources: @resources, resource_count: @resource_count }
+            index_json
+        else
+          puts "@query is invalid. Errors:"
+          @query.errors.full_messages.each do |msg|
+            puts msg
+          end
+          render json: { errors: @query.errors.full_messages }, status: :unprocessable_entity
         end
       end
-    else
-      puts "@query is invalid. Errors:"
-      @query.errors.full_messages.each do |msg|
-        puts msg
-      end
-      render json: { errors: @query.errors.full_messages }, status: :unprocessable_entity
     end
+  end 
+
+  def set_chart_display_default_params
+
+    puts "-----session0------------#{session}"
+    puts "-----params0------------#{params}"  
+
+    default_params = {
+      chart_type: 'utilization_report',
+      group_by: 'issue',
+      show_spent_time: 0,
+      show_percent: 0,
+      show_hours: 1,
+    }
+    session[:filter_params] = default_params
+    params.merge!(default_params) 
+
+    puts "-----session1------------#{session}"
+    puts "-----params1------------#{params}"  
   end
 
 
-    # def index_json
-    #   user_ids = params[:user_ids]&.split(',')
-    #   from_date = params[:from_date]&.to_date
-    #   to_date = params[:to_date]&.to_date
-  
-    #   # 验证日期范围的有效性
-    #   if from_date && to_date && from_date > to_date
-    #     return render json: { error: 'from_date cannot be after to_date' }, status: :unprocessable_entity
-    #   end
-  
-    #   # 构建查询
-    #   bookings = ResourceBooking.includes(:work_package)
-    #   bookings = bookings.where(assigned_to_id: user_ids) if user_ids.present?
-    #   if from_date && to_date
-    #     bookings = bookings.where('start_date <=? AND (end_date >=? OR end_date IS NULL)', to_date, from_date)
-    #   elsif from_date
-    #     bookings = bookings.where('start_date >=?', from_date)
-    #   elsif to_date
-    #     bookings = bookings.where('start_date <=? AND (end_date >=? OR end_date IS NULL)', to_date, to_date)
-    #   end
-  
-    #   # 按用户分组处理数据
-    #   user_bookings = bookings.group_by(&:assigned_to_id)
-    #   result = user_bookings.map do |assigned_to_id, user_booking_list|
-    #     work_days = {}
-    #     user_booking_list.each do |booking|
-    #       current_date = booking.start_date.to_date
-    #       end_date = booking.end_date&.to_date || current_date
-    #       while current_date <= end_date
-    #         date_str = current_date.strftime('%Y-%m-%d')
-    #         work_days[date_str] ||= { planned_h_total: 0, work_packages: {} }
-    #         work_days[date_str][:planned_h_total] += calculate_planned_hours(booking, current_date)      
-    #         work_package_id = booking.work_package&.id.to_s
-    #         work_days[date_str][:work_packages][work_package_id] ||= { planned_h: 0 }
-    #         work_days[date_str][:work_packages][work_package_id][:planned_h] += booking.hours_per_day
-    #         current_date += 1.day
-    #       end
-    #     end
-  
-    #     {
-    #       user_id: assigned_to_id,
-    #       work_days: work_days
-    #     }
-    #   end
-  
-    #   render json: result
-    # end
+  def filter_users
+    @departments = Department.all
+    @projects = Project.all
+    
+    # 如果没有任何筛选参数，设置默认值
+    #    if !params[:commit] && !session[:filter_params]
+    # 设置默认筛选参数
+    if !session[:department_ids]  
+      session[:department_ids] = Department.where(parent_id: nil).pluck(:id)   # 默认选择所有根部门
+    end
+    if !session[:project_ids]  
+      session[:project_ids] = Project.pluck(:id)  # 默认选择所有项目
+    end
+    if !session[:start_date]  
+      # session[:start_date] = Date.current  # 默认起始时间为当前日期
+      session[:start_date] = '2025-02-22'
+      params[:start_date] = session[:start_date]
+      puts "-----set start date------------#{session[:start_date]}"
+    end
+    # puts "-----session[:start_date]------------#{session[:start_date]}-------#{session[:start_date].class}"
+    # session[:filter_params][:date_from] = session[:start_date].to_s
+
+    puts "-----session2------------#{session[:filter_params]}"
+    puts "-----params2------------#{params}"
+
+    #    end
+    
+    # 保存筛选条件到会话
+    session[:filter_params] = filter_params if params[:commit].present?
+    # 清除筛选
+    session[:filter_params] = nil if params[:reset].present?
+    
+    @employees = filter_employees(session[:filter_params])
+  end
+
 
   def index_json
     user_ids = params[:user_ids]&.split(',')
@@ -262,14 +274,6 @@ class ResourceBookingsController < ApplicationController
     end
   end
 
-  # def calculate_planned_hours(booking, current_date)
-  #   if booking.hours_per_day.present?
-  #     booking.hours_per_day
-  #   else
-  #     days_since_start = (current_date - booking.start_date.to_date).to_i
-  #     booking.hours[days_since_start] || 0
-  #   end
-  # end    
 
   # 创建一个新的资源预订记录
   def create
@@ -528,10 +532,15 @@ def retrieve_query
   else
     Rails.logger.debug "Retrieving query from session"
     # retrieve from session
-    session[session_key][:options][:date_from] = params[:date_from].to_date if params[:date_from]
-    session[session_key][:options][:date_from] = "#{params[:year]}-#{params[:month]}-01".to_date if (params[:year] && params[:month])
+  #  puts "-----params[:date_from]------------#{params[:date_from]}}"
+  #  session[session_key][:options][:date_from] = params[:date_from].to_date if params[:date_from]
+
+    puts "-----params[:date_from]------------#{params[:start_date]}}"
+    session[session_key][:options][:date_from] = params[:start_date].to_date if params[:start_date]
+    # session[session_key][:options][:date_from] = "#{params[:year]}-#{params[:month]}-01".to_date if (params[:year] && params[:month])
     @query = ResourceBookingQuery.new(name: '_', group_by: session[session_key][:group_by], filters: session[session_key][:filters], options: session[session_key][:options])
     @query.project = @project
+    # @query.build_from_params(params)
   end
   @query
 end
@@ -573,4 +582,77 @@ end
     @user_workday_length = @person.try(:workday_length) || RedmineResources.default_workday_length
     @resource_booking.assigned_to = selected_user
   end
+
+  def filter_params
+    params.permit(:start_date, department_ids: [], project_ids: [])
+  end
+
+  def filter_employees(filters)
+    # 基于用户角色的基础查询
+    employees = base_employee_scope
+    return employees unless filters.present?
+
+    # 应用部门筛选
+    if filters[:department_ids].present?
+      department_ids = Array(filters[:department_ids]).reject(&:blank?)
+      if department_ids.any?
+        if current_employee.department_manager?
+          # 部门经理只能看到自己部门的员工，如果筛选其他部门则返回空
+          if (department_ids & [current_employee.department_id]).empty?
+            return Employee.none
+          end
+          department_ids = [current_employee.department_id]
+        end
+        
+        all_department_ids = []
+        Department.where(id: department_ids).each do |dept|
+          all_department_ids += [dept.id] + dept.descendants.pluck(:id)
+        end
+        employees = employees.where(department_id: all_department_ids.uniq)
+      end
+    end
+
+    # 应用项目筛选
+    if filters[:project_ids].present?
+      project_ids = Array(filters[:project_ids]).reject(&:blank?)
+      if project_ids.any?
+        if current_employee.project_manager?
+          # 项目经理只能看到自己管理的项目中的员工，如果筛选其他项目则返回空
+          managed_project_ids = current_employee.managed_projects.pluck(:id)
+          if (project_ids & managed_project_ids).empty?
+            return Employee.none
+          end
+          project_ids = managed_project_ids
+        end
+        
+        employees = employees.joins(:members)
+                           .where(members: { project_id: project_ids })
+                           .distinct
+      end
+    end
+
+    employees
+  end
+
+  def base_employee_scope
+    if current_employee.admin?
+      Employee.all
+    elsif current_employee.department_manager?
+      Employee.where(department_id: current_employee.department_id)
+    elsif current_employee.project_manager?
+      project_ids = current_employee.managed_projects.pluck(:id)
+      Employee.joins(:members).where(members: { project_id: project_ids }).distinct
+    else
+      Employee.where(id: current_employee.id)
+    end
+  end
+
+  def current_employee
+    # 使用 ||= 实现缓存，避免重复查询
+    @current_employee ||= current_user.becomes(Person)
+  end
+
+  
+    
+
 end

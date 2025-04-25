@@ -47,6 +47,7 @@
       <div class="form--field -required"><%= f.select :status, options_for_select([[t(:status_active), 0], [t(:status_locked), 1]], @person.status.to_s), :container_class => "-middle" %></div>
       <% end %>      
       <div class="form--field -required"><%= information.text_field :job_title, :label => t(:label_people_job_title) , :container_class => "-middle" %></div>
+      <div class="form--field -required"><%= f.select :station_id, Station.all.collect {|s| [s.name, s.id]}, :include_blank => true, :label => t(:label_station), :container_class => "-middle" %></div>
       <% unless @departments.blank? %>
         <div class="form--field -required"><%= information.select :department_id, department_tree_options_for_select(@departments,  :selected => @person.department_id), :include_blank => true, :label => t(:label_people_department)  , :container_class => "-middle" %></div>
       <% end %>
@@ -84,7 +85,6 @@
 <%
 =end%>
 
-
     <%
 =begin%>
  <p class  = "notes"><%= information.text_area :background , :cols => 80, :rows => 8, :class => 'wiki-edit', :label => t(:label_people_background)  %></p>
@@ -93,3 +93,4 @@
 =end%>
   <% end %>
 </div>
+

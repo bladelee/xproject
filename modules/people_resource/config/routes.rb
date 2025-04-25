@@ -109,13 +109,22 @@ end
 resources :resource_bookings do
   get :issues_autocomplete, on: :collection
   post :split, on: :member
+  collection do
+    post :index  # 添加对 POST 请求的支持
+  end  
 end
 
 resources :resource_bookings, only: [:index] do
   get :index, on: :collection, defaults: { format: :json }
 end
 
-match 'resource_bookings/new', to: 'resource_bookings#new', via: :post
+resources :employees do
+  collection do
+    post :index  # 添加对 POST 请求的支持
+  end
+end
+
+match 'resource_bookings/create', to: 'resource_bookings#create', via: :post
 match 'resource_bookings/:id', to: 'resource_bookings#update', via: :post, id: /\d+/
 
 get '/projects/:project_id/resource_bookings', to: 'resource_bookings#index', as: 'project_resource_bookings'

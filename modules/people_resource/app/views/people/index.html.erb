@@ -51,60 +51,6 @@
 <% end %>
 </div>
 
-<% if User.current.admin? %>
-<div class="generic-table--container">
-  <div class="generic-table--results-container">
-    <table class="generic-table">
-      <colgroup>
-        <col highlight-col>
-        <col highlight-col>
-        <col>
-      </colgroup>
-      <thead>
-        <tr>
-          <th>
-            <div class="generic-table--sort-header-outer">
-              <div class="generic-table--sort-header">
-                <%= Station.model_name.human %>
-              </div>
-            </div>
-          </th>
-          <th>
-            <div class="generic-table--sort-header-outer">
-              <div class="generic-table--sort-header">
-                <%= Station.human_attribute_name(:position) %>
-              </div>
-            </div>
-          </th>
-          <th><div class="generic-table--empty-header"></div></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% if @stations&.any? %>
-          <% @stations.each do |station| %>
-            <tr>
-              <td class="name">
-                <span><%= station.name %></span>
-              </td>
-              <td><%= station.position %></td>
-              <td class="buttons">
-                <%= link_to(t(:button_edit),
-                          edit_station_path(station),
-                          class: 'icon icon-edit') %>
-                <%= link_to(t(:button_delete),
-                          station_path(station),
-                          method: :delete,
-                          data: { confirm: t(:text_are_you_sure) },
-                          class: 'icon icon-del') %>
-              </td>
-            </tr>
-          <% end %>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-</div>
-<% end %>
 
 <% html_title t(:label_people) %>
 

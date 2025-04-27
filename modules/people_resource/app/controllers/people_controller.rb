@@ -135,25 +135,52 @@ class PeopleController < ApplicationController
       render layout: "global"
     end
 
-    def update
-      # (render_403; return false) unless @person.editable_by?(User.current)
-      @person.safe_attributes = params[:person]
-      if @person.save
-        # attachments = Attachment.attach_files(@person, params[:attachments])
-        # render_attachment_warning_if_needed(@person)
-        flash[:notice] = t(:notice_successful_update)
-        # attach_avatar
-        respond_to do |format|
-          format.html { redirect_to action: 'show', id: @person, tab: params[:tab] }
-          # format.api  { head :ok }
-        end
-      else
-        respond_to do |format|
-          format.html { render action: 'edit', status: 400 }
-          # format.api  { render_validation_errors(@person) }
-        end
-      end
-    end
+    # def update
+    #   # (render_403; return false) unless @person.editable_by?(User.current)
+    #   @person.safe_attributes = params[:person]
+    #   @person.ensure_information
+    #   @person.build_information  # if @person.information.nil?
+    #   Rails.logger.debug "------------------Person attrs---------: #{@person.attributes}"
+    #   if @person.save
+    #     # attachments = Attachment.attach_files(@person, params[:attachments])
+    #     # render_attachment_warning_if_needed(@person)
+    #     flash[:notice] = t(:notice_successful_update)
+    #     # attach_avatar
+    #     respond_to do |format|
+    #       format.html { redirect_to action: 'show', id: @person, tab: params[:tab] }
+    #       # format.api  { head :ok }
+    #     end
+    #   else
+    #     Rails.logger.error "Failed to save person: #{@person.errors.full_messages.join(', ')}"
+    #     respond_to do |format|
+    #       format.html { render action: 'edit', status: 400 }
+    #       # format.api  { render_validation_errors(@person) }
+    #     end
+    #   end
+    # end
+
+
+    # def update
+    #   # (render_403; return false) unless @person.editable_by?(User.current)
+    #   @person.safe_attributes = params[:person]
+    #   @person.ensure_information
+    #   Rails.logger.debug "------------------Person attrs---------: #{@person.attributes}"
+    #   if @person.save
+    #     # attachments = Attachment.attach_files(@person, params[:attachments])
+    #     # render_attachment_warning_if_needed(@person)
+    #     flash[:notice] = t(:notice_successful_update)
+    #     # attach_avatar
+    #     respond_to do |format|
+    #       format.html { redirect_to action: 'show', id: @person, tab: params[:tab] }
+    #       # format.api  { head :ok }
+    #     end
+    #   else
+    #     respond_to do |format|
+    #       format.html { render action: 'edit', status: 400 }
+    #       # format.api  { render_validation_errors(@person) }
+    #     end
+    #   end
+    # end
 
 
     # def update
@@ -165,7 +192,7 @@ class PeopleController < ApplicationController
     #   @person.lastname = params[:person][:lastname]
     #   @person.mail = params[:person][:mail]
 
-    #   @person.status = params[:person][:status]
+    #   # @person.status = params[:person][:status]
     #   @person.information = params[:person][:information_attributes].permit!
     #   logger.debug "Failed to deduce event params for #{@person.firstname}"
     #   if @person.save
@@ -199,6 +226,56 @@ class PeopleController < ApplicationController
     #     end
     #   end
     # end
+    def update
+      params.permit!
+      # (render_403; return false) # unless @person.editable_by?(User.current)
+      @person = Person.find(params[:id])
+
+      if @person.information.nil?
+        @people_information = PeopleInformation.new
+        @people_information.user_id = @person.id
+        @people_information.save
+      end
+
+      @person.firstname = params[:person][:firstname]
+      @person.lastname = params[:person][:lastname]
+      @person.mail = params[:person][:mail]
+
+      # Ensure @person has an associated PeopleInformation record
+      @person.build_information unless @person.information
+      # @person.information.user_id = @person.id
+      # @person.information.save
+    
+      Rails.logger.debug "------------------Person info attrs1---------: #{params[:person][:information_attributes]}"
+      # Update the associated PeopleInformation record with the permitted parameters
+      if  @person.information.update(params[:person][:information_attributes].permit!)
+        logger.debug "Failed to deduce event params for #{@person.firstname}"
+        if @person.save
+          #attachments = Attachment.attach_files(@person, params[:attachments])
+          #render_attachment_warning_if_needed(@person)
+          flash[:notice] = t(:notice_successful_update)
+          # attach_avatar
+          respond_to do |format|
+            format.html { redirect_to action: 'show', id: @person, tab: params[:tab] }
+            # format.api  { head :ok }
+          end
+        else
+          Rails.logger.error "Failed to save person: #{@person.errors.full_messages.join(', ')}"
+          respond_to do |format|
+            format.html { render layout: "global", action: 'edit', status: 400 }
+            # format.api  { render_validation_errors(@person) }
+          end
+        end
+      else
+        Rails.logger.debug "------------------Person info attrs2---------: #{@person.information.attributes}"
+        Rails.logger.error "Failed to update person information: #{@person.information.errors.full_messages.join(', ')}"
+        respond_to do |format|
+          format.html { render layout: "global", action: 'edit', status: 400 }
+          # format.api  { render_validation_errors(@person.information) }
+        end
+      end
+    end
+
 
 
     def product_params
@@ -210,14 +287,14 @@ class PeopleController < ApplicationController
       logger.debug "Failed to deduce event params for #{params[:person][:login]}"
       @person.admin = false
       @person.login = params[:person][:login]
-      @person.password, @person.password_confirmation = params[:person][:password], params[:person][:password_confirmation] unless @person.auth_source_id
+      @person.password, @person.password_confirmation = params[:person][:password], params[:person][:password_confirmation] # unless @person.auth_source_id
       @person.type = 'User'
       #@person.information_attributes = params[:person][:information_attributes]
       #@person = params[:person]
       @person.firstname = params[:person][:firstname]
       @person.lastname = params[:person][:lastname]
       @person.mail = params[:person][:mail]
-      @person.status = params[:person][:status]
+      # @person.status = params[:person][:status]
 
 
 
@@ -241,7 +318,7 @@ class PeopleController < ApplicationController
         @person.pref.attributes = params[:pref] if params[:pref]
         #@person.pref[:no_self_notified] = (params[:no_self_notified] == '1')
         @person.pref.save
-        @person.notified_project_ids = (@person.mail_notification == 'selected' ? params[:notified_project_ids] : [])
+        # @person.notified_project_ids = (@person.mail_notification == 'selected' ? params[:notified_project_ids] : [])
         @person.group_ids = params[:person][:group_ids] if groups_present?
         attach_avatar
         Mailer.account_information(@person, params[:person][:password]).deliver if params[:send_information]

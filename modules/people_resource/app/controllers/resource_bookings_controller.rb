@@ -169,7 +169,7 @@ class ResourceBookingsController < ApplicationController
     if !session[:project_ids]  
       session[:project_ids] = Project.pluck(:id)  # 默认选择所有项目
     end
-    if !session[:start_date]  
+    if !session[:start_date] ||  !session[:start_date].is_a?(Date)
       # session[:start_date] = Date.current  # 默认起始时间为当前日期
       session[:start_date] = '2025-02-22'
       params[:start_date] = session[:start_date]

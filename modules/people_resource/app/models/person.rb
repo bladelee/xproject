@@ -29,6 +29,8 @@ class Person < User
 
   self.inheritance_column = :_type_disabled
 
+  # before_save :ensure_information
+
   has_one :information, :class_name => 'PeopleInformation', :foreign_key => :user_id, :dependent => :destroy
   belongs_to :station
 
@@ -202,6 +204,12 @@ class Person < User
     super
     @global_role = nil
   end
+
+  # def ensure_information
+  #   puts 'ensure_information-----------------------, information = ', information
+  #   build_information unless information
+  # end
+
 
   # 定义角色枚举
   module Roles

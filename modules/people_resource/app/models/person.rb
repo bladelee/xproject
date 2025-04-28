@@ -29,7 +29,7 @@ class Person < User
 
   self.inheritance_column = :_type_disabled
 
-  # before_save :ensure_information
+  # before_update :ensure_information
 
   has_one :information, :class_name => 'PeopleInformation', :foreign_key => :user_id, :dependent => :destroy
   belongs_to :station
@@ -40,7 +40,9 @@ class Person < User
 
   acts_as_customizable
 
-  accepts_nested_attributes_for :information, :allow_destroy => true, :update_only => true, :reject_if => proc { |attributes| PeopleInformation.reject_information(attributes) }
+  # accepts_nested_attributes_for :information, :allow_destroy => true, :update_only => true, :reject_if => proc { |attributes| PeopleInformation.reject_information(attributes) }  accepts_nested_attributes_for :information, :allow_destroy => true, :update_only => false, :reject_if => proc { |attributes| PeopleInformation.reject_information(attributes) }
+  # accepts_nested_attributes_for :information, :allow_destroy => true, :update_only => false, :reject_if => proc { |attributes| PeopleInformation.reject_information(attributes) }
+  accepts_nested_attributes_for :information
 
   has_one :department, :through => :information
 
@@ -76,7 +78,8 @@ class Person < User
                   'custom_fields',
                   'information_attributes',
                   'auth_source_id',
-                  'station_id'
+                  'station_id',
+                  'firstname'
     # :if => lambda { |person, user| (person.new_record? && user.allowed_people_to?(:add_people, person)) || user.allowed_people_to?(:edit_people, person) }
 
   # safe_attributes 'status'
@@ -205,10 +208,11 @@ class Person < User
     @global_role = nil
   end
 
-  # def ensure_information
-  #   puts 'ensure_information-----------------------, information = ', information
-  #   build_information unless information
-  # end
+  def ensure_information
+    puts 'before ensure_information-----------------------, information = ', information.attributes unless information.nil?
+    build_information unless information
+    puts 'after ensure_information-----------------------, information = ', information.attributes 
+  end
 
 
   # 定义角色枚举

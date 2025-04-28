@@ -135,29 +135,32 @@ class PeopleController < ApplicationController
       render layout: "global"
     end
 
-    # def update
-    #   # (render_403; return false) unless @person.editable_by?(User.current)
-    #   @person.safe_attributes = params[:person]
-    #   @person.ensure_information
-    #   @person.build_information  # if @person.information.nil?
-    #   Rails.logger.debug "------------------Person attrs---------: #{@person.attributes}"
-    #   if @person.save
-    #     # attachments = Attachment.attach_files(@person, params[:attachments])
-    #     # render_attachment_warning_if_needed(@person)
-    #     flash[:notice] = t(:notice_successful_update)
-    #     # attach_avatar
-    #     respond_to do |format|
-    #       format.html { redirect_to action: 'show', id: @person, tab: params[:tab] }
-    #       # format.api  { head :ok }
-    #     end
-    #   else
-    #     Rails.logger.error "Failed to save person: #{@person.errors.full_messages.join(', ')}"
-    #     respond_to do |format|
-    #       format.html { render action: 'edit', status: 400 }
-    #       # format.api  { render_validation_errors(@person) }
-    #     end
-    #   end
-    # end
+    def update
+      # (render_403; return false) unless @person.editable_by?(User.current)
+      @person.safe_attributes = params[:person]
+      @person.ensure_information
+      # @person.build_information  if @person.information.nil?
+      Rails.logger.debug "------------------Person attrs---------: #{@person.attributes}"
+      Rails.logger.debug "------------------Person info attrs1---------: #{@person.information.attributes}"      
+      # binding.pry # 程序会在此处暂停，进入 pry 会话
+      if @person.save
+        # attachments = Attachment.attach_files(@person, params[:attachments])
+        # render_attachment_warning_if_needed(@person)
+        flash[:notice] = t(:notice_successful_update)
+        # attach_avatar
+        respond_to do |format|
+          format.html { redirect_to action: 'show', id: @person, tab: params[:tab] }
+          # format.api  { head :ok }
+        end
+      else
+        Rails.logger.error "Failed to save person: #{@person.errors.full_messages.join(', ')}"
+        Rails.logger.error "Failed to update person information: #{@person.information.errors.full_messages.join(', ')}"
+        respond_to do |format|
+          format.html { render action: 'edit', status: 400 }
+          # format.api  { render_validation_errors(@person) }
+        end
+      end
+    end
 
 
     # def update
@@ -226,55 +229,55 @@ class PeopleController < ApplicationController
     #     end
     #   end
     # end
-    def update
-      params.permit!
-      # (render_403; return false) # unless @person.editable_by?(User.current)
-      @person = Person.find(params[:id])
+    # def update
+    #   params.permit!
+    #   # (render_403; return false) # unless @person.editable_by?(User.current)
+    #   @person = Person.find(params[:id])
 
-      if @person.information.nil?
-        @people_information = PeopleInformation.new
-        @people_information.user_id = @person.id
-        @people_information.save
-      end
+    #   if @person.information.nil?
+    #     @people_information = PeopleInformation.new
+    #     @people_information.user_id = @person.id
+    #     @people_information.save
+    #   end
 
-      @person.firstname = params[:person][:firstname]
-      @person.lastname = params[:person][:lastname]
-      @person.mail = params[:person][:mail]
+    #   @person.firstname = params[:person][:firstname]
+    #   @person.lastname = params[:person][:lastname]
+    #   @person.mail = params[:person][:mail]
 
-      # Ensure @person has an associated PeopleInformation record
-      @person.build_information unless @person.information
-      # @person.information.user_id = @person.id
-      # @person.information.save
+    #   # Ensure @person has an associated PeopleInformation record
+    #   @person.build_information unless @person.information
+    #   # @person.information.user_id = @person.id
+    #   # @person.information.save
     
-      Rails.logger.debug "------------------Person info attrs1---------: #{params[:person][:information_attributes]}"
-      # Update the associated PeopleInformation record with the permitted parameters
-      if  @person.information.update(params[:person][:information_attributes].permit!)
-        logger.debug "Failed to deduce event params for #{@person.firstname}"
-        if @person.save
-          #attachments = Attachment.attach_files(@person, params[:attachments])
-          #render_attachment_warning_if_needed(@person)
-          flash[:notice] = t(:notice_successful_update)
-          # attach_avatar
-          respond_to do |format|
-            format.html { redirect_to action: 'show', id: @person, tab: params[:tab] }
-            # format.api  { head :ok }
-          end
-        else
-          Rails.logger.error "Failed to save person: #{@person.errors.full_messages.join(', ')}"
-          respond_to do |format|
-            format.html { render layout: "global", action: 'edit', status: 400 }
-            # format.api  { render_validation_errors(@person) }
-          end
-        end
-      else
-        Rails.logger.debug "------------------Person info attrs2---------: #{@person.information.attributes}"
-        Rails.logger.error "Failed to update person information: #{@person.information.errors.full_messages.join(', ')}"
-        respond_to do |format|
-          format.html { render layout: "global", action: 'edit', status: 400 }
-          # format.api  { render_validation_errors(@person.information) }
-        end
-      end
-    end
+    #   Rails.logger.debug "------------------Person info attrs1---------: #{params[:person][:information_attributes]}"
+    #   # Update the associated PeopleInformation record with the permitted parameters
+    #   if  @person.information.update(params[:person][:information_attributes].permit!)
+    #     logger.debug "Failed to deduce event params for #{@person.firstname}"
+    #     if @person.save
+    #       #attachments = Attachment.attach_files(@person, params[:attachments])
+    #       #render_attachment_warning_if_needed(@person)
+    #       flash[:notice] = t(:notice_successful_update)
+    #       # attach_avatar
+    #       respond_to do |format|
+    #         format.html { redirect_to action: 'show', id: @person, tab: params[:tab] }
+    #         # format.api  { head :ok }
+    #       end
+    #     else
+    #       Rails.logger.error "Failed to save person: #{@person.errors.full_messages.join(', ')}"
+    #       respond_to do |format|
+    #         format.html { render layout: "global", action: 'edit', status: 400 }
+    #         # format.api  { render_validation_errors(@person) }
+    #       end
+    #     end
+    #   else
+    #     Rails.logger.debug "------------------Person info attrs2---------: #{@person.information.attributes}"
+    #     Rails.logger.error "Failed to update person information: #{@person.information.errors.full_messages.join(', ')}"
+    #     respond_to do |format|
+    #       format.html { render layout: "global", action: 'edit', status: 400 }
+    #       # format.api  { render_validation_errors(@person.information) }
+    #     end
+    #   end
+    # end
 
 
 

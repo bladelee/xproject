@@ -29,7 +29,7 @@ class PeopleInformation < ApplicationRecord
   belongs_to :manager, :class_name => "Person"
   belongs_to :station
 
-  validates_presence_of :user
+  # validates_presence_of :user
   validates_uniqueness_of :user_id
 
   validate :validate_manager

@@ -145,6 +145,7 @@ export class OpProjectIncludeComponent extends UntilDestroyedMixin implements On
       this.untilDestroyed(),
       map((queryFilters) => {
         const projectFilter = queryFilters.find((queryFilter) => queryFilter._type === 'ProjectQueryFilter');
+        console.log('projectFilter', projectFilter);
         const selectedProjectHrefs = ((projectFilter?.values || []) as HalResource[]).map((p) => p.href);
         const currentProjectHref = this.currentProjectService.apiv3Path;
         if (selectedProjectHrefs.includes(currentProjectHref)) {

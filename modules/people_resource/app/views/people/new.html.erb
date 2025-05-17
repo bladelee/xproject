@@ -17,8 +17,10 @@
     <div class="form--field -required"><%= f.text_field :login, :required => true, :size => 25 , :container_class => "-middle" %></div>
 
     <div id="password_fields" >
-    <div class="form--field -required"><%= f.password_field :password, :required => true, :size => 25 , :container_class => "-middle" %>
-    <em class="info"><%= t(:text_caracters_minimum, :count => 8) %></em></div>
+    <div class="form--field -required">
+      <%= f.password_field :password, :required => true, :size => 25 , :container_class => "-middle" %>
+      <em class="info"><%= t(:text_caracters_minimum, :count => 10) %></em>
+    </div>
     <div class="form--field -required"><%= f.password_field :password_confirmation, :required => true, :size => 25 , :container_class => "-middle" %></div>
     </div>
   <%
@@ -32,14 +34,17 @@
 
   <%= render :partial => 'form', :locals => {:f => f} %>
 
-  <%= submit_tag t(:button_save) -%>
+  <div class="form-actions" style="width: 100%;">
+    <%= submit_tag t(:button_save), :class => "button", style: "margin-left: 20%;" %>
+  </div>
 <% end -%>
 
 <% content_for :sidebar do %>
 <% end %>
 
 <% content_for :header_tags do %>
-  <%=  %>
+  <%= select2_assets %>
+  <%= javascript_include_tag 'application'  %> 
   <%= javascript_include_tag :redmine_people, :plugin => 'redmine_people'  %>
   <%= robot_exclusion_tag %>
 <% end %>

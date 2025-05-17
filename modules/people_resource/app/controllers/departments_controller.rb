@@ -20,9 +20,9 @@
 class DepartmentsController < ApplicationController
     include Layout
     include QueriesHelper
-    # before_action :find_department, :except => [:index, :create, :new, :org_chart]
+    before_action :find_department, :except => [:index, :create, :new, :org_chart]
     #before_action :authorize_people, :except => [:index, :show, :load_tab, :autocomplete_for_person, :org_chart]
-    before_action :load_department_events, :load_department_attachments, :only => [:show, :load_tab]
+    # before_action :load_department_events, :load_department_attachments, :only => [:show, :load_tab]
 
     #helper :attachments
     menu_item :people_resources
@@ -38,6 +38,9 @@ class DepartmentsController < ApplicationController
         @department = Department.find(params[:id])
         puts "------------------------------@department = #{@department.as_json}"
         puts "------------------------------@department.head_id = #{@department.head_id}"
+        response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
         @department
       end
       render layout: "global"
@@ -104,6 +107,9 @@ class DepartmentsController < ApplicationController
 
         respond_to do |format|
           format.html { redirect_to :controller => 'departments', :action => 'index', :id => @department, :tab => 'people' }
+          # format.html do
+          #   redirect_to edit_department_path(@department, tab: 'people', _t: Time.now.to_i)
+          # end
           #format.html { redirect_to :action => 'show', :id => @department }
           # format.html { redirect_to :controller => "people_settings", :action => "index", :tab => "departments" }
           #format.api  { head :ok }
@@ -119,12 +125,27 @@ class DepartmentsController < ApplicationController
     def add_people
       @people = PeopleInformation.where(:user_id => params[:person_id] || params[:person_ids])
       @department.people_information << @people if request.post?
+      # @department.people_information.save
       respond_to do |format|
-        format.html { redirect_to :controller => 'departments', :action => 'edit', :id => @department, :tab => 'people' }
+        format.html { redirect_to :controller => 'departments', :action => 'edit', 
+                                  :id => @department, :tab => 'people',  
+                                  format: :html, _t: Time.now.to_i  }
         format.js
-        format.api { render_api_ok }
+        # format.api { render_api_ok }
       end
     end
+
+    def remove_person
+      @department.people_information.delete(PeopleInformation.find(params[:person_id])) 
+      # @department.people_information.save
+      respond_to do |format|
+        # format.html { redirect_to :controller => 'departments', :action => 'edit', :id => @department, :tab => 'people' }
+        format.html { redirect_to edit_department_path(@department, tab: 'people'), format: :html, _t: Time.now.to_i  } 
+        format.js
+        # format.api { render_api_ok }
+      end
+    end  
+
 
     def delete
       @department = Department.find(params[:id])

@@ -2,20 +2,23 @@
 <% if @department.people.any? %>
   <table class="list people">
     <thead><tr>
-      <th><%= l(:label_user) %></th>
-      <% if User.current.allowed_people_to?(:edit_people) %>
+      <th><%= t(:label_user) %></th>
+      <%# if User.current.allowed_people_to?(:edit_people) %>
       <th style="width:15%"></th>
-      <% end %>
+      <%# end %>
     </tr></thead>
     <tbody>
     <% @department.people.sort.each do |person| %>
       <tr id="person-<%= person.id %>" class="<%= cycle 'odd', 'even' %>">
         <td class="person"><%= link_to_user person %></td>
-        <% if User.current.allowed_people_to?(:edit_people) %>
+        <%# if User.current.allowed_people_to?(:edit_people) %>
         <td class="buttons">
-          <%= delete_link url_for(:action => "remove_person", :id => @department, :person_id => person), :remote => true %>
+          <%#= delete_link url_for(:action => "remove_person", :id => @department, :person_id => person), :remote => true %>
+          <%= link_to t(:button_delete),  url_for(:action => "remove_person", :id => @department, :person_id => person), 
+                       method: :post,  
+                       :remote => true %>         
         </td>
-        <% end %>
+        <%# end %>
       </tr>
     <% end %>
     </tbody>

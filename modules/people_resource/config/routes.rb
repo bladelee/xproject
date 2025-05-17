@@ -84,7 +84,7 @@ resources :departments do
   member do
     get :autocomplete_for_person
     post :add_people
-    delete :remove_person
+    post :remove_person
     get 'tabs/:tab' => 'departments#show', :as => 'tabs'
     get 'load_tab' => 'departments#load_tab', :as => 'load_tab'
   end

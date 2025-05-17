@@ -46,7 +46,7 @@
   </div>
 
   <% unless @department.allowed_parents.compact.empty? %>
-    <div class="form--field -required">
+    <div class="form--field">
       <%= label(:department, :parent_id, t(:field_department_parent), class: "form--label") %>
       <%= parent_department_select_tag(@department) %>
     </div>

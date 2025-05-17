@@ -32,8 +32,10 @@
                container_class: '-middle' %>
 </div>
 
-<div class="form--field">
+<% if false %>
+ <div class="form--field">
   <%= f.select :position,
               options_from_collection_for_select(PlaceholderUser.all, :id, :name),
                container_class: '-middle' %>
-</div>
+</div> 
+<% end %>
